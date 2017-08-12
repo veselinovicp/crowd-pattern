@@ -3,25 +3,25 @@ package com.monoton.horizont.crowd.pattern;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
 import com.badlogic.gdx.ai.steer.behaviors.PrioritySteering;
 import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
+import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
 
 public class CrowndPatternCommand extends ApplicationAdapter {
 
@@ -29,12 +29,13 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 
 	Array<SteeringActor> characters;
 
-	protected Table testTable;
 
 	Stage stage;
 	Table table;
+	Stack stack;
 
 	private float lastUpdateTime;
+	private final static int PROXIMITY_FACTOR=10;
 
 
 
@@ -46,6 +47,7 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 		// Create a stage
 		stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
+//		table = new Table(){
 		table = new Table(){
 			@Override
 			public void act (float delta) {
@@ -61,17 +63,20 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 
 
 		img = new Texture("green_fish.png");
+
 		characters = new Array<SteeringActor>();
 
-		for (int i = 0; i < 60; i++) {
+		for (int i = 0; i < 100;i++) {
 			final SteeringActor character = new SteeringActor(new TextureRegion(img), false);
 			character.setMaxLinearSpeed(50);
 			character.setMaxLinearAcceleration(100);
 
 			RadiusProximity<Vector2> proximity = new RadiusProximity<Vector2>(character, characters,
-					character.getBoundingRadius() * 4);
+					character.getBoundingRadius() * PROXIMITY_FACTOR);
 
-			CollisionAvoidance<Vector2> collisionAvoidanceSB = new CollisionAvoidance<Vector2>(character, proximity);
+//			CollisionAvoidance<Vector2> collisionAvoidanceSB = new CollisionAvoidance<Vector2>(character, proximity);
+			PassingNeighboursSteering<Vector2> passingNeighboursSB = new PassingNeighboursSteering<Vector2>(character, proximity);
+
 
 			Wander<Vector2> wanderSB = new Wander<Vector2>(character) //
 					// Don't use Face internally because independent facing is off
@@ -85,13 +90,15 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 					.setWanderRate(MathUtils.PI2 * 4);
 
 			PrioritySteering<Vector2> prioritySteeringSB = new PrioritySteering<Vector2>(character, 0.0001f);
-			prioritySteeringSB.add(collisionAvoidanceSB);
-			prioritySteeringSB.add(wanderSB);
+//			prioritySteeringSB.add(collisionAvoidanceSB);
+			prioritySteeringSB.add(passingNeighboursSB);
+//			prioritySteeringSB.add(wanderSB);
 
 			character.setSteeringBehavior(prioritySteeringSB);
 
 			setRandomNonOverlappingPosition(character, characters, 5);
 			setRandomOrientation(character);
+			speedUp(character);
 
 
 
@@ -99,6 +106,11 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 			table.addActor(character);
 		}
 
+	}
+
+	private void speedUp(SteeringActor character) {
+		//character.getLinearVelocity().set(new Vector2(MathUtils.random(-1, 1),MathUtils.random(-1, 1))).nor().scl(character.getMaxLinearAcceleration());
+		character.getLinearVelocity().scl(character.getMaxLinearAcceleration());
 	}
 
 	protected void setRandomOrientation (SteeringActor character) {
