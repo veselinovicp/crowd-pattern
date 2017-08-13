@@ -2,6 +2,8 @@ package com.monoton.horizont.crowd.pattern;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.steer.behaviors.PrioritySteering;
 import com.badlogic.gdx.ai.steer.behaviors.Wander;
@@ -20,15 +22,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
+import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
 import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
 
-public class CrowndPatternCommand extends ApplicationAdapter {
+public class CrowndPatternCommand extends ApplicationAdapter implements InputProcessor {
 
 	Texture img;
 
-	Array<SteeringActor> characters;
+	Array<SteeringActor> characters = new Array<SteeringActor>();;
 
 
 	Stage stage;
@@ -40,12 +43,15 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
 
+	private SteeringActorCreator steeringActorCreator;
+
 
 
 	
 	@Override
 	public void create () {
 
+		Gdx.input.setInputProcessor(this);
 
 		lastUpdateTime =0;
 
@@ -71,78 +77,13 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 
 		characters = new Array<SteeringActor>();
 
-		for (int i = 0; i < 100;i++) {
-			final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl);
-			character.setMaxLinearSpeed(50);
-			character.setMaxLinearAcceleration(100);
+		steeringActorCreator = new SteeringActorCreator(characters, table, img, borderControl, PROXIMITY_FACTOR);
 
-			RadiusProximity<Vector2> proximity = new RadiusProximity<Vector2>(character, characters,
-					character.getBoundingRadius() * PROXIMITY_FACTOR);
+		steeringActorCreator.createSteeringActors(60);
 
-//			CollisionAvoidance<Vector2> collisionAvoidanceSB = new CollisionAvoidance<Vector2>(character, proximity);
-			PassingNeighboursSteering<Vector2> passingNeighboursSB = new PassingNeighboursSteering<Vector2>(character, proximity);
-
-
-			Wander<Vector2> wanderSB = new Wander<Vector2>(character) //
-					// Don't use Face internally because independent facing is off
-					.setFaceEnabled(false) //
-					// We don't need a limiter supporting angular components because Face is not used
-					// No need to call setAlignTolerance, setDecelerationRadius and setTimeToTarget for the same reason
-					.setLimiter(new LinearAccelerationLimiter(30)) //
-					.setWanderOffset(60) //
-					.setWanderOrientation(0) //
-					.setWanderRadius(40) //
-					.setWanderRate(MathUtils.PI2 * 4);
-
-			PrioritySteering<Vector2> prioritySteeringSB = new PrioritySteering<Vector2>(character, 0.0001f);
-//			prioritySteeringSB.add(collisionAvoidanceSB);
-			prioritySteeringSB.add(passingNeighboursSB);
-//			prioritySteeringSB.add(wanderSB);
-
-			character.setSteeringBehavior(prioritySteeringSB);
-
-			setRandomNonOverlappingPosition(character, characters, 5);
-			setRandomOrientation(character);
-			speedUp(character);
-
-
-
-			characters.add(character);
-			table.addActor(character);
-		}
 
 	}
 
-	private void speedUp(SteeringActor character) {
-		//character.getLinearVelocity().set(new Vector2(MathUtils.random(-1, 1),MathUtils.random(-1, 1))).nor().scl(character.getMaxLinearAcceleration());
-		character.getLinearVelocity().scl(character.getMaxLinearAcceleration());
-	}
-
-	protected void setRandomOrientation (SteeringActor character) {
-		float orientation = MathUtils.random(-MathUtils.PI, MathUtils.PI);
-		character.setOrientation(orientation);
-		if (!character.isIndependentFacing()) {
-			// Set random initial non-zero linear velocity since independent facing is off
-			character.angleToVector(character.getLinearVelocity(), orientation).scl(character.getMaxLinearSpeed()/5);
-		}
-	}
-
-	protected void setRandomNonOverlappingPosition (SteeringActor character, Array<SteeringActor> others,
-													float minDistanceFromBoundary) {
-		int maxTries = Math.max(100, others.size * others.size);
-		SET_NEW_POS:
-		while (--maxTries >= 0) {
-			character.setPosition(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()), Align.center);
-			character.getPosition().set(character.getX(Align.center), character.getY(Align.center));
-			for (int i = 0; i < others.size; i++) {
-				SteeringActor other = (SteeringActor)others.get(i);
-				if (character.getPosition().dst(other.getPosition()) <= character.getBoundingRadius() + other.getBoundingRadius()
-						+ minDistanceFromBoundary) continue SET_NEW_POS;
-			}
-			return;
-		}
-		throw new GdxRuntimeException("Probable infinite loop detected");
-	}
 
 	@Override
 	public void render () {
@@ -150,6 +91,8 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		/*batch.begin();
 		batch.draw(img, 0, 0);*/
+
+
 
 		GdxAI.getTimepiece().update(Gdx.graphics.getDeltaTime());
 
@@ -165,5 +108,50 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 	public void dispose () {
 
 		img.dispose();
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT){
+			float posX = screenX - img.getWidth()/2;
+			float posY = Gdx.graphics.getHeight() - screenY - img.getHeight()/2;
+			steeringActorCreator.createSteeringActor(posX, posY);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
 	}
 }
