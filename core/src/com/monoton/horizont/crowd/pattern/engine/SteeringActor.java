@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /** A SteeringActor is a scene2d {@link Actor} implementing the {@link Steerable} interface.
  * 
@@ -222,8 +223,15 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 			wrapAround(position, getParent().getWidth(), getParent().getHeight());
 			setPosition(position.x, position.y, Align.center);
+			applyColor();
 		}
 		super.act(delta);
+	}
+
+	private void applyColor(){
+
+		float[] color = DrawUtils.getRainbowColor(linearVelocity.angleRad());
+		setColor(color[0], color[1], color[2],1f);
 	}
 
 	// the display area is considered to wrap around from top to bottom

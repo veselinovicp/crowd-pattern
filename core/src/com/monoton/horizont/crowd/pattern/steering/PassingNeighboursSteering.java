@@ -115,7 +115,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
          *
          * make neighbours result small as to not disturb the particle much
          */
-        T smallNeighboursResult = neighboursResult.cpy().nor().scl(0.1f);
+        T smallNeighboursResult = neighboursResult.cpy().nor().scl(0.5f);
 
         T ownerVelocity = newVector(owner);
         ownerVelocity.setZero();
