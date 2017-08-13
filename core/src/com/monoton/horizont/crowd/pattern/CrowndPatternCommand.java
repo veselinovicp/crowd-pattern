@@ -15,12 +15,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
+import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
+import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
 import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
 
 public class CrowndPatternCommand extends ApplicationAdapter {
@@ -37,11 +38,15 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 	private float lastUpdateTime;
 	private final static int PROXIMITY_FACTOR=10;
 
+	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
+
 
 
 	
 	@Override
 	public void create () {
+
+
 		lastUpdateTime =0;
 
 		// Create a stage
@@ -67,7 +72,7 @@ public class CrowndPatternCommand extends ApplicationAdapter {
 		characters = new Array<SteeringActor>();
 
 		for (int i = 0; i < 100;i++) {
-			final SteeringActor character = new SteeringActor(new TextureRegion(img), false);
+			final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl);
 			character.setMaxLinearSpeed(50);
 			character.setMaxLinearAcceleration(100);
 

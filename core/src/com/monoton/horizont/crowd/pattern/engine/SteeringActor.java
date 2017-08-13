@@ -16,7 +16,6 @@
 
 package com.monoton.horizont.crowd.pattern.engine;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
@@ -28,6 +27,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /** A SteeringActor is a scene2d {@link Actor} implementing the {@link Steerable} interface.
@@ -54,11 +54,12 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	SteeringBehavior<Vector2> steeringBehavior;
 
-	public SteeringActor (TextureRegion region) {
-		this(region, false);
-	}
+	private BorderControl borderControl;
 
-	public SteeringActor (TextureRegion region, boolean independentFacing) {
+
+
+	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl) {
+		this.borderControl = borderControl;
 		this.independentFacing = independentFacing;
 		this.region = region;
 		this.position = new Vector2();
@@ -236,14 +237,31 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	// the display area is considered to wrap around from top to bottom
 	// and from left to right
-	protected static void wrapAround (Vector2 pos, float maxX, float maxY) {
-		if (pos.x > maxX) pos.x = 0.0f;
+	protected void wrapAround (Vector2 pos, float maxX, float maxY) {
+	/*	if (pos.x > maxX) pos.x = 0.0f;
 
 		if (pos.x < 0) pos.x = maxX;
 
 		if (pos.y < 0) pos.y = maxY;
 
-		if (pos.y > maxY) pos.y = 0.0f;
+		if (pos.y > maxY) pos.y = 0.0f;*/
+
+		if (pos.x > maxX) {
+			borderControl.overBorderX(pos, linearVelocity, maxX, maxY);
+		}
+
+		if (pos.x < 0) {
+			borderControl.negativeX(pos, linearVelocity, maxX, maxY);
+		}
+
+		if (pos.y < 0) {
+			borderControl.negativeY(pos, linearVelocity, maxX, maxY);
+		}
+
+		if (pos.y > maxY) {
+			borderControl.overBorderY(pos, linearVelocity, maxX, maxY);
+		}
+
 	}
 
 	private void applySteering (SteeringAcceleration<Vector2> steering, float time) {
