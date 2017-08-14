@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.monoton.horizont.crowd.pattern.SystemState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
     private T relativePosition;
     private T relativeVelocity;
 
+
     /**
      * Creates a GroupBehavior for the specified owner and proximity.
      *
@@ -34,6 +36,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
      */
     public PassingNeighboursSteering(Steerable<T> owner, Proximity<T> proximity) {
         super(owner, proximity);
+
         neighbours = new ArrayList<Steerable<T>>();
 
         this.firstRelativePosition = newVector(owner);
@@ -115,7 +118,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
          *
          * make neighbours result small as to not disturb the particle much
          */
-        T smallNeighboursResult = neighboursResult.cpy().nor().scl(2.0f);
+        T smallNeighboursResult = neighboursResult.cpy().nor().scl(SystemState.getInstance().getOrderFactor());
 
         T ownerVelocity = newVector(owner);
         ownerVelocity.setZero();
@@ -232,4 +235,5 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         this.limiter = limiter;
         return this;
     }
+
 }

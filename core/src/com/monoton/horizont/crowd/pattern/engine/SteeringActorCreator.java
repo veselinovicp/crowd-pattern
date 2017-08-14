@@ -45,12 +45,15 @@ public class SteeringActorCreator {
     }
 
     public void createSteeringActor(float x, float y) {
-        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl);
+        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this);
         character.setMaxLinearSpeed(50);
         character.setMaxLinearAcceleration(100);
 
         RadiusProximity<Vector2> proximity = new RadiusProximity<Vector2>(character, characters,
                 character.getBoundingRadius() * PROXIMITY_FACTOR);
+        character.setProximity(proximity);
+
+
 
 //			CollisionAvoidance<Vector2> collisionAvoidanceSB = new CollisionAvoidance<Vector2>(character, proximity);
         PassingNeighboursSteering<Vector2> passingNeighboursSB = new PassingNeighboursSteering<Vector2>(character, proximity);
@@ -82,6 +85,15 @@ public class SteeringActorCreator {
         characters.add(character);
 //        table.addActor(character);
         steeringActorsScene.addSteeringActor(character);
+
+    }
+
+    public void setRadius(float radius){
+        for(SteeringActor steeringActor : characters){
+           steeringActor.getProximity().setRadius(radius);
+        }
+    }
+    public void setOrderFactor(float orderFactor){
 
     }
 

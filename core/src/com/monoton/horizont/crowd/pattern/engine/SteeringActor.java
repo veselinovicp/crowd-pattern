@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
+import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -57,9 +58,16 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	private BorderControl borderControl;
 
+	private SteeringActorCreator steeringActorCreator;
+
+	private RadiusProximity<Vector2> proximity;
 
 
-	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl) {
+
+
+	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl, SteeringActorCreator steeringActorCreator) {
+
+		this.steeringActorCreator = steeringActorCreator;
 		this.borderControl = borderControl;
 		this.independentFacing = independentFacing;
 		this.region = region;
@@ -291,6 +299,18 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		batch.setColor(color.r, color.g, color.b, parentAlpha);
 		batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
 			getRotation());
+	}
+
+	public SteeringActorCreator getSteeringActorCreator() {
+		return steeringActorCreator;
+	}
+
+	public void setProximity(RadiusProximity<Vector2> proximity) {
+		this.proximity = proximity;
+	}
+
+	public RadiusProximity<Vector2> getProximity() {
+		return proximity;
 	}
 
 }
