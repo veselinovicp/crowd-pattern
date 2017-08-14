@@ -35,6 +35,10 @@ public class DrawUtils {
         float[] blue = new float[]{0,0,1,1};
         float[] indigo = new float[]{75f/255f,0,130f/255f,1};
         float[] violet = new float[]{143f/255f,0,1,1};
+        /**
+         * add another red at the end to make final circular transition color smooth
+         */
+        float[] red2 = new float[]{1,0,0,1};
         rainbowColors.add(red);
         rainbowColors.add(orange);
         rainbowColors.add(yellow);
@@ -42,6 +46,7 @@ public class DrawUtils {
         rainbowColors.add(blue);
         rainbowColors.add(indigo);
         rainbowColors.add(violet);
+        rainbowColors.add(red2);
         return getColorChain(rainbowColors, perColorTransitions);
 
     }

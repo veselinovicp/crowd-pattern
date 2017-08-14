@@ -16,6 +16,7 @@
 
 package com.monoton.horizont.crowd.pattern.engine;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
@@ -222,7 +223,8 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 			// Apply steering acceleration
 			applySteering(steeringOutput, delta);
 
-			wrapAround(position, getParent().getWidth(), getParent().getHeight());
+//			wrapAround(position, getParent().getWidth(), getParent().getHeight());
+			wrapAround(position, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			setPosition(position.x, position.y, Align.center);
 			applyColor();
 		}

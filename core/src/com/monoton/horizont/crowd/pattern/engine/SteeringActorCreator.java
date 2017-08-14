@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
+import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
 
 /**
@@ -21,14 +22,16 @@ import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
 public class SteeringActorCreator {
 
     private Array<SteeringActor> characters;
-    private Table table;
+    //private Table table;
     private Texture img;
     private BorderControl borderControl;
     private int PROXIMITY_FACTOR;
+    private SteeringActorsScene steeringActorsScene;
 
-    public SteeringActorCreator(Array<SteeringActor> characters, Table table, Texture img, BorderControl borderControl, int PROXIMITY_FACTOR) {
+    public SteeringActorCreator(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, Texture img, BorderControl borderControl, int PROXIMITY_FACTOR) {
         this.characters = characters;
-        this.table = table;
+//        this.table = table;
+        this.steeringActorsScene = steeringActorsScene;
         this.img = img;
         this.borderControl = borderControl;
         this.PROXIMITY_FACTOR = PROXIMITY_FACTOR;
@@ -77,7 +80,9 @@ public class SteeringActorCreator {
 
 
         characters.add(character);
-        table.addActor(character);
+//        table.addActor(character);
+        steeringActorsScene.addSteeringActor(character);
+
     }
 
     private void setPosition(SteeringActor character, float x, float y) {

@@ -115,7 +115,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
          *
          * make neighbours result small as to not disturb the particle much
          */
-        T smallNeighboursResult = neighboursResult.cpy().nor().scl(1.0f);
+        T smallNeighboursResult = neighboursResult.cpy().nor().scl(2.0f);
 
         T ownerVelocity = newVector(owner);
         ownerVelocity.setZero();
@@ -142,7 +142,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         velocityDifference.add(steering.linear).sub(ownerVelocity);
         //velocityDifference.add(neighboursResult.cpy().nor()).sub(ownerVelocity);
         float velocityDifferenceSize = velocityDifference.len();
-        if(velocityDifferenceSize<0.1f){
+        if(velocityDifferenceSize<0.2f){
 //            steering.linear = (T) getPerpendicularNormalizedVector((Vector2)ownerVelocity);//neighboursResult ownerVelocity
             /**
              * go away from the closest neighbour
