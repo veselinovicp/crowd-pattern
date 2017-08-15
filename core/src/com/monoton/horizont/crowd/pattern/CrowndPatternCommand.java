@@ -35,10 +35,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 	private final static int PARTICLE_START_NUMBER =300;
-	private final static int PROXIMITY_FACTOR=10;
-	private final static float START_ORDER_VALUE=1.0f;
 
-	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_FLY_THROUGH);
+
+	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
 
 	private SteeringActorCreator steeringActorCreator;
 
@@ -50,14 +49,16 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 	private Slider radiusSlider;
-
 	private Label radiusLabelName;
 	private Label radiusValue;
 
 	private Slider orderSlider;
-
 	private Label orderLabelName;
 	private Label orderValue;
+
+	private Slider distanceSlider;
+	private Label distanceLabelName;
+	private Label distanceValue;
 
 
 
@@ -65,7 +66,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	@Override
 	public void create () {
 
-		SystemState.getInstance().setOrderFactor(START_ORDER_VALUE);
 
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -100,19 +100,20 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		radiusSlider = new Slider(1f,15f,0.1f, false, skin);
 
-		radiusSlider.setValue(PROXIMITY_FACTOR);
+		radiusSlider.setValue(SystemState.getInstance().getRadiusFactor());
 		radiusSlider.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 //				Gdx.app.log("TAG", "slider changed to: " + radiusSlider.getValue());
 				steeringActorCreator.setRadius(radiusSlider.getValue());
 				radiusValue.setText(""+radiusSlider.getValue());
+				SystemState.getInstance().setRadiusFactor(radiusSlider.getValue());
 
 			}
 			@Override
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				steeringActorCreator.setRadius(radiusSlider.getValue());
-
+				SystemState.getInstance().setRadiusFactor(radiusSlider.getValue());
 				return true;
 			};
 		});
@@ -134,7 +135,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		orderSlider = new Slider(0.1f,5f,0.05f, false, skin);
 
-		orderSlider.setValue(START_ORDER_VALUE);
+		orderSlider.setValue(SystemState.getInstance().getOrderFactor());
 		orderSlider.addListener(new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -155,6 +156,38 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		controlsTable.row();
 		/**
 		 * end order slider and labels
+		 */
+
+
+		/**
+		 * distance slider and labels
+		 */
+		distanceLabelName = new Label("Distance: ", ls);
+		controlsTable.add(distanceLabelName).padRight(10);
+
+		distanceSlider = new Slider(0.01f,1f,0.05f, false, skin);
+
+		distanceSlider.setValue(SystemState.getInstance().getDistanceFactor());
+		distanceSlider.addListener(new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				SystemState.getInstance().setDistanceFactor(distanceSlider.getValue());
+				distanceValue.setText(""+distanceSlider.getValue());
+			}
+			@Override
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				SystemState.getInstance().setDistanceFactor(distanceSlider.getValue());
+				return true;
+			};
+		});
+
+		controlsTable.add(distanceSlider).padRight(10);
+
+		distanceValue = new Label(""+distanceSlider.getValue(), ls);
+		controlsTable.add(distanceValue);
+		controlsTable.row();
+		/**
+		 * end distance slider and labels
 		 */
 
 
@@ -184,7 +217,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		actionStage.addActor(steeringActorsScene);
 
-		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, PROXIMITY_FACTOR);
+		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, SystemState.getInstance().getRadiusFactor());
 
 		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER);
 

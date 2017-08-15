@@ -145,7 +145,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         velocityDifference.add(steering.linear).sub(ownerVelocity);
         //velocityDifference.add(neighboursResult.cpy().nor()).sub(ownerVelocity);
         float velocityDifferenceSize = velocityDifference.len();
-        if(velocityDifferenceSize<0.2f){
+        if(velocityDifferenceSize<SystemState.getInstance().getDistanceFactor()){
 //            steering.linear = (T) getPerpendicularNormalizedVector((Vector2)ownerVelocity);//neighboursResult ownerVelocity
             /**
              * go away from the closest neighbour

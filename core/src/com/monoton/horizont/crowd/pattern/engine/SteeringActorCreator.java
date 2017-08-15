@@ -25,10 +25,10 @@ public class SteeringActorCreator {
     //private Table table;
     private Texture img;
     private BorderControl borderControl;
-    private int PROXIMITY_FACTOR;
+    private float PROXIMITY_FACTOR;
     private SteeringActorsScene steeringActorsScene;
 
-    public SteeringActorCreator(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, Texture img, BorderControl borderControl, int PROXIMITY_FACTOR) {
+    public SteeringActorCreator(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, Texture img, BorderControl borderControl, float PROXIMITY_FACTOR) {
         this.characters = characters;
 //        this.table = table;
         this.steeringActorsScene = steeringActorsScene;
