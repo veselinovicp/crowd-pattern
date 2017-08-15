@@ -137,26 +137,8 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         steering.linear.nor();
 
 
-        /**
-         * if owner goes in approximately the same direction as neighbour go perpendicular to them
-         */
-        T velocityDifference = newVector(owner);
-        velocityDifference.setZero();
-        velocityDifference.add(steering.linear).sub(ownerVelocity);
-        //velocityDifference.add(neighboursResult.cpy().nor()).sub(ownerVelocity);
-        float velocityDifferenceSize = velocityDifference.len();
-        if(velocityDifferenceSize<SystemState.getInstance().getDistanceFactor()){
-//            steering.linear = (T) getPerpendicularNormalizedVector((Vector2)ownerVelocity);//neighboursResult ownerVelocity
-            /**
-             * go away from the closest neighbour
-             */
-            Steerable<T> closestNeighbour = getClosestNeighbour();
-            steering.linear = getRelativeVector(owner, closestNeighbour).nor();
 
-        }
-        /**
-         * end of comment
-         */
+        SystemState.getInstance().getClosenessResponse().determineAndExecute(steering, owner, neighbours);
 
 
 
@@ -174,42 +156,6 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         return steering;
     }
 
-    private T getRelativeVector(Steerable<T> first, Steerable<T> second){
-        T relative = newVector(owner);
-        relative.setZero();
-        relative.add(first.getPosition()).sub(second.getPosition());
-        return relative;
-    }
-
-    private Steerable<T> getClosestNeighbour(){
-        Steerable<T> result = neighbours.get(0);
-        for(Steerable<T> neighbour :  neighbours){
-            float min = getDistance(result, owner);
-            float current = getDistance(neighbour, owner);
-            if(current<=min){
-                result = neighbour;
-            }
-        }
-        return result;
-
-    }
-
-    private float getDistance(Steerable<T> first, Steerable<T> second){
-        T relative = getRelativeVector(first, second);
-        return relative.len();
-    }
-
-
-    private Vector2 getPerpendicularNormalizedVector(Vector2 vector){
-        Vector2 result = vector.cpy();
-        result.setZero();
-        float x = MathUtils.random();
-
-        //return (-b,a,0)
-        result.add(new Vector2(-vector.y,vector.x));
-        return result.nor();
-
-    }
 
 
     //

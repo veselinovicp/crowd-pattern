@@ -30,6 +30,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
+import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /** A SteeringActor is a scene2d {@link Actor} implementing the {@link Steerable} interface.
@@ -61,6 +62,8 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 	private SteeringActorCreator steeringActorCreator;
 
 	private RadiusProximity<Vector2> proximity;
+
+
 
 
 

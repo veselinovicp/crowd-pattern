@@ -1,12 +1,19 @@
 package com.monoton.horizont.crowd.pattern;
 
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
+import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
+import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFactory;
+
 /**
  * Created by monoton on 14.8.2017.
  */
-public class SystemState {
+public class SystemState<T extends Vector<T>> {
     float orderFactor=1.0f;
     float distanceFactor=0.1f;
     float radiusFactor=10;
+
+    private ClosenessResponse<T> closenessResponse;
 
     private static SystemState ourInstance = new SystemState();
 
@@ -15,6 +22,8 @@ public class SystemState {
     }
 
     private SystemState() {
+        ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
+        closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
     }
 
     public float getOrderFactor() {
@@ -39,5 +48,13 @@ public class SystemState {
 
     public void setRadiusFactor(float radiusFactor) {
         this.radiusFactor = radiusFactor;
+    }
+
+    public ClosenessResponse<T> getClosenessResponse() {
+        return closenessResponse;
+    }
+
+    public void setClosenessResponse(ClosenessResponse<T> closenessResponse) {
+        this.closenessResponse = closenessResponse;
     }
 }

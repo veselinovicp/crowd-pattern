@@ -7,4 +7,5 @@ public class Constants {
 
     public static final String BORDER_CONTROL_FLY_THROUGH="BORDER_CONTROL_FLY_THROUGH";
     public static final String BORDER_CONTROL_BOUNCE="BORDER_CONTROL_BOUNCE";
+    public static final String CLOSENESS_RESPONSE_SIMILAR_VELOCITY ="CLOSENESS_RESPONSE_SIMILAR_VELOCITY";
 }
