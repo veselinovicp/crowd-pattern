@@ -12,6 +12,9 @@ public class ClosenessResponseFactory<T extends Vector<T>>  {
         if(type.equals(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY)){
             return new SimilarVelocityClosenessResponse<T>();
         }
+        if(type.equals(Constants.CLOSENESS_RESPONSE_NONE)){
+            return new EmptyClosenessResponse<T>();
+        }
 
         throw new RuntimeException("No closeness response by type: "+type+" exists.");
 
