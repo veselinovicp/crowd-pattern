@@ -11,17 +11,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
+import com.monoton.horizont.crowd.pattern.painter.CrowdPainter;
 
 /**
  * Created by monoton on 14.8.2017.
  */
 public class SteeringActorsScene extends Actor {
+    private CrowdPainter crowdPainter;
+
     private Array<SteeringActor> characters;
 
 
     public SteeringActorsScene(final Array<SteeringActor> characters) {
         this.characters = characters;
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        crowdPainter = new CrowdPainter(characters);
 
         addListener(new ClickListener(){
             @Override
@@ -43,6 +48,7 @@ public class SteeringActorsScene extends Actor {
         for (SteeringActor steeringActor : characters){
             steeringActor.draw(batch, parentAlpha);
         }
+        crowdPainter.draw(batch, parentAlpha);
     }
     float lastUpdateTime = 0;
     @Override

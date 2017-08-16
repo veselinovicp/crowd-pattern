@@ -1,5 +1,7 @@
 package com.monoton.horizont.crowd.pattern.utils;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,23 @@ import java.util.List;
  * Created by monoton on 12.8.2017.
  */
 public class DrawUtils {
+
+    public static Vector2 calculateNorSum(List<Vector2> vectors){
+        Vector2 result = vectors.get(0).cpy().setZero();
+        for(Vector2 vector: vectors){
+            result = result.add(vector);
+        }
+        return result.nor();
+    }
+
+    public static Vector2 calculateAvarage(List<Vector2> vectors){
+        Vector2 result = vectors.get(0).cpy().setZero();
+        for(Vector2 vector: vectors){
+            result = result.add(vector);
+        }
+        return result.scl(1f/(float)vectors.size());
+
+    }
 
     public static float[] getRainbowColor(float radAngle){
         if(radAngle<0){
