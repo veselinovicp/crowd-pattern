@@ -9,15 +9,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
-import com.monoton.horizont.crowd.pattern.painter.CrowdPainter;
+import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
 
 /**
  * Created by monoton on 14.8.2017.
  */
 public class SteeringActorsScene extends Actor {
-    private CrowdPainter crowdPainter;
+    private ShootingStarPainter shootingStarPainter;
 
     private Array<SteeringActor> characters;
 
@@ -26,7 +27,7 @@ public class SteeringActorsScene extends Actor {
         this.characters = characters;
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        crowdPainter = new CrowdPainter(characters);
+        shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_AVERAGE, characters, null, 500);
 
         addListener(new ClickListener(){
             @Override
@@ -48,7 +49,7 @@ public class SteeringActorsScene extends Actor {
         for (SteeringActor steeringActor : characters){
             steeringActor.draw(batch, parentAlpha);
         }
-        crowdPainter.draw(batch, parentAlpha);
+//        shootingStarPainter.draw(batch, parentAlpha);
     }
     float lastUpdateTime = 0;
     @Override

@@ -22,15 +22,15 @@ import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.ai.utils.Location;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
-import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
+import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /** A SteeringActor is a scene2d {@link Actor} implementing the {@link Steerable} interface.
@@ -63,6 +63,8 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	private RadiusProximity<Vector2> proximity;
 
+	private ShootingStarPainter shootingStarPainter;
+
 
 
 
@@ -80,6 +82,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		this.boundingRadius = (region.getRegionWidth() + region.getRegionHeight()) / 4f;
 		this.setOrigin(region.getRegionWidth() * .5f, region.getRegionHeight() * .5f);
 		//this.setOrigin(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()));
+		shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_SINGLE,null, this, 500);
 	}
 
 	public TextureRegion getRegion () {
@@ -298,10 +301,13 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
-		Color color = getColor();
-		batch.setColor(color.r, color.g, color.b, parentAlpha);
+
+		shootingStarPainter.draw(batch, parentAlpha);
+		/*Color color = getColor();
+		batch.setColor(Color.WHITE);
 		batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(),
-			getRotation());
+				getRotation());*/
+
 	}
 
 	public SteeringActorCreator getSteeringActorCreator() {

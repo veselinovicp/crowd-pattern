@@ -34,7 +34,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Stage controlsStage;
 
 
-	private final static int PARTICLE_START_NUMBER =300;
+	private final static int PARTICLE_START_NUMBER =100;
 
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
@@ -98,7 +98,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		radiusLabelName = new Label("Radius: ", ls);
 		controlsTable.add(radiusLabelName).padRight(10);
 
-		radiusSlider = new Slider(1f,15f,0.1f, false, skin);
+		radiusSlider = new Slider(1f,30f,0.1f, false, skin);
 
 		radiusSlider.setValue(SystemState.getInstance().getRadiusFactor());
 		radiusSlider.addListener(new InputListener() {
