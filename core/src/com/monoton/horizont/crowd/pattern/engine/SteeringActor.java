@@ -82,7 +82,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		this.boundingRadius = (region.getRegionWidth() + region.getRegionHeight()) / 4f;
 		this.setOrigin(region.getRegionWidth() * .5f, region.getRegionHeight() * .5f);
 		//this.setOrigin(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()));
-		shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_SINGLE,null, this, 500);
+		shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_SINGLE,null, this, 200);
 	}
 
 	public TextureRegion getRegion () {

@@ -21,11 +21,13 @@ public abstract class ShootingStarPainter extends Actor {
 
     protected Array<SteeringActor> characters;
     protected SteeringActor steeringActor;
+    protected int tailSize;
 
 
-    ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor) {
+    ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
         this.characters = characters;
         this.steeringActor = steeringActor;
+        this.tailSize = tailSize;
     }
 
     protected abstract Vector2 getVelocity();
@@ -74,10 +76,10 @@ public abstract class ShootingStarPainter extends Actor {
 
     public static ShootingStarPainter getShootingStarPainter(String type, Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize){
         if(type.equals(Constants.SHOOTING_STAR_PAINTER_AVERAGE)){
-            return new AverageShootingStarPainter(characters, steeringActor);
+            return new AverageShootingStarPainter(characters, steeringActor, tailSize);
         }
         if(type.equals(Constants.SHOOTING_STAR_PAINTER_SINGLE)){
-            return new SingleShootingStartPainter(characters, steeringActor);
+            return new SingleShootingStartPainter(characters, steeringActor, tailSize);
         }
 
 
@@ -87,7 +89,7 @@ public abstract class ShootingStarPainter extends Actor {
 
     private void removeTail() {
         int i=0;
-        while(drawPoints.size()>100){
+        while(drawPoints.size()>tailSize){
             drawPoints.remove(i);
             i++;
         }

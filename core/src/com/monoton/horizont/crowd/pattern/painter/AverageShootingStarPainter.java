@@ -13,8 +13,8 @@ import java.util.List;
  * Created by monoton on 19.8.2017.
  */
 public class AverageShootingStarPainter extends ShootingStarPainter {
-    AverageShootingStarPainter(Array<SteeringActor> characters, SteeringActor steeringActor) {
-        super(characters, steeringActor);
+    AverageShootingStarPainter(Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
+        super(characters, steeringActor, tailSize);
     }
 
     @Override
