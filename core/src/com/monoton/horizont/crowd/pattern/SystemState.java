@@ -2,6 +2,8 @@ package com.monoton.horizont.crowd.pattern;
 
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
+import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
 import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
 import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFactory;
 
@@ -10,10 +12,12 @@ import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFa
  */
 public class SystemState<T extends Vector<T>> {
     float orderFactor=1.0f;
-    float distanceFactor=0.1f;
+    float distanceFactor=0.2f;
     float radiusFactor=10;
 
     private ClosenessResponse<T> closenessResponse;
+
+    private ColorMachine colorMachine;
 
     private static SystemState ourInstance = new SystemState();
 
@@ -24,6 +28,7 @@ public class SystemState<T extends Vector<T>> {
     private SystemState() {
         ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
         closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
+        colorMachine = ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_EIGHTIES);
     }
 
     public float getOrderFactor() {
@@ -56,5 +61,13 @@ public class SystemState<T extends Vector<T>> {
 
     public void setClosenessResponse(ClosenessResponse<T> closenessResponse) {
         this.closenessResponse = closenessResponse;
+    }
+
+    public ColorMachine getColorMachine() {
+        return colorMachine;
+    }
+
+    public void setColorMachine(ColorMachine colorMachine) {
+        this.colorMachine = colorMachine;
     }
 }

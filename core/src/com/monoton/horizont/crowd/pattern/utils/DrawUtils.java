@@ -28,20 +28,189 @@ public class DrawUtils {
     }
 
     public static float[] getRainbowColor(float radAngle){
+
+        return getColor(radAngle, rainbowColorChain);
+
+
+    }
+
+    public static float[] getRastaColor(float radAngle){
+
+        return getColor(radAngle, rastaColorChain);
+
+
+    }
+
+    public static float[] getDreamMagnetColor(float radAngle){
+
+        return getColor(radAngle, dreamMagnetColorChain);
+
+
+    }
+
+    public static float[] getEightiesColor(float radAngle){
+
+        return getColor(radAngle, eightiesColorChain);
+
+
+    }
+
+    public static float[] getColor(float radAngle, List<float[]> colorChain){
         if(radAngle<0){
             radAngle+=2*Math.PI;
         }
         float percent = radAngle/(float)(Math.PI*2);
 
-        List<float[]> rainbowColorChain = getRainbowColorChain(100);
-        int size = rainbowColorChain.size();
+
+        int size = colorChain.size();
         int index = (int)(size * percent);
         if (index==size){
             index--;
         }
-        return rainbowColorChain.get(index);
+        return colorChain.get(index);
+
+    }
+
+    static List<float[]> rainbowColorChain;
+    static List<float[]> rastaColorChain;
+    static List<float[]> dreamMagnetColorChain;
+    static List<float[]> eightiesColorChain;
+
+    static{
+        rainbowColorChain = getRainbowColorChain(200);
+        rastaColorChain = getRastaColorChain(200);
+        dreamMagnetColorChain = getDreamMagnetColorChain(200);
+        eightiesColorChain = getEightiesrChain(200);
+    }
+
+    public static List<float[]> getRastaColorChain(int perColorTransitions){
+        List<float[]> rastaColors = new ArrayList<float[]>();
 
 
+        float[] red = new float[]{1,0,0,1};
+        //22,94,0
+        float[] green = new float[]{22/255f,94/255f,0,1};
+        //255,221,0
+        float[] yellow = new float[]{1,221/255f,0,1};
+
+
+        rastaColors.add(red);
+        rastaColors.add(red);
+        rastaColors.add(green);
+        rastaColors.add(green);
+        rastaColors.add(yellow);
+        rastaColors.add(yellow);
+
+        rastaColors.add(red);
+        rastaColors.add(red);
+        rastaColors.add(green);
+        rastaColors.add(green);
+        rastaColors.add(yellow);
+        rastaColors.add(yellow);
+
+
+        return getColorChain(rastaColors, perColorTransitions);
+
+    }
+
+    public static List<float[]> getDreamMagnetColorChain(int perColorTransitions){
+        List<float[]> dreamMagnet = new ArrayList<float[]>();
+
+        //52,56,56
+        //0,95,107
+        //0,140,158
+
+        //0,180,204
+        //0,223,252
+        float[] color1 = getColorFrom256(52,56,56);
+        float[] color2 = getColorFrom256(0,95,107);
+        float[] color3 = getColorFrom256(0,140,158);
+        float[] color4 = getColorFrom256(0,180,204);
+        float[] color5 = getColorFrom256(0,223,252);
+
+
+
+        dreamMagnet.add(color1);
+
+        dreamMagnet.add(color2);
+        dreamMagnet.add(color2);
+        dreamMagnet.add(color3);
+        dreamMagnet.add(color3);
+        dreamMagnet.add(color4);
+        dreamMagnet.add(color4);
+        dreamMagnet.add(color5);
+        dreamMagnet.add(color5);
+
+        dreamMagnet.add(color1);
+        dreamMagnet.add(color1);
+
+        dreamMagnet.add(color2);
+        dreamMagnet.add(color2);
+        dreamMagnet.add(color3);
+        dreamMagnet.add(color3);
+        dreamMagnet.add(color4);
+        dreamMagnet.add(color4);
+        dreamMagnet.add(color5);
+        dreamMagnet.add(color5);
+
+        dreamMagnet.add(color1);
+
+
+
+        return getColorChain(dreamMagnet, perColorTransitions);
+
+    }
+
+    public static List<float[]> getEightiesrChain(int perColorTransitions){
+        List<float[]> eighties = new ArrayList<float[]>();
+
+        //52,56,56
+        //0,95,107
+        //0,140,158
+
+        //0,180,204
+        //0,223,252
+        float[] color1 = getColorFrom256(73,10,61);
+        float[] color2 = getColorFrom256(189,21,80);
+        float[] color3 = getColorFrom256(233,127,2);
+        float[] color4 = getColorFrom256(248,202,0);
+        float[] color5 = getColorFrom256(138,155,15);
+
+
+
+        eighties.add(color1);
+
+        eighties.add(color2);
+        eighties.add(color2);
+        eighties.add(color3);
+        eighties.add(color3);
+        eighties.add(color4);
+        eighties.add(color4);
+        eighties.add(color5);
+        eighties.add(color5);
+
+        eighties.add(color1);
+        eighties.add(color1);
+
+        eighties.add(color2);
+        eighties.add(color2);
+        eighties.add(color3);
+        eighties.add(color3);
+        eighties.add(color4);
+        eighties.add(color4);
+        eighties.add(color5);
+        eighties.add(color5);
+
+        eighties.add(color1);
+
+
+
+        return getColorChain(eighties, perColorTransitions);
+
+    }
+
+    static float[] getColorFrom256(float r, float g, float b){
+        return new float[]{r/255f,g/255f,b/255f,1};
     }
 
     public static List<float[]> getRainbowColorChain(int perColorTransitions){
@@ -49,22 +218,34 @@ public class DrawUtils {
 
         float[] red = new float[]{1,0,0,1};
         float[] orange = new float[]{1,0.5f,0,1};
+        float[] orange2 = new float[]{1,0.5f,0,1};
         float[] yellow = new float[]{1,1,0,1};
+        float[] yellow2 = new float[]{1,1,0,1};
         float[] green = new float[]{0,1,0,1};
+        float[] green2 = new float[]{0,1,0,1};
         float[] blue = new float[]{0,0,1,1};
+        float[] blue2 = new float[]{0,0,1,1};
         float[] indigo = new float[]{75f/255f,0,130f/255f,1};
+        float[] indigo2 = new float[]{75f/255f,0,130f/255f,1};
         float[] violet = new float[]{143f/255f,0,1,1};
+        float[] violet2 = new float[]{143f/255f,0,1,1};
         /**
          * add another red at the end to make final circular transition color smooth
          */
         float[] red2 = new float[]{1,0,0,1};
         rainbowColors.add(red);
         rainbowColors.add(orange);
+        rainbowColors.add(orange2);
         rainbowColors.add(yellow);
+        rainbowColors.add(yellow2);
         rainbowColors.add(green);
+        rainbowColors.add(green2);
         rainbowColors.add(blue);
+        rainbowColors.add(blue2);
         rainbowColors.add(indigo);
+        rainbowColors.add(indigo2);
         rainbowColors.add(violet);
+        rainbowColors.add(violet2);
         rainbowColors.add(red2);
         return getColorChain(rainbowColors, perColorTransitions);
 

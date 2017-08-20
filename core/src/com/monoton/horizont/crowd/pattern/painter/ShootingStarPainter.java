@@ -6,8 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
+import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
-import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
+import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,12 @@ public abstract class ShootingStarPainter extends Actor {
     protected int tailSize;
 
 
+
     ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
         this.characters = characters;
         this.steeringActor = steeringActor;
         this.tailSize = tailSize;
+
     }
 
     protected abstract Vector2 getVelocity();
@@ -59,7 +62,8 @@ public abstract class ShootingStarPainter extends Actor {
 
 
 
-        float[] color = DrawUtils.getRainbowColor(velocity.angleRad());
+//        float[] color = DrawUtils.getColor(velocity.angleRad());
+        float[] color = SystemState.getInstance().getColorMachine().getColor(position, velocity);
 
 
         batch.setColor(color[0], color[1], color[2], parentAlpha);

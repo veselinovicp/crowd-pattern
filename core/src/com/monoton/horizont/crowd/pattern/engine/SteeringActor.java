@@ -29,8 +29,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.monoton.horizont.crowd.pattern.Constants;
+import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
+import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /** A SteeringActor is a scene2d {@link Actor} implementing the {@link Steerable} interface.
@@ -82,6 +84,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		this.boundingRadius = (region.getRegionWidth() + region.getRegionHeight()) / 4f;
 		this.setOrigin(region.getRegionWidth() * .5f, region.getRegionHeight() * .5f);
 		//this.setOrigin(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()));
+
 		shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_SINGLE,null, this, 200);
 	}
 
@@ -240,16 +243,12 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 //			wrapAround(position, getParent().getWidth(), getParent().getHeight());
 			wrapAround(position, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			setPosition(position.x, position.y, Align.center);
-			applyColor();
+
 		}
 		super.act(delta);
 	}
 
-	private void applyColor(){
 
-		float[] color = DrawUtils.getRainbowColor(linearVelocity.angleRad());
-		setColor(color[0], color[1], color[2],1f);
-	}
 
 	// the display area is considered to wrap around from top to bottom
 	// and from left to right
