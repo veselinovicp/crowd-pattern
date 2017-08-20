@@ -6,11 +6,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -19,13 +20,19 @@ import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
+import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
+import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Skin skin;
 
 	Texture img;
+
+	private Texture tfBackground;
+	private Texture scroll_horizontal;
+	private Texture knob_scroll;
 
 	Array<SteeringActor> characters = new Array<SteeringActor>();
 
@@ -191,6 +198,94 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		 */
 
 
+		/**
+		 * color chooser select box
+		 */
+		Label colorLabel = new Label("Color: ", ls);
+		controlsTable.add(colorLabel).padRight(10);
+
+
+		tfBackground = new Texture(Gdx.files.internal("tfbackground.png"));
+		//List
+		List.ListStyle listS = new List.ListStyle();
+		listS.font = font;
+		listS.fontColorSelected = Color.BLACK;
+		listS.fontColorUnselected = Color.GRAY;
+		listS.selection = new TextureRegionDrawable(new TextureRegion(tfBackground));
+
+
+		//SelectBox
+		SelectBox.SelectBoxStyle sbs = new SelectBox.SelectBoxStyle();
+		sbs.listStyle = listS;
+		ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
+
+		scroll_horizontal = new Texture(Gdx.files.internal("scroll_horizontal.png"));
+		knob_scroll = new Texture(Gdx.files.internal("knob_scroll.png"));
+		sps.background = new TextureRegionDrawable(new TextureRegion(tfBackground));
+		sps.vScroll = new TextureRegionDrawable(new TextureRegion(scroll_horizontal));
+		sps.vScrollKnob = new TextureRegionDrawable(new TextureRegion(knob_scroll));
+		sbs.background = new TextureRegionDrawable(new TextureRegion(tfBackground));
+		sbs.scrollStyle = sps;
+		sbs.font = font;
+		sbs.fontColor.set(Color.RED);
+		final SelectBox selectBox = new SelectBox<String>(sbs);
+
+		Array<String> items = new Array<String>();
+
+		items.add(Constants.COLOR_MACHINE_RAINBOW);
+		items.add(Constants.COLOR_MACHINE_RASTA);
+		items.add(Constants.COLOR_MACHINE_DREAM_MAGNET);
+		items.add(Constants.COLOR_MACHINE_EIGHTIES);
+		items.add(Constants.COLOR_MACHINE_RANDOM);
+
+
+
+		selectBox.setItems(items);
+		selectBox.pack(); // To get the actual size
+//		selectBox.setPosition(list.getX() + list.getWidth() + 10, secondRowY-selectBox.getHeight());
+
+		selectBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				String selected = (String) selectBox.getSelected();
+
+				SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(selected));
+
+
+			}
+		});
+
+		controlsTable.add(selectBox).padRight(10);
+		SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(items.first()));
+
+		TextButton randomColor = new TextButton("Random", skin);
+
+
+		randomColor.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				DrawUtils.reinitializeRandomColorChain();
+				SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_RANDOM));
+				selectBox.setSelected(Constants.COLOR_MACHINE_RANDOM);
+				return true;
+			}
+		});
+
+		controlsTable.add(randomColor).center().padBottom(20);
+		controlsTable.row();
+
+		/**
+		 * end color chooser select box
+		 */
+
+
+
+
+
+
+
+
+
 		exitButton = new TextButton("exit", skin);
 
 		exitButton.addListener(new ClickListener(){
@@ -201,7 +296,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			}
 		});
 
-		controlsTable.add(exitButton).padBottom(20);
+		controlsTable.add(exitButton).colspan(3).right().padBottom(20);
 		controlsTable.row();
 
 		controlsStage.addActor(controlsTable);
@@ -255,6 +350,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	public void dispose () {
 
 		img.dispose();
+		tfBackground.dispose();
+		scroll_horizontal.dispose();
+		knob_scroll.dispose();
 		skin.dispose();
 	}
 

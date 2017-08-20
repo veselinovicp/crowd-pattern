@@ -55,6 +55,13 @@ public class DrawUtils {
 
     }
 
+    public static float[] getRandomColor(float radAngle){
+
+        return getColor(radAngle, randomColorChain);
+
+
+    }
+
     public static float[] getColor(float radAngle, List<float[]> colorChain){
         if(radAngle<0){
             radAngle+=2*Math.PI;
@@ -75,12 +82,18 @@ public class DrawUtils {
     static List<float[]> rastaColorChain;
     static List<float[]> dreamMagnetColorChain;
     static List<float[]> eightiesColorChain;
+    static List<float[]> randomColorChain;
 
     static{
         rainbowColorChain = getRainbowColorChain(200);
         rastaColorChain = getRastaColorChain(200);
         dreamMagnetColorChain = getDreamMagnetColorChain(200);
         eightiesColorChain = getEightiesrChain(200);
+        randomColorChain = getRandomColorChain(200);
+    }
+
+    public static void reinitializeRandomColorChain(){
+        randomColorChain = getRandomColorChain(200);
     }
 
     public static List<float[]> getRastaColorChain(int perColorTransitions){
@@ -159,6 +172,58 @@ public class DrawUtils {
 
         return getColorChain(dreamMagnet, perColorTransitions);
 
+    }
+
+    public static List<float[]> getRandomColorChain(int perColorTransitions){
+        List<float[]> random = new ArrayList<float[]>();
+
+        //52,56,56
+        //0,95,107
+        //0,140,158
+
+        //0,180,204
+        //0,223,252
+        float[] color1 = getRandomColor();
+        float[] color2 = getRandomColor();
+        float[] color3 = getRandomColor();
+        float[] color4 = getRandomColor();
+        float[] color5 = getRandomColor();
+
+
+
+        random.add(color1);
+
+        random.add(color2);
+        random.add(color2);
+        random.add(color3);
+        random.add(color3);
+        random.add(color4);
+        random.add(color4);
+        random.add(color5);
+        random.add(color5);
+
+        random.add(color1);
+        random.add(color1);
+
+        random.add(color2);
+        random.add(color2);
+        random.add(color3);
+        random.add(color3);
+        random.add(color4);
+        random.add(color4);
+        random.add(color5);
+        random.add(color5);
+
+        random.add(color1);
+
+
+
+        return getColorChain(random, perColorTransitions);
+
+    }
+
+    static float[] getRandomColor(){
+        return new float[]{(float)Math.random(),(float)Math.random(),(float)Math.random(),1};
     }
 
     public static List<float[]> getEightiesrChain(int perColorTransitions){

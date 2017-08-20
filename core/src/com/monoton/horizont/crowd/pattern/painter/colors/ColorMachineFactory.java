@@ -3,6 +3,7 @@ package com.monoton.horizont.crowd.pattern.painter.colors;
 import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.engine.border.BounceBorderControl;
 import com.monoton.horizont.crowd.pattern.engine.border.FlyThroughBorderControl;
+import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /**
  * Created by monoton on 20.8.2017.
@@ -21,6 +22,10 @@ public class ColorMachineFactory {
         }
         if(type.equals(Constants.COLOR_MACHINE_EIGHTIES)){
             return new EightiesColorMachine();
+        }
+        if(type.equals(Constants.COLOR_MACHINE_RANDOM)){
+
+            return new RandomColorMachine();
         }
         throw new RuntimeException("No color machine by type: "+type+" exists.");
 
