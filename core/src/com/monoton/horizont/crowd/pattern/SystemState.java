@@ -28,7 +28,7 @@ public class SystemState<T extends Vector<T>> {
     private SystemState() {
         ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
         closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
-        colorMachine = ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_RANDOM);
+//        colorMachine = ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_RANDOM);
     }
 
     public float getOrderFactor() {

@@ -271,7 +271,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			}
 		});
 
-		controlsTable.add(randomColor).center().padBottom(20);
+		controlsTable.add(randomColor).center();
 		controlsTable.row();
 
 		/**
