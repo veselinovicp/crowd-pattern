@@ -16,4 +16,6 @@ public class Constants {
     public static final String COLOR_MACHINE_DREAM_MAGNET ="Dream Magnet";
     public static final String COLOR_MACHINE_EIGHTIES ="Eighties";
     public static final String COLOR_MACHINE_RANDOM ="Random";
+    public static final String TAIL_PAINTER_SPERM ="TAIL_PAINTER_SPERM";
+    public static final String TAIL_PAINTER_SNAKE ="TAIL_PAINTER_SNAKE";
 }

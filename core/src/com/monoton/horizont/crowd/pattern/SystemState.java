@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
+import com.monoton.horizont.crowd.pattern.painter.tail.TailPainter;
+import com.monoton.horizont.crowd.pattern.painter.tail.TailPainterFactory;
 import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
 import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFactory;
 
@@ -19,6 +21,8 @@ public class SystemState<T extends Vector<T>> {
 
     private ColorMachine colorMachine;
 
+    private TailPainter tailPainter;
+
     private static SystemState ourInstance = new SystemState();
 
     public static SystemState getInstance() {
@@ -28,7 +32,8 @@ public class SystemState<T extends Vector<T>> {
     private SystemState() {
         ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
         closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
-//        colorMachine = ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_RANDOM);
+        tailPainter = TailPainterFactory.getTailPainter(Constants.TAIL_PAINTER_SNAKE);
+
     }
 
     public float getOrderFactor() {
@@ -69,5 +74,13 @@ public class SystemState<T extends Vector<T>> {
 
     public void setColorMachine(ColorMachine colorMachine) {
         this.colorMachine = colorMachine;
+    }
+
+    public TailPainter getTailPainter() {
+        return tailPainter;
+    }
+
+    public void setTailPainter(TailPainter tailPainter) {
+        this.tailPainter = tailPainter;
     }
 }

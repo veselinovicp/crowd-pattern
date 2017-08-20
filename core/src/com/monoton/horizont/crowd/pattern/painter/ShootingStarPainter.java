@@ -49,14 +49,8 @@ public abstract class ShootingStarPainter extends Actor {
         /**
          * first draw old ones
          */
-        for(int i=0;i<drawPoints.size();i++){
-            DrawPoint drawPoint = drawPoints.get(i);
-            float[] drawPointColor = drawPoint.getColor();
-            float factor = i / (float) drawPoints.size();
-            batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//i/(float)drawPoints.size()
-            batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y, region.getRegionWidth()*factor, region.getRegionHeight()*factor);
 
-        }
+        SystemState.getInstance().getTailPainter().drawTail(drawPoints, region, batch, parentAlpha);
 
 
 
