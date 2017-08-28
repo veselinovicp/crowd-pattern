@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
+import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 import com.monoton.horizont.crowd.pattern.utils.SteeringActorUtils;
 
 /**
@@ -20,7 +21,7 @@ public class LightScene extends Actor {
     private Array<SteeringActor> characters;
 
     private Light light;
-    private Vector3 position = new Vector3();
+    private Vector2 position = new Vector2();
 
     float[] color;
 
@@ -43,24 +44,28 @@ public class LightScene extends Actor {
         Vector2 averagePosition = SteeringActorUtils.getAveragePosition(characters);
 
         calculateLightPosition(averagePosition);
-        calculateColor(averagePosition);
+
+        Vector2 velocity = SteeringActorUtils.getNorSumVelocity(characters);
+        calculateColor(averagePosition, velocity);
 
         light.setColor(color[0], color[1], color[2], 1);
 
         light.setPosition(position.x, position.y);
+        light.setDirection(velocity.angle());
 
 
     }
 
-    private void calculateColor(Vector2 averagePosition){
-        Vector2 velocity = SteeringActorUtils.getNorSumVelocity(characters);
+    private void calculateColor(Vector2 averagePosition, Vector2 velocity){
+
         color = SystemState.getInstance().getColorMachine().getColor(averagePosition, velocity);
     }
 
     private void calculateLightPosition(Vector2 averagePosition){
 
-        float factorX = averagePosition.x / Gdx.graphics.getWidth();
+        /*float factorX = averagePosition.x / Gdx.graphics.getWidth();
         float factorY = averagePosition.y / Gdx.graphics.getHeight();
-        position.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT, 0);
+        position.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT, 0);*/
+        position = DrawUtils.getBox2DCoords(averagePosition);
     }
 }

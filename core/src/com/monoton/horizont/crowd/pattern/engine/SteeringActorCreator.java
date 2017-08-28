@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
@@ -38,14 +38,14 @@ public class SteeringActorCreator {
     }
 
 
-    public void createSteeringActors(int number){
+    public void createSteeringActors(int number, World world){
         for (int i = 0; i < number;i++) {
-            createSteeringActor(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()));
+            createSteeringActor(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()), world);
         }
     }
 
-    public void createSteeringActor(float x, float y) {
-        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this);
+    public void createSteeringActor(float x, float y, World world) {
+        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this, world, x, y);
         character.setMaxLinearSpeed(50);
         character.setMaxLinearAcceleration(100);
 
@@ -77,7 +77,7 @@ public class SteeringActorCreator {
 
         character.setSteeringBehavior(prioritySteeringSB);
 
-        setPosition(character, x, y);
+//        setPosition(character, x, y);
         setRandomOrientation(character);
         speedUp(character);
 

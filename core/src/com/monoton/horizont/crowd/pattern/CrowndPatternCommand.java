@@ -1,5 +1,6 @@
 package com.monoton.horizont.crowd.pattern;
 
+import box2dLight.ConeLight;
 import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
@@ -50,7 +51,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Stage controlsStage;
 
 
-	private final static int PARTICLE_START_NUMBER =80;
+	private final static int PARTICLE_START_NUMBER =50;
 
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
@@ -102,7 +103,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		// Create Physics World
-		world = new World(new Vector2(0,-9.8f), true);
+//		world = new World(new Vector2(0,-9.8f), true);
+		world = new World(new Vector2(0,0), true);
+
+
 		// Instantiate the class in charge of drawing physics shapes
 		debugRenderer = new Box2DDebugRenderer();
 		// To add some color to the ground
@@ -114,10 +118,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		light.setPosition(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f);
 
 		light.setColor(Color.YELLOW);
-		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.5f);
+		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
 
 //		createBodies();
-//		Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15, LIGHT_SCENE_WIDTH*0.5f, LIGHT_SCENE_HEIGHT-1, 270, 45);
+//		Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15,Constants.LIGHT_SCENE_WIDTH*0.5f, Constants.LIGHT_SCENE_HEIGHT-1, 270, 45);
 
 
 
@@ -355,15 +359,16 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		characters = new Array<SteeringActor>();
 
-		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters);
+		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, world);
 
 		actionStage.addActor(steeringActorsScene);
 
 		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, SystemState.getInstance().getRadiusFactor());
 
-		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER);
+		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER, world);
 
 		actionStage.setScrollFocus(steeringActorsScene);
+
 
 		LightScene lightScene = new LightScene(characters, light);
 		actionStage.addActor(lightScene);
@@ -372,6 +377,16 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		InputMultiplexer inputMultiplexer = new InputMultiplexer(controlsStage, actionStage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
+
+		/*// Tweak debug information
+		debugRenderer = new Box2DDebugRenderer(
+				true, *//* draw bodies *//*
+				false, *//* don't draw joints *//*
+				true, *//* draw aabbs *//*
+				true, *//* draw inactive bodies *//*
+				false, *//* don't draw velocities *//*
+				true *//* draw contacts *//*);
+*/
 
 	}
 
@@ -428,6 +443,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		world.step(1/60f, 6, 2);
+		debugRenderer.render(world, viewport.getCamera().combined);
 /*
 
 

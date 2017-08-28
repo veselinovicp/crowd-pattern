@@ -5,12 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
-import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
 import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
@@ -24,8 +24,10 @@ public class SteeringActorsScene extends Actor {
     private Array<SteeringActor> characters;
 
 
-    public SteeringActorsScene(final Array<SteeringActor> characters) {
+
+    public SteeringActorsScene(final Array<SteeringActor> characters, final World world) {
         this.characters = characters;
+
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_AVERAGE, characters, null, 500);
@@ -38,7 +40,7 @@ public class SteeringActorsScene extends Actor {
                     SteeringActorCreator steeringActorCreator = characters.get(0).getSteeringActorCreator();
                     float posX = x - region.getRegionHeight()/2;
                     float posY = y - region.getRegionHeight()/2;
-                    steeringActorCreator.createSteeringActor(posX, posY);
+                    steeringActorCreator.createSteeringActor(posX, posY, world);
                 }
                 return true;
             }
@@ -50,7 +52,7 @@ public class SteeringActorsScene extends Actor {
         for (SteeringActor steeringActor : characters){
             steeringActor.draw(batch, parentAlpha);
         }
-        shootingStarPainter.draw(batch, parentAlpha);
+//        shootingStarPainter.draw(batch, parentAlpha);
     }
     float lastUpdateTime = 0;
     @Override

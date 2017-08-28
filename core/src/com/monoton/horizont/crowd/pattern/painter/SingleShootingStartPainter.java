@@ -4,14 +4,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
-import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
 
 /**
  * Created by monoton on 19.8.2017.
  */
 public class SingleShootingStartPainter extends ShootingStarPainter {
     SingleShootingStartPainter(Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
-        super(characters, steeringActor, tailSize);
+        super(characters, steeringActor,tailSize);
     }
 
     @Override
