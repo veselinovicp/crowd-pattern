@@ -18,4 +18,8 @@ public class Constants {
     public static final String COLOR_MACHINE_RANDOM ="Random";
     public static final String TAIL_PAINTER_SPERM ="TAIL_PAINTER_SPERM";
     public static final String TAIL_PAINTER_SNAKE ="TAIL_PAINTER_SNAKE";
+
+
+    public static final float LIGHT_SCENE_WIDTH = 12.80f; // 12.8 metres wide
+    public static final float LIGHT_SCENE_HEIGHT = 7.20f; // 7.2 metres high
 }

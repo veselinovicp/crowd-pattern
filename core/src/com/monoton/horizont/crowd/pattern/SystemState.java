@@ -14,8 +14,9 @@ import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFa
  */
 public class SystemState<T extends Vector<T>> {
     float orderFactor=1.0f;
-    float distanceFactor=0.2f;
+    float distanceFactor=0.3f;
     float radiusFactor=10;
+
 
     private ClosenessResponse<T> closenessResponse;
 
@@ -83,4 +84,6 @@ public class SystemState<T extends Vector<T>> {
     public void setTailPainter(TailPainter tailPainter) {
         this.tailPainter = tailPainter;
     }
+
+
 }

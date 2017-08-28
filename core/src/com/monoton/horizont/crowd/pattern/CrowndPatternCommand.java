@@ -1,5 +1,8 @@
 package com.monoton.horizont.crowd.pattern;
 
+import box2dLight.Light;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.Color;
@@ -7,6 +10,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -14,13 +20,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
+import com.monoton.horizont.crowd.pattern.scene.LightScene;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
@@ -41,7 +50,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Stage controlsStage;
 
 
-	private final static int PARTICLE_START_NUMBER =100;
+	private final static int PARTICLE_START_NUMBER =80;
 
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
@@ -68,10 +77,48 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Label distanceValue;
 
 
+	private World world;
+	private Box2DDebugRenderer debugRenderer;
+	private RayHandler rayHandler;
+	private Light light;
+
+
+
+	ShapeRenderer sr;
+
+	private Viewport viewport;
+
 
 	
 	@Override
 	public void create () {
+
+		viewport = new FitViewport(Constants.LIGHT_SCENE_WIDTH, Constants.LIGHT_SCENE_HEIGHT);
+		// Center camera
+		viewport.getCamera().position.set(viewport.getCamera().position.x + Constants.LIGHT_SCENE_WIDTH *0.5f,
+				viewport.getCamera().position.y + Constants.LIGHT_SCENE_HEIGHT *0.5f
+				, 0);
+		viewport.getCamera().update();
+
+
+		// Create Physics World
+		world = new World(new Vector2(0,-9.8f), true);
+		// Instantiate the class in charge of drawing physics shapes
+		debugRenderer = new Box2DDebugRenderer();
+		// To add some color to the ground
+		sr = new ShapeRenderer();
+
+		rayHandler = new RayHandler(world);
+		rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.25f);
+		light = new PointLight(rayHandler, 32);
+		light.setPosition(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f);
+
+		light.setColor(Color.YELLOW);
+		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.5f);
+
+//		createBodies();
+//		Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15, LIGHT_SCENE_WIDTH*0.5f, LIGHT_SCENE_HEIGHT-1, 270, 45);
+
 
 
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -318,6 +365,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		actionStage.setScrollFocus(steeringActorsScene);
 
+		LightScene lightScene = new LightScene(characters, light);
+		actionStage.addActor(lightScene);
+
 		// ORDER IS IMPORTANT!
 		InputMultiplexer inputMultiplexer = new InputMultiplexer(controlsStage, actionStage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -325,10 +375,40 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	}
 
+	private void createBodies() {
+
+		// Create a static body definition
+		BodyDef staticBodyDef = new BodyDef();
+		staticBodyDef.type = BodyDef.BodyType.StaticBody;
+
+		//GROUND
+		Body groundBody = world.createBody(staticBodyDef);
+		PolygonShape groundBox = new PolygonShape();
+		groundBox.setAsBox(Constants.LIGHT_SCENE_WIDTH * 0.5f, 0.5f);
+		groundBody.createFixture(groundBox, 0.0f);
+		groundBox.dispose();
+
+		groundBody.setTransform(new Vector2(Constants.LIGHT_SCENE_WIDTH *0.5f, 0.5f), groundBody.getAngle());
+
+		// BOX
+		Body boxBody = world.createBody(staticBodyDef);
+		PolygonShape box = new PolygonShape();
+		box.setAsBox(.5f, .5f);
+		boxBody.createFixture(box, 0.0f);
+		box.dispose();
+
+		boxBody.setTransform(new Vector2(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f), groundBody.getAngle());
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		viewport.update(width, height);
+	}
+
 
 	@Override
 	public void render () {
-//		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
@@ -344,6 +424,24 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		controlsStage.act();
 		controlsStage.draw();
 
+
+
+
+		world.step(1/60f, 6, 2);
+/*
+
+
+		sr.setProjectionMatrix(viewport.getCamera().combined);
+		sr.begin(ShapeRenderer.ShapeType.Filled);
+		sr.setColor(Color.RED);
+		sr.rect(0, 0, LIGHT_SCENE_WIDTH, 1f);
+		sr.end();
+*/
+
+
+		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
+		rayHandler.updateAndRender();
+
 	}
 	
 	@Override
@@ -354,6 +452,11 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		scroll_horizontal.dispose();
 		knob_scroll.dispose();
 		skin.dispose();
+		debugRenderer.dispose();
+
+
+		rayHandler.dispose();
+		world.dispose();
 	}
 
 }

@@ -50,7 +50,7 @@ public class SteeringActorsScene extends Actor {
         for (SteeringActor steeringActor : characters){
             steeringActor.draw(batch, parentAlpha);
         }
-//        shootingStarPainter.draw(batch, parentAlpha);
+        shootingStarPainter.draw(batch, parentAlpha);
     }
     float lastUpdateTime = 0;
     @Override
