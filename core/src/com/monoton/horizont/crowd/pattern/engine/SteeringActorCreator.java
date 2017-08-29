@@ -93,10 +93,11 @@ public class SteeringActorCreator {
            steeringActor.getProximity().setRadius(radius);
         }
     }
-    public void setOrderFactor(float orderFactor){
-
-    }
-
+   public void dispose(){
+       for(SteeringActor steeringActor : characters){
+           steeringActor.cleanResources();
+       }
+   }
     private void setPosition(SteeringActor character, float x, float y) {
       /*  int maxTries = Math.max(100, others.size * others.size);
         SET_NEW_POS:

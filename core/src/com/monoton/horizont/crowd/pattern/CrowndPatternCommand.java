@@ -472,6 +472,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		rayHandler.dispose();
 		world.dispose();
+
+		steeringActorCreator.dispose();
 	}
 
 }

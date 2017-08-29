@@ -336,7 +336,14 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		shootingStarPainter.draw(batch, parentAlpha);
 
 
+
 	}
+
+	public void cleanResources(){
+		light.dispose();
+	}
+
+
 
 	public SteeringActorCreator getSteeringActorCreator() {
 		return steeringActorCreator;
