@@ -19,7 +19,7 @@ public class SnakeTailPainter implements TailPainter {
             return;
         }
         int regionWidth = region.getRegionWidth();
-        int regionHeight = region.getRegionHeight();
+
         float radius = regionWidth * TAIL_PAINTER_PROXIMITY_FACTOR;
         DrawPoint justDrawn = drawPoints.get(0);
         for(int i=drawPoints.size()-1;i>=0;i--){
@@ -28,7 +28,7 @@ public class SnakeTailPainter implements TailPainter {
             if(distance>=radius){
                 float[] drawPointColor = drawPoint.getColor();
                 float factor = i / (float) drawPoints.size();
-                batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//i/(float)drawPoints.size()
+                batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor/2f);//i/(float)drawPoints.size()
                 batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y, region.getRegionWidth()*factor, region.getRegionHeight()*factor);
                 radius = region.getRegionWidth()*factor * TAIL_PAINTER_PROXIMITY_FACTOR;
                 justDrawn = drawPoint;

@@ -1,6 +1,5 @@
 package com.monoton.horizont.crowd.pattern;
 
-import box2dLight.ConeLight;
 import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
@@ -359,13 +358,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		characters = new Array<SteeringActor>();
 
-		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, world);
+		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler);
 
 		actionStage.addActor(steeringActorsScene);
 
 		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, SystemState.getInstance().getRadiusFactor());
 
-		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER, world);
+		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER,rayHandler);
 
 		actionStage.setScrollFocus(steeringActorsScene);
 

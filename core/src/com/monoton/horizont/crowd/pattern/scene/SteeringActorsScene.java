@@ -1,11 +1,11 @@
 package com.monoton.horizont.crowd.pattern.scene;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -25,7 +25,7 @@ public class SteeringActorsScene extends Actor {
 
 
 
-    public SteeringActorsScene(final Array<SteeringActor> characters, final World world) {
+    public SteeringActorsScene(final Array<SteeringActor> characters, final RayHandler rayHandler) {
         this.characters = characters;
 
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -40,7 +40,7 @@ public class SteeringActorsScene extends Actor {
                     SteeringActorCreator steeringActorCreator = characters.get(0).getSteeringActorCreator();
                     float posX = x - region.getRegionHeight()/2;
                     float posY = y - region.getRegionHeight()/2;
-                    steeringActorCreator.createSteeringActor(posX, posY, world);
+                    steeringActorCreator.createSteeringActor(posX, posY, rayHandler);
                 }
                 return true;
             }

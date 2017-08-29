@@ -12,6 +12,11 @@ import java.util.List;
  */
 public class DrawUtils {
 
+    public static float getBox2DWidth(float x){
+        float factorX = x / Gdx.graphics.getWidth();
+        return factorX * Constants.LIGHT_SCENE_WIDTH;
+    }
+
     public static Vector2 getBox2DCoords(Vector2 vector){
         return getBox2DCoords(vector.x, vector.y);
     }

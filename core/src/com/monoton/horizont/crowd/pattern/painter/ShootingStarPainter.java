@@ -3,7 +3,6 @@ package com.monoton.horizont.crowd.pattern.painter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.SystemState;
@@ -38,7 +37,7 @@ public abstract class ShootingStarPainter{
     protected abstract TextureRegion getRegion();
 
 
-    public void draw(Batch batch, Body body, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {
 
 
 

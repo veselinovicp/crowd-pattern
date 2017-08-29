@@ -1,5 +1,6 @@
 package com.monoton.horizont.crowd.pattern.engine;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.behaviors.PrioritySteering;
 import com.badlogic.gdx.ai.steer.behaviors.Wander;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
@@ -38,14 +38,14 @@ public class SteeringActorCreator {
     }
 
 
-    public void createSteeringActors(int number, World world){
+    public void createSteeringActors(int number, RayHandler rayHandler){
         for (int i = 0; i < number;i++) {
-            createSteeringActor(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()), world);
+            createSteeringActor(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()),rayHandler);
         }
     }
 
-    public void createSteeringActor(float x, float y, World world) {
-        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this, world, x, y);
+    public void createSteeringActor(float x, float y, RayHandler rayHandler) {
+        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this,rayHandler, x, y);
         character.setMaxLinearSpeed(50);
         character.setMaxLinearAcceleration(100);
 

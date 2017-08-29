@@ -16,24 +16,25 @@
 
 package com.monoton.horizont.crowd.pattern.engine;
 
+import box2dLight.Light;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.ai.utils.Location;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.monoton.horizont.crowd.pattern.Constants;
-import com.monoton.horizont.crowd.pattern.engine.body.BodyEngine;
+import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
-import com.monoton.horizont.crowd.pattern.painter.DrawPoint;
 import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
@@ -69,15 +70,16 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	private ShootingStarPainter shootingStarPainter;
 
-
-	private Body body;
-
+	private Light light;
 
 
 
 
 
-	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl, SteeringActorCreator steeringActorCreator, World world, float x, float y) {
+
+
+
+	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl, SteeringActorCreator steeringActorCreator, RayHandler rayHandler, float x, float y) {
 
 		this.steeringActorCreator = steeringActorCreator;
 		this.borderControl = borderControl;
@@ -95,8 +97,22 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		setPosition(x, y, Align.center);
 		getPosition().set(getX(Align.center), getY(Align.center));
 
-		/*BodyEngine bodyEngine = new BodyEngine();
-		body = bodyEngine.createBody(x, y, world);*/
+		createLight(rayHandler, x, y);
+
+	}
+
+	private void createLight(RayHandler rayHandler, float x, float y){
+		light = new PointLight(rayHandler, 32);
+		light.setPosition(DrawUtils.getBox2DCoords(x, y));
+
+		setLightColor();
+		light.setDistance(DrawUtils.getBox2DWidth(region.getRegionWidth()));
+	}
+
+	private void setLightColor() {
+		float[] color = SystemState.getInstance().getColorMachine().getColor(position, linearVelocity);
+//		light.setColor(1-color[0], 1-color[1], 1-color[2],1);
+		light.setColor(color[0],color[1],color[2],1);
 	}
 
 	public TextureRegion getRegion () {
@@ -311,17 +327,13 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
-
-
-
-//		body.setLinearVelocity(DrawUtils.getBox2DCoords(linearVelocity));
-		/*Vector2 box2DCoords = DrawUtils.getBox2DCoords(position);
-		body.setTransform(box2DCoords.x, box2DCoords.y, linearVelocity.angleRad());*/
+		setLightColor();
+		light.setPosition(DrawUtils.getBox2DCoords(position));
 
 
 
 
-		shootingStarPainter.draw(batch, body, parentAlpha);
+		shootingStarPainter.draw(batch, parentAlpha);
 
 
 	}
