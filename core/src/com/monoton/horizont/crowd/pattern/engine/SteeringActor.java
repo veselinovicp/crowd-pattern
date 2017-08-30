@@ -16,9 +16,7 @@
 
 package com.monoton.horizont.crowd.pattern.engine;
 
-import box2dLight.Light;
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
+import box2dLight.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
@@ -103,7 +101,9 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	private void createLight(RayHandler rayHandler, float x, float y){
 		light = new PointLight(rayHandler, 32);
+//		light = new ConeLight(rayHandler, 32, Color.WHITE, 15,Constants.LIGHT_SCENE_WIDTH*0.5f, Constants.LIGHT_SCENE_HEIGHT-1, 270, 45);
 		light.setPosition(DrawUtils.getBox2DCoords(x, y));
+		light.setDirection(linearVelocity.angle());
 
 		setLightColor();
 		light.setDistance(DrawUtils.getBox2DWidth(region.getRegionWidth()));
@@ -328,6 +328,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
 		setLightColor();
+		light.setDirection(linearVelocity.angle());
 		light.setPosition(DrawUtils.getBox2DCoords(position));
 
 

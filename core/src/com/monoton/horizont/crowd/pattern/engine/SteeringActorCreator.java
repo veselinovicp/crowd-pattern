@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
@@ -46,7 +47,7 @@ public class SteeringActorCreator {
 
     public void createSteeringActor(float x, float y, RayHandler rayHandler) {
         final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this,rayHandler, x, y);
-        character.setMaxLinearSpeed(50);
+        character.setMaxLinearSpeed(Constants.MAX_SPEED);
         character.setMaxLinearAcceleration(100);
 
         RadiusProximity<Vector2> proximity = new RadiusProximity<Vector2>(character, characters,
@@ -77,14 +78,27 @@ public class SteeringActorCreator {
 
         character.setSteeringBehavior(prioritySteeringSB);
 
-//        setPosition(character, x, y);
-        setRandomOrientation(character);
+//        setRandomOrientation(character);
+        setOrientationTowardsCenter(x, y, character);
         speedUp(character);
 
 
         characters.add(character);
 //        table.addActor(character);
         steeringActorsScene.addSteeringActor(character);
+
+    }
+
+    private void setOrientationTowardsCenter(float x, float y, SteeringActor character){
+        Vector2 center = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        Vector2 current = new Vector2(x, y);
+        float orientation = current.sub(center).angleRad();
+        character.setOrientation(orientation);
+        if (!character.isIndependentFacing()) {
+            // Set random initial non-zero linear velocity since independent facing is off
+            character.angleToVector(character.getLinearVelocity(), orientation).scl(character.getMaxLinearSpeed()/5);
+        }
+
 
     }
 
@@ -98,21 +112,7 @@ public class SteeringActorCreator {
            steeringActor.cleanResources();
        }
    }
-    private void setPosition(SteeringActor character, float x, float y) {
-      /*  int maxTries = Math.max(100, others.size * others.size);
-        SET_NEW_POS:
-        while (--maxTries >= 0) {*/
-            character.setPosition(x, y, Align.center);
-            character.getPosition().set(character.getX(Align.center), character.getY(Align.center));
-            /*for (int i = 0; i < others.size; i++) {
-                SteeringActor other = (SteeringActor)others.get(i);
-                if (character.getPosition().dst(other.getPosition()) <= character.getBoundingRadius() + other.getBoundingRadius()
-                        + minDistanceFromBoundary) continue SET_NEW_POS;
-            }
-            return;
-        }
-        throw new GdxRuntimeException("Probable infinite loop detected");*/
-    }
+
     private void speedUp(SteeringActor character) {
         //character.getLinearVelocity().set(new Vector2(MathUtils.random(-1, 1),MathUtils.random(-1, 1))).nor().scl(character.getMaxLinearAcceleration());
         character.getLinearVelocity().scl(character.getMaxLinearAcceleration());
