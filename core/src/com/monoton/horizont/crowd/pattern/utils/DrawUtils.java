@@ -1,6 +1,8 @@
 package com.monoton.horizont.crowd.pattern.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.monoton.horizont.crowd.pattern.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,25 @@ import java.util.List;
  * Created by monoton on 12.8.2017.
  */
 public class DrawUtils {
+
+    public static float getBox2DWidth(float x){
+        float factorX = x / Gdx.graphics.getWidth();
+        return factorX * Constants.LIGHT_SCENE_WIDTH;
+    }
+
+    public static Vector2 getBox2DCoords(Vector2 vector){
+        return getBox2DCoords(vector.x, vector.y);
+    }
+
+
+    public static Vector2 getBox2DCoords(float x, float y){
+        Vector2 vector2 = new Vector2();
+        float factorX = x / Gdx.graphics.getWidth();
+        float factorY = y / Gdx.graphics.getHeight();
+        vector2.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT);
+
+        return vector2;
+    }
 
     public static Vector2 calculateNorSum(List<Vector2> vectors){
         Vector2 result = vectors.get(0).cpy().setZero();
