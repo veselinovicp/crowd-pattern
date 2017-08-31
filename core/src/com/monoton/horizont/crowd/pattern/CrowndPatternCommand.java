@@ -63,20 +63,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private TextButton exitButton;
 
 
-
-	/*private Slider radiusSlider;
-	private Label radiusLabelName;
-	private Label radiusValue;*/
-
-	private Slider orderSlider;
-	private Label orderLabelName;
-	private Label orderValue;
-
-	private Slider distanceSlider;
-	private Label distanceLabelName;
-	private Label distanceValue;
-
-
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private RayHandler rayHandler;
@@ -304,86 +290,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		controlsTable.row();
 	}
 
-	private void createDistanceControls(Label.LabelStyle ls) {
-
-
-		InputListener listener = new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setDistanceFactor(distanceSlider.getValue());
-				distanceValue.setText("" + distanceSlider.getValue());
-			}
-
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setDistanceFactor(distanceSlider.getValue());
-				return true;
-			}
-
-			;
-		};
-
-		Controls controls = createControls("Distance: ",0.01f,1f,0.05f,SystemState.getInstance().getDistanceFactor(), listener, ls);
-		distanceSlider = controls.getSlider();
-		distanceValue = controls.getValue();
-	}
-
-	private void createOrderControls(Label.LabelStyle ls) {
-
-
-		InputListener listener = new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setOrderFactor(orderSlider.getValue());
-				orderValue.setText("" + orderSlider.getValue());
-			}
-
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setOrderFactor(orderSlider.getValue());
-				return true;
-			}
-
-			;
-		};
-
-		Controls controls = createControls("Order: ",0.1f,5f,0.05f,SystemState.getInstance().getOrderFactor(), listener, ls);
-		orderSlider = controls.getSlider();
-		orderValue = controls.getValue();
-	}
-
-	private Label radiusValue = null;
-	private Slider radiusSlider = null;
-
-	private void createRadiusControls(Label.LabelStyle ls) {
-
-
-		InputListener listener = new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//				Gdx.app.log("TAG", "slider changed to: " + radiusSlider.getValue());
-				steeringActorCreator.setRadius(radiusSlider.getValue());
-				radiusValue.setText("" + radiusSlider.getValue());
-				SystemState.getInstance().setRadiusFactor(radiusSlider.getValue());
-
-			}
-
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				steeringActorCreator.setRadius(radiusSlider.getValue());
-				SystemState.getInstance().setRadiusFactor(radiusSlider.getValue());
-				return true;
-			}
-
-			;
-		};
-
-		Controls controls = createControls("Radius: ",1f,30f,0.1f,SystemState.getInstance().getRadiusFactor(), listener, ls);
-		radiusSlider = controls.getSlider();
-		radiusValue = controls.getValue();
-	}
-
-
 
 
 	private Label speedValue = null;
@@ -430,7 +336,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 				lightSizeValue.setText("" + lightSizeSlider.getValue());
 
-//				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
 				light.setDistance(lightSizeSlider.getValue());
 
@@ -439,8 +344,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				steeringActorCreator.setSpeed(speedSlider.getValue());
-//				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
+
 				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
 				light.setDistance(lightSizeSlider.getValue());
 				return true;
