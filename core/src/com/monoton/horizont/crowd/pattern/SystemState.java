@@ -19,6 +19,7 @@ public class SystemState<T extends Vector<T>> {
     float speedFactor=80;
     float tailLengthFactor=200;
     float tailDensityFactor=0.5f;
+    float lightSizeFactor=Constants.LIGHT_SCENE_WIDTH *0.7f;
 
 
     private ClosenessResponse<T> closenessResponse;
@@ -110,5 +111,13 @@ public class SystemState<T extends Vector<T>> {
 
     public void setTailDensityFactor(float tailDensityFactor) {
         this.tailDensityFactor = tailDensityFactor;
+    }
+
+    public float getLightSizeFactor() {
+        return lightSizeFactor;
+    }
+
+    public void setLightSizeFactor(float lightSizeFactor) {
+        this.lightSizeFactor = lightSizeFactor;
     }
 }

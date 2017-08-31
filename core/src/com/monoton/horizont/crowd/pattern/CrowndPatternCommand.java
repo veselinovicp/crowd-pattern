@@ -160,6 +160,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		createSpeedControls(ls);
 		createTailLengthControls(ls);
 		createTailDensityControls(ls);
+		createLightSizeControls(ls);
 
 
 		/**
@@ -415,6 +416,42 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		Controls controls = createControls("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener, ls);
 		speedSlider = controls.getSlider();
 		speedValue = controls.getValue();
+	}
+
+	private Label lightSizeValue = null;
+	private Slider lightSizeSlider = null;
+
+	private void createLightSizeControls(Label.LabelStyle ls) {
+
+
+		InputListener listener = new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				lightSizeValue.setText("" + lightSizeSlider.getValue());
+
+//				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
+				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
+				light.setDistance(lightSizeSlider.getValue());
+
+
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				steeringActorCreator.setSpeed(speedSlider.getValue());
+//				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
+				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
+				light.setDistance(lightSizeSlider.getValue());
+				return true;
+			}
+
+			;
+		};
+
+		Controls controls = createControls("Light size: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getLightSizeFactor(), listener, ls);
+		lightSizeSlider = controls.getSlider();
+		lightSizeValue = controls.getValue();
 	}
 
 	private Label tailLengthValue = null;
