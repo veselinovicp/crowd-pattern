@@ -33,11 +33,13 @@ import com.monoton.horizont.crowd.pattern.scene.LightScene;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
+
 public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Skin skin;
 
-	Texture img;
+	private Texture img;
+	private Texture background;
 
 	private Texture tfBackground;
 	private Texture scroll_horizontal;
@@ -105,7 +107,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		light.setColor(Color.YELLOW);
 		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
 
-//		createBodies();
+
 //		Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15,Constants.LIGHT_SCENE_WIDTH*0.5f, Constants.LIGHT_SCENE_HEIGHT-1, 270, 45);
 
 
@@ -125,7 +127,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		controlsTable.setWidth(Gdx.graphics.getWidth());
 		controlsTable.setHeight(Gdx.graphics.getHeight());
 		controlsTable.align(Align.top|Align.right);
-		//controlsTable.setPosition(0, Gdx.graphics.getHeight());
+
 
 
 		controlsTable.padTop(20);
@@ -135,12 +137,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
 		Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
 
-
-	/*	createRadiusControls(ls);
-
-		createOrderControls(ls);
-
-		createDistanceControls(ls);*/
 
 
 		createSpeedControls(ls);
@@ -170,7 +166,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		characters = new Array<SteeringActor>();
 
-		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler);
+		background = new Texture(Gdx.files.internal("background.jpg"));
+
+		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background);
 
 		actionStage.addActor(steeringActorsScene);
 
@@ -457,30 +455,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	}
 
-	private void createBodies() {
-
-		// Create a static body definition
-		BodyDef staticBodyDef = new BodyDef();
-		staticBodyDef.type = BodyDef.BodyType.StaticBody;
-
-		//GROUND
-		Body groundBody = world.createBody(staticBodyDef);
-		PolygonShape groundBox = new PolygonShape();
-		groundBox.setAsBox(Constants.LIGHT_SCENE_WIDTH * 0.5f, 0.5f);
-		groundBody.createFixture(groundBox, 0.0f);
-		groundBox.dispose();
-
-		groundBody.setTransform(new Vector2(Constants.LIGHT_SCENE_WIDTH *0.5f, 0.5f), groundBody.getAngle());
-
-		// BOX
-		Body boxBody = world.createBody(staticBodyDef);
-		PolygonShape box = new PolygonShape();
-		box.setAsBox(.5f, .5f);
-		boxBody.createFixture(box, 0.0f);
-		box.dispose();
-
-		boxBody.setTransform(new Vector2(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f), groundBody.getAngle());
-	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -511,15 +485,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		world.step(1/60f, 6, 2);
 		debugRenderer.render(world, viewport.getCamera().combined);
-/*
 
-
-		sr.setProjectionMatrix(viewport.getCamera().combined);
-		sr.begin(ShapeRenderer.ShapeType.Filled);
-		sr.setColor(Color.RED);
-		sr.rect(0, 0, LIGHT_SCENE_WIDTH, 1f);
-		sr.end();
-*/
 
 
 		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
@@ -542,6 +508,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		world.dispose();
 
 		steeringActorCreator.dispose();
+		tfBackground.dispose();
+		background.dispose();
 	}
 
 }

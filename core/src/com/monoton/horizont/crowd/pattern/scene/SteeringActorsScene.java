@@ -4,6 +4,7 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,9 +24,12 @@ public class SteeringActorsScene extends Actor {
 
     private Array<SteeringActor> characters;
 
+    private Texture background;
 
 
-    public SteeringActorsScene(final Array<SteeringActor> characters, final RayHandler rayHandler) {
+
+    public SteeringActorsScene(final Array<SteeringActor> characters, final RayHandler rayHandler, Texture background) {
+        this.background = background;
         this.characters = characters;
 
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -49,6 +53,7 @@ public class SteeringActorsScene extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        batch.draw(background,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for (SteeringActor steeringActor : characters){
             steeringActor.draw(batch, parentAlpha);
         }

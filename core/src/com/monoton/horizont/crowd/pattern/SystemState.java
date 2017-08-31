@@ -18,8 +18,8 @@ public class SystemState<T extends Vector<T>> {
     float radiusFactor=10;
     float speedFactor=80;
     float tailLengthFactor=200;
-    float tailDensityFactor=0.5f;
-    float lightSizeFactor=Constants.LIGHT_SCENE_WIDTH *0.7f;
+    float tailDensityFactor=0.8f;
+    float lightSizeFactor=Constants.LIGHT_SCENE_WIDTH *1.0f;
 
 
     private ClosenessResponse<T> closenessResponse;
