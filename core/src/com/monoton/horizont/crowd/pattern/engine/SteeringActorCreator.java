@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
+import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
@@ -47,7 +48,7 @@ public class SteeringActorCreator {
 
     public void createSteeringActor(float x, float y, RayHandler rayHandler) {
         final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this,rayHandler, x, y);
-        character.setMaxLinearSpeed(Constants.MAX_SPEED);
+        character.setMaxLinearSpeed(SystemState.getInstance().getSpeedFactor());
         character.setMaxLinearAcceleration(100);
 
         RadiusProximity<Vector2> proximity = new RadiusProximity<Vector2>(character, characters,
@@ -99,6 +100,13 @@ public class SteeringActorCreator {
             character.angleToVector(character.getLinearVelocity(), orientation).scl(character.getMaxLinearSpeed()/5);
         }
 
+
+    }
+
+    public void setSpeed(float speed){
+        for(SteeringActor steeringActor : characters){
+            steeringActor.setMaxLinearSpeed(speed);
+        }
 
     }
 

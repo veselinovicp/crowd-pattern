@@ -30,7 +30,7 @@ public class SteeringActorsScene extends Actor {
 
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_AVERAGE, characters, null, 500);
+        shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_AVERAGE, characters, null);
 
         addListener(new ClickListener(){
             @Override

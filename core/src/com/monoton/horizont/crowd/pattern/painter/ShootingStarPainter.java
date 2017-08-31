@@ -20,14 +20,14 @@ public abstract class ShootingStarPainter{
 
     protected Array<SteeringActor> characters;
     protected SteeringActor steeringActor;
-    protected int tailSize;
 
 
 
-    ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
+
+    ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor) {
         this.characters = characters;
         this.steeringActor = steeringActor;
-        this.tailSize = tailSize;
+
 
 
     }
@@ -72,12 +72,12 @@ public abstract class ShootingStarPainter{
 
     }
 
-    public static ShootingStarPainter getShootingStarPainter(String type, Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize){
+    public static ShootingStarPainter getShootingStarPainter(String type, Array<SteeringActor> characters, SteeringActor steeringActor){
         if(type.equals(Constants.SHOOTING_STAR_PAINTER_AVERAGE)){
-            return new AverageShootingStarPainter(characters, steeringActor, tailSize);
+            return new AverageShootingStarPainter(characters, steeringActor);
         }
         if(type.equals(Constants.SHOOTING_STAR_PAINTER_SINGLE)){
-            return new SingleShootingStartPainter(characters, steeringActor, tailSize);
+            return new SingleShootingStartPainter(characters, steeringActor);
         }
 
 
@@ -87,9 +87,13 @@ public abstract class ShootingStarPainter{
 
     private void removeTail() {
         int i=0;
-        while(drawPoints.size()>tailSize){
-            drawPoints.remove(i);
-            i++;
+        while(drawPoints.size()>SystemState.getInstance().getTailLengthFactor()){
+            if(i<drawPoints.size()) {
+                drawPoints.remove(i);
+                i++;
+            }else{
+                break;
+            }
         }
     }
 
