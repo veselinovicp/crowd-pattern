@@ -162,7 +162,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 
-		img = new Texture("ship1.png");
+		img = new Texture("star.png");
 
 		characters = new Array<SteeringActor>();
 
