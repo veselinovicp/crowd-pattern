@@ -3,6 +3,8 @@ package com.monoton.horizont.crowd.pattern.painter.tail;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.painter.DrawPoint;
 
 import java.util.List;
@@ -11,16 +13,20 @@ import java.util.List;
  * Created by monoton on 20.8.2017.
  */
 public class SnakeTailPainter implements TailPainter {
-    float TAIL_PAINTER_PROXIMITY_FACTOR=0.5f;
+
 
     @Override
-    public void drawTail(List<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
+    public Array<DrawPoint> drawTail(List<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
+        Array<DrawPoint> result = new Array<DrawPoint>();
+
+        float tailDensityFactor= SystemState.getInstance().getTailDensityFactor();
+
         if(drawPoints==null || drawPoints.size()==0){
-            return;
+            return result;
         }
         int regionWidth = region.getRegionWidth();
 
-        float radius = regionWidth * TAIL_PAINTER_PROXIMITY_FACTOR;
+        float radius = regionWidth * tailDensityFactor;
         DrawPoint justDrawn = drawPoints.get(0);
         for(int i=drawPoints.size()-1;i>=0;i--){
             DrawPoint drawPoint = drawPoints.get(i);
@@ -28,15 +34,24 @@ public class SnakeTailPainter implements TailPainter {
             if(distance>=radius){
                 float[] drawPointColor = drawPoint.getColor();
                 float factor = i / (float) drawPoints.size();
-                batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor/2f);//i/(float)drawPoints.size()
-                batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y, region.getRegionWidth()*factor, region.getRegionHeight()*factor);
-                radius = region.getRegionWidth()*factor * TAIL_PAINTER_PROXIMITY_FACTOR;
+                batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//  /2f
+//                batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y, region.getRegionWidth()*factor, region.getRegionHeight()*factor);
+                batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y,region.getRegionWidth()/2*factor,region.getRegionHeight()/2*factor, region.getRegionWidth()*factor, region.getRegionHeight()*factor,1,1,drawPoint.getVelocity().angle());
+
+
+                radius = region.getRegionWidth()*factor * tailDensityFactor;
                 justDrawn = drawPoint;
+
+                drawPoint.setWidth(region.getRegionWidth()*factor);
+                drawPoint.setHeight(region.getRegionHeight()*factor);
+                result.add(drawPoint);
             }
 
 
 
         }
+
+        return result;
 
 
     }

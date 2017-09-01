@@ -33,11 +33,13 @@ import com.monoton.horizont.crowd.pattern.scene.LightScene;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
+
 public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Skin skin;
 
-	Texture img;
+	private Texture img;
+	private Texture background;
 
 	private Texture tfBackground;
 	private Texture scroll_horizontal;
@@ -50,7 +52,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Stage controlsStage;
 
 
-	private final static int PARTICLE_START_NUMBER =50;
+	private final static int PARTICLE_START_NUMBER =10;
 
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
@@ -61,20 +63,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 	private TextButton exitButton;
-
-
-
-	private Slider radiusSlider;
-	private Label radiusLabelName;
-	private Label radiusValue;
-
-	private Slider orderSlider;
-	private Label orderLabelName;
-	private Label orderValue;
-
-	private Slider distanceSlider;
-	private Label distanceLabelName;
-	private Label distanceValue;
 
 
 	private World world;
@@ -119,7 +107,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		light.setColor(Color.YELLOW);
 		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
 
-//		createBodies();
+
 //		Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15,Constants.LIGHT_SCENE_WIDTH*0.5f, Constants.LIGHT_SCENE_HEIGHT-1, 270, 45);
 
 
@@ -139,7 +127,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		controlsTable.setWidth(Gdx.graphics.getWidth());
 		controlsTable.setHeight(Gdx.graphics.getHeight());
 		controlsTable.align(Align.top|Align.right);
-		//controlsTable.setPosition(0, Gdx.graphics.getHeight());
+
 
 
 		controlsTable.padTop(20);
@@ -149,108 +137,84 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
 		Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
 
-		/**
-		 * radius slider and labels
-		 */
-		radiusLabelName = new Label("Radius: ", ls);
-		controlsTable.add(radiusLabelName).padRight(10);
-
-		radiusSlider = new Slider(1f,30f,0.1f, false, skin);
-
-		radiusSlider.setValue(SystemState.getInstance().getRadiusFactor());
-		radiusSlider.addListener(new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//				Gdx.app.log("TAG", "slider changed to: " + radiusSlider.getValue());
-				steeringActorCreator.setRadius(radiusSlider.getValue());
-				radiusValue.setText(""+radiusSlider.getValue());
-				SystemState.getInstance().setRadiusFactor(radiusSlider.getValue());
-
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				steeringActorCreator.setRadius(radiusSlider.getValue());
-				SystemState.getInstance().setRadiusFactor(radiusSlider.getValue());
-				return true;
-			};
-		});
-
-		controlsTable.add(radiusSlider).padRight(10);
-
-		radiusValue = new Label(""+radiusSlider.getValue(), ls);
-		controlsTable.add(radiusValue);
-		controlsTable.row();
-		/**
-		 * end radius slider and labels
-		 */
-
-		/**
-		 * order slider and labels
-		 */
-		orderLabelName = new Label("Order: ", ls);
-		controlsTable.add(orderLabelName).padRight(10);
-
-		orderSlider = new Slider(0.1f,5f,0.05f, false, skin);
-
-		orderSlider.setValue(SystemState.getInstance().getOrderFactor());
-		orderSlider.addListener(new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setOrderFactor(orderSlider.getValue());
-				orderValue.setText(""+orderSlider.getValue());
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setOrderFactor(orderSlider.getValue());
-				return true;
-			};
-		});
-
-		controlsTable.add(orderSlider).padRight(10);
-
-		orderValue = new Label(""+orderSlider.getValue(), ls);
-		controlsTable.add(orderValue);
-		controlsTable.row();
-		/**
-		 * end order slider and labels
-		 */
 
 
-		/**
-		 * distance slider and labels
-		 */
-		distanceLabelName = new Label("Distance: ", ls);
-		controlsTable.add(distanceLabelName).padRight(10);
-
-		distanceSlider = new Slider(0.01f,1f,0.05f, false, skin);
-
-		distanceSlider.setValue(SystemState.getInstance().getDistanceFactor());
-		distanceSlider.addListener(new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setDistanceFactor(distanceSlider.getValue());
-				distanceValue.setText(""+distanceSlider.getValue());
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setDistanceFactor(distanceSlider.getValue());
-				return true;
-			};
-		});
-
-		controlsTable.add(distanceSlider).padRight(10);
-
-		distanceValue = new Label(""+distanceSlider.getValue(), ls);
-		controlsTable.add(distanceValue);
-		controlsTable.row();
-		/**
-		 * end distance slider and labels
-		 */
+		createSpeedControls(ls);
+		createTailLengthControls(ls);
+		createTailDensityControls(ls);
+		createLightSizeControls(ls);
 
 
 		/**
 		 * color chooser select box
 		 */
+		createColorChooseControls(font, ls);
+
+		/**
+		 * end color chooser select box
+		 */
+
+
+		createExitButton();
+
+		controlsStage.addActor(controlsTable);
+
+
+
+
+		img = new Texture("star.png");
+
+		characters = new Array<SteeringActor>();
+
+		background = new Texture(Gdx.files.internal("background2.jpg"));
+
+		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background);
+
+		actionStage.addActor(steeringActorsScene);
+
+		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, SystemState.getInstance().getRadiusFactor());
+
+		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER,rayHandler);
+
+		actionStage.setScrollFocus(steeringActorsScene);
+
+
+		LightScene lightScene = new LightScene(characters, light);
+		actionStage.addActor(lightScene);
+
+		// ORDER IS IMPORTANT!
+		InputMultiplexer inputMultiplexer = new InputMultiplexer(controlsStage, actionStage);
+		Gdx.input.setInputProcessor(inputMultiplexer);
+
+
+		/*// Tweak debug information
+		debugRenderer = new Box2DDebugRenderer(
+				true, *//* draw bodies *//*
+				false, *//* don't draw joints *//*
+				true, *//* draw aabbs *//*
+				true, *//* draw inactive bodies *//*
+				false, *//* don't draw velocities *//*
+				true *//* draw contacts *//*);
+*/
+
+	}
+
+	private void createExitButton() {
+		exitButton = new TextButton("exit", skin);
+
+		exitButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				System.exit(0);
+				return true;
+			}
+		});
+
+		controlsTable.add(exitButton).colspan(3).right().padBottom(20);
+		controlsTable.row();
+	}
+
+	private void createColorChooseControls(BitmapFont font, Label.LabelStyle ls) {
 		Label colorLabel = new Label("Color: ", ls);
 		controlsTable.add(colorLabel).padRight(10);
 
@@ -289,7 +253,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		items.add(Constants.COLOR_MACHINE_RANDOM);
 
 
-
 		selectBox.setItems(items);
 		selectBox.pack(); // To get the actual size
 //		selectBox.setPosition(list.getX() + list.getWidth() + 10, secondRowY-selectBox.getHeight());
@@ -323,96 +286,175 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		controlsTable.add(randomColor).center();
 		controlsTable.row();
-
-		/**
-		 * end color chooser select box
-		 */
+	}
 
 
 
+	private Label speedValue = null;
+	private Slider speedSlider = null;
+
+	private void createSpeedControls(Label.LabelStyle ls) {
 
 
+		InputListener listener = new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				speedValue.setText("" + speedSlider.getValue());
+				steeringActorCreator.setSpeed(speedSlider.getValue());
+				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 
 
+			}
 
-
-		exitButton = new TextButton("exit", skin);
-
-		exitButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				System.exit(0);
+				steeringActorCreator.setSpeed(speedSlider.getValue());
+				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 				return true;
 			}
-		});
 
-		controlsTable.add(exitButton).colspan(3).right().padBottom(20);
+			;
+		};
+
+		Controls controls = createControls("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener, ls);
+		speedSlider = controls.getSlider();
+		speedValue = controls.getValue();
+	}
+
+	private Label lightSizeValue = null;
+	private Slider lightSizeSlider = null;
+
+	private void createLightSizeControls(Label.LabelStyle ls) {
+
+
+		InputListener listener = new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				lightSizeValue.setText("" + lightSizeSlider.getValue());
+
+				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
+				light.setDistance(lightSizeSlider.getValue());
+
+
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
+				light.setDistance(lightSizeSlider.getValue());
+				return true;
+			}
+
+			;
+		};
+
+		Controls controls = createControls("Light size: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getLightSizeFactor(), listener, ls);
+		lightSizeSlider = controls.getSlider();
+		lightSizeValue = controls.getValue();
+	}
+
+	private Label tailLengthValue = null;
+	private Slider tailLengthSlider = null;
+
+	private void createTailLengthControls(Label.LabelStyle ls) {
+
+
+		InputListener listener = new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				tailLengthValue.setText("" + tailLengthSlider.getValue());
+
+				SystemState.getInstance().setTailLengthFactor(tailLengthSlider.getValue());
+
+
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				SystemState.getInstance().setTailLengthFactor(tailLengthSlider.getValue());
+				return true;
+			}
+
+			;
+		};
+
+		Controls controls = createControls("Tail length: ",50f,500f,1f,SystemState.getInstance().getTailLengthFactor(), listener, ls);
+		tailLengthSlider = controls.getSlider();
+		tailLengthValue = controls.getValue();
+	}
+
+	private Label tailDensityValue = null;
+	private Slider tailDensitySlider = null;
+
+	private void createTailDensityControls(Label.LabelStyle ls) {
+
+
+		InputListener listener = new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				tailDensityValue.setText("" + tailDensitySlider.getValue());
+
+				SystemState.getInstance().setTailDensityFactor(tailDensitySlider.getValue());
+
+
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				SystemState.getInstance().setTailDensityFactor(tailDensitySlider.getValue());
+				return true;
+			}
+
+			;
+		};
+
+		Controls controls = createControls("Tail density: ",0.1f,2f,0.1f,SystemState.getInstance().getTailDensityFactor(), listener, ls);
+		tailDensitySlider = controls.getSlider();
+		tailDensityValue = controls.getValue();
+	}
+
+
+	private class Controls{
+		Slider slider;
+		Label value;
+
+		public Controls(Slider slider, Label value) {
+			this.slider = slider;
+			this.value = value;
+		}
+
+		public Slider getSlider() {
+			return slider;
+		}
+
+		public Label getValue() {
+			return value;
+		}
+	}
+
+	private Controls createControls(String label,float min, float max, float stepSize, float defaultValue, InputListener inputListener, Label.LabelStyle ls){
+		Label labelName = new Label(label, ls);
+		controlsTable.add(labelName).padRight(10);
+
+		Slider slider = new Slider(min,max,stepSize, false, skin);
+
+		slider.setValue(defaultValue);//
+		slider.addListener(inputListener);
+
+		controlsTable.add(slider).padRight(10);
+
+		Label value = new Label(""+slider.getValue(), ls);
+		controlsTable.add(value);
 		controlsTable.row();
-
-		controlsStage.addActor(controlsTable);
-
-
-
-
-		img = new Texture("circle.png");
-
-		characters = new Array<SteeringActor>();
-
-		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler);
-
-		actionStage.addActor(steeringActorsScene);
-
-		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, SystemState.getInstance().getRadiusFactor());
-
-		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER,rayHandler);
-
-		actionStage.setScrollFocus(steeringActorsScene);
-
-
-		LightScene lightScene = new LightScene(characters, light);
-		actionStage.addActor(lightScene);
-
-		// ORDER IS IMPORTANT!
-		InputMultiplexer inputMultiplexer = new InputMultiplexer(controlsStage, actionStage);
-		Gdx.input.setInputProcessor(inputMultiplexer);
-
-
-		/*// Tweak debug information
-		debugRenderer = new Box2DDebugRenderer(
-				true, *//* draw bodies *//*
-				false, *//* don't draw joints *//*
-				true, *//* draw aabbs *//*
-				true, *//* draw inactive bodies *//*
-				false, *//* don't draw velocities *//*
-				true *//* draw contacts *//*);
-*/
+		return new Controls(slider, value);
 
 	}
 
-	private void createBodies() {
-
-		// Create a static body definition
-		BodyDef staticBodyDef = new BodyDef();
-		staticBodyDef.type = BodyDef.BodyType.StaticBody;
-
-		//GROUND
-		Body groundBody = world.createBody(staticBodyDef);
-		PolygonShape groundBox = new PolygonShape();
-		groundBox.setAsBox(Constants.LIGHT_SCENE_WIDTH * 0.5f, 0.5f);
-		groundBody.createFixture(groundBox, 0.0f);
-		groundBox.dispose();
-
-		groundBody.setTransform(new Vector2(Constants.LIGHT_SCENE_WIDTH *0.5f, 0.5f), groundBody.getAngle());
-
-		// BOX
-		Body boxBody = world.createBody(staticBodyDef);
-		PolygonShape box = new PolygonShape();
-		box.setAsBox(.5f, .5f);
-		boxBody.createFixture(box, 0.0f);
-		box.dispose();
-
-		boxBody.setTransform(new Vector2(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f), groundBody.getAngle());
-	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -443,15 +485,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		world.step(1/60f, 6, 2);
 		debugRenderer.render(world, viewport.getCamera().combined);
-/*
 
-
-		sr.setProjectionMatrix(viewport.getCamera().combined);
-		sr.begin(ShapeRenderer.ShapeType.Filled);
-		sr.setColor(Color.RED);
-		sr.rect(0, 0, LIGHT_SCENE_WIDTH, 1f);
-		sr.end();
-*/
 
 
 		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
@@ -474,6 +508,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		world.dispose();
 
 		steeringActorCreator.dispose();
+		tfBackground.dispose();
+		background.dispose();
 	}
 
 }

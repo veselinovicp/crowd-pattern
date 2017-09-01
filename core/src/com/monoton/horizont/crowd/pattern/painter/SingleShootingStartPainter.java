@@ -9,8 +9,8 @@ import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
  * Created by monoton on 19.8.2017.
  */
 public class SingleShootingStartPainter extends ShootingStarPainter {
-    SingleShootingStartPainter(Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
-        super(characters, steeringActor,tailSize);
+    SingleShootingStartPainter(Array<SteeringActor> characters, SteeringActor steeringActor) {
+        super(characters, steeringActor);
     }
 
     @Override

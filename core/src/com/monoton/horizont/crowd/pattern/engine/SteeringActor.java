@@ -23,16 +23,18 @@ import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
 import com.badlogic.gdx.ai.utils.Location;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
+import com.monoton.horizont.crowd.pattern.engine.light.LightPainter;
+import com.monoton.horizont.crowd.pattern.painter.DrawPoint;
 import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
@@ -68,7 +70,10 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	private ShootingStarPainter shootingStarPainter;
 
-	private Light light;
+
+	private LightPainter lightPainter;
+
+
 
 
 
@@ -90,30 +95,22 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		this.setOrigin(region.getRegionWidth() * .5f, region.getRegionHeight() * .5f);
 		//this.setOrigin(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()));
 
-		shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_SINGLE,null, this, 200);
+		shootingStarPainter = ShootingStarPainter.getShootingStarPainter(Constants.SHOOTING_STAR_PAINTER_SINGLE,null, this);
 
 		setPosition(x, y, Align.center);
 		getPosition().set(getX(Align.center), getY(Align.center));
 
-		createLight(rayHandler, x, y);
+
+
+		lightPainter = new LightPainter(rayHandler);
+
+
 
 	}
 
-	private void createLight(RayHandler rayHandler, float x, float y){
-		light = new PointLight(rayHandler, 32);
-//		light = new ConeLight(rayHandler, 32, Color.WHITE, 15,Constants.LIGHT_SCENE_WIDTH*0.5f, Constants.LIGHT_SCENE_HEIGHT-1, 270, 45);
-		light.setPosition(DrawUtils.getBox2DCoords(x, y));
-		light.setDirection(linearVelocity.angle());
 
-		setLightColor();
-		light.setDistance(DrawUtils.getBox2DWidth(region.getRegionWidth()));
-	}
 
-	private void setLightColor() {
-		float[] color = SystemState.getInstance().getColorMachine().getColor(position, linearVelocity);
-//		light.setColor(1-color[0], 1-color[1], 1-color[2],1);
-		light.setColor(color[0],color[1],color[2],1);
-	}
+
 
 	public TextureRegion getRegion () {
 		return region;
@@ -272,6 +269,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 			setPosition(position.x, position.y, Align.center);
 
 		}
+
 		super.act(delta);
 	}
 
@@ -327,21 +325,24 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
-		setLightColor();
-		light.setDirection(linearVelocity.angle());
-		light.setPosition(DrawUtils.getBox2DCoords(position));
 
 
+//		lightPainter.adjustPrimaryLight(position, linearVelocity);
 
 
-		shootingStarPainter.draw(batch, parentAlpha);
+		Array<DrawPoint> tail = shootingStarPainter.draw(batch, parentAlpha);
+
+		lightPainter.drawLight(tail);
+
 
 
 
 	}
 
 	public void cleanResources(){
-		light.dispose();
+		lightPainter.releaseResources();
+
+
 	}
 
 
@@ -357,5 +358,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 	public RadiusProximity<Vector2> getProximity() {
 		return proximity;
 	}
+
+
 
 }

@@ -20,14 +20,14 @@ public abstract class ShootingStarPainter{
 
     protected Array<SteeringActor> characters;
     protected SteeringActor steeringActor;
-    protected int tailSize;
 
 
 
-    ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize) {
+
+    ShootingStarPainter(final Array<SteeringActor> characters, SteeringActor steeringActor) {
         this.characters = characters;
         this.steeringActor = steeringActor;
-        this.tailSize = tailSize;
+
 
 
     }
@@ -37,7 +37,7 @@ public abstract class ShootingStarPainter{
     protected abstract TextureRegion getRegion();
 
 
-    public void draw(Batch batch, float parentAlpha) {
+    public Array<DrawPoint> draw(Batch batch, float parentAlpha) {
 
 
 
@@ -49,10 +49,7 @@ public abstract class ShootingStarPainter{
          * first draw old ones
          */
 
-        SystemState.getInstance().getTailPainter().drawTail(drawPoints, region, batch, parentAlpha);
-
-
-
+        Array<DrawPoint> drawPoints = SystemState.getInstance().getTailPainter().drawTail(this.drawPoints, region, batch, parentAlpha);
 
 
 //        float[] color = DrawUtils.getColor(velocity.angleRad());
@@ -60,24 +57,31 @@ public abstract class ShootingStarPainter{
 
 
         batch.setColor(color[0], color[1], color[2], parentAlpha);
-        batch.draw(region, position.x, position.y, region.getRegionWidth(), region.getRegionHeight());
+
+/*        public void draw (TextureRegion region, float x, float y, float originX, float originY, float width, float height,
+        float scaleX, float scaleY, float rotation);*/
+
+//        batch.draw(region, position.x, position.y, region.getRegionWidth(), region.getRegionHeight());
+        batch.draw(region, position.x, position.y,region.getRegionWidth()/2,region.getRegionHeight()/2, region.getRegionWidth(), region.getRegionHeight(),1,1,velocity.angle());
 
 
-        drawPoints.add(new DrawPoint(position, color));
+        this.drawPoints.add(new DrawPoint(position, velocity, color));
 
 
         removeTail();
+
+        return drawPoints;
 
 
 
     }
 
-    public static ShootingStarPainter getShootingStarPainter(String type, Array<SteeringActor> characters, SteeringActor steeringActor, int tailSize){
+    public static ShootingStarPainter getShootingStarPainter(String type, Array<SteeringActor> characters, SteeringActor steeringActor){
         if(type.equals(Constants.SHOOTING_STAR_PAINTER_AVERAGE)){
-            return new AverageShootingStarPainter(characters, steeringActor, tailSize);
+            return new AverageShootingStarPainter(characters, steeringActor);
         }
         if(type.equals(Constants.SHOOTING_STAR_PAINTER_SINGLE)){
-            return new SingleShootingStartPainter(characters, steeringActor, tailSize);
+            return new SingleShootingStartPainter(characters, steeringActor);
         }
 
 
@@ -87,9 +91,13 @@ public abstract class ShootingStarPainter{
 
     private void removeTail() {
         int i=0;
-        while(drawPoints.size()>tailSize){
-            drawPoints.remove(i);
-            i++;
+        while(drawPoints.size()>SystemState.getInstance().getTailLengthFactor()){
+            if(i<drawPoints.size()) {
+                drawPoints.remove(i);
+                i++;
+            }else{
+                break;
+            }
         }
     }
 
