@@ -3,6 +3,7 @@ package com.monoton.horizont.crowd.pattern.painter.tail;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.painter.DrawPoint;
 
@@ -15,11 +16,13 @@ public class SnakeTailPainter implements TailPainter {
 
 
     @Override
-    public void drawTail(List<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
+    public Array<DrawPoint> drawTail(List<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
+        Array<DrawPoint> result = new Array<DrawPoint>();
+
         float tailDensityFactor= SystemState.getInstance().getTailDensityFactor();
 
         if(drawPoints==null || drawPoints.size()==0){
-            return;
+            return result;
         }
         int regionWidth = region.getRegionWidth();
 
@@ -38,11 +41,17 @@ public class SnakeTailPainter implements TailPainter {
 
                 radius = region.getRegionWidth()*factor * tailDensityFactor;
                 justDrawn = drawPoint;
+
+                drawPoint.setWidth(region.getRegionWidth()*factor);
+                drawPoint.setHeight(region.getRegionHeight()*factor);
+                result.add(drawPoint);
             }
 
 
 
         }
+
+        return result;
 
 
     }

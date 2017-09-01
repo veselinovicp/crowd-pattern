@@ -37,7 +37,7 @@ public abstract class ShootingStarPainter{
     protected abstract TextureRegion getRegion();
 
 
-    public void draw(Batch batch, float parentAlpha) {
+    public Array<DrawPoint> draw(Batch batch, float parentAlpha) {
 
 
 
@@ -49,10 +49,7 @@ public abstract class ShootingStarPainter{
          * first draw old ones
          */
 
-        SystemState.getInstance().getTailPainter().drawTail(drawPoints, region, batch, parentAlpha);
-
-
-
+        Array<DrawPoint> drawPoints = SystemState.getInstance().getTailPainter().drawTail(this.drawPoints, region, batch, parentAlpha);
 
 
 //        float[] color = DrawUtils.getColor(velocity.angleRad());
@@ -68,10 +65,12 @@ public abstract class ShootingStarPainter{
         batch.draw(region, position.x, position.y,region.getRegionWidth()/2,region.getRegionHeight()/2, region.getRegionWidth(), region.getRegionHeight(),1,1,velocity.angle());
 
 
-        drawPoints.add(new DrawPoint(position, velocity, color));
+        this.drawPoints.add(new DrawPoint(position, velocity, color));
 
 
         removeTail();
+
+        return drawPoints;
 
 
 
