@@ -19,6 +19,8 @@ public class SpermTailPainter implements TailPainter{
             batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//i/(float)drawPoints.size()
             batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y, region.getRegionWidth()*factor, region.getRegionHeight()*factor);
 
+
+
         }
     }
 }

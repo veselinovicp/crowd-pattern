@@ -271,6 +271,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 			setPosition(position.x, position.y, Align.center);
 
 		}
+
 		super.act(delta);
 	}
 

@@ -162,11 +162,11 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 
-		img = new Texture("circle.png");
+		img = new Texture("spaceship.png");
 
 		characters = new Array<SteeringActor>();
 
-		background = new Texture(Gdx.files.internal("background.jpg"));
+		background = new Texture(Gdx.files.internal("background2.jpg"));
 
 		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background);
 

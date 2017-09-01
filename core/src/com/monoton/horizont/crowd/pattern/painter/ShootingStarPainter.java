@@ -60,10 +60,15 @@ public abstract class ShootingStarPainter{
 
 
         batch.setColor(color[0], color[1], color[2], parentAlpha);
-        batch.draw(region, position.x, position.y, region.getRegionWidth(), region.getRegionHeight());
+
+/*        public void draw (TextureRegion region, float x, float y, float originX, float originY, float width, float height,
+        float scaleX, float scaleY, float rotation);*/
+
+//        batch.draw(region, position.x, position.y, region.getRegionWidth(), region.getRegionHeight());
+        batch.draw(region, position.x, position.y,region.getRegionWidth()/2,region.getRegionHeight()/2, region.getRegionWidth(), region.getRegionHeight(),1,1,velocity.angle());
 
 
-        drawPoints.add(new DrawPoint(position, color));
+        drawPoints.add(new DrawPoint(position, velocity, color));
 
 
         removeTail();
