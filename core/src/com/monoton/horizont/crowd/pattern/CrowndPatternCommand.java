@@ -52,7 +52,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Stage controlsStage;
 
 
-	private final static int PARTICLE_START_NUMBER =10;
+	private final static int PARTICLE_START_NUMBER =50;
 
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
@@ -484,7 +484,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		world.step(1/60f, 6, 2);
-		debugRenderer.render(world, viewport.getCamera().combined);
+
 
 
 
@@ -505,11 +505,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		rayHandler.dispose();
-		world.dispose();
+
 
 		steeringActorCreator.dispose();
 		tfBackground.dispose();
 		background.dispose();
+
+		world.dispose();
 	}
 
 }
