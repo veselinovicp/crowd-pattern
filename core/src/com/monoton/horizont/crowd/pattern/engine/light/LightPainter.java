@@ -44,7 +44,7 @@ public class LightPainter {
 
 
         while(tail.size> tailLights.size){
-            tailLights.add(new PointLight(rayHandler, 32));
+            tailLights.add(new PointLight(rayHandler, 20));
 
         }
 
@@ -71,6 +71,7 @@ public class LightPainter {
 
     public void releaseResources(){
         for(Light light : tailLights){
+
             light.dispose();
         }
     }

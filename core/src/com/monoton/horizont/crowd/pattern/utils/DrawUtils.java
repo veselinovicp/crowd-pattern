@@ -110,11 +110,11 @@ public class DrawUtils {
     static List<float[]> randomColorChain;
 
     static{
-        rainbowColorChain = getRainbowColorChain(200);
-        rastaColorChain = getRastaColorChain(200);
-        dreamMagnetColorChain = getDreamMagnetColorChain(200);
-        eightiesColorChain = getEightiesrChain(200);
-        randomColorChain = getRandomColorChain(200);
+        rainbowColorChain = getRainbowColorChain(500);
+        rastaColorChain = getRastaColorChain(500);
+        dreamMagnetColorChain = getDreamMagnetColorChain(500);
+        eightiesColorChain = getEightiesrChain(500);
+        randomColorChain = getRandomColorChain(500);
     }
 
     public static void reinitializeRandomColorChain(){

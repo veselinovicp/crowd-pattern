@@ -87,6 +87,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	@Override
 	public void create () {
 
+		System.out.println("start creating");
 		createShapes();
 
 		viewport = new FitViewport(Constants.LIGHT_SCENE_WIDTH, Constants.LIGHT_SCENE_HEIGHT);
@@ -95,6 +96,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 				viewport.getCamera().position.y + Constants.LIGHT_SCENE_HEIGHT *0.5f
 				, 0);
 		viewport.getCamera().update();
+
+
 
 
 		// Create Physics World
@@ -106,6 +109,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		debugRenderer = new Box2DDebugRenderer();
 		// To add some color to the ground
 		sr = new ShapeRenderer();
+
 
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.25f);
@@ -128,6 +132,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		StretchViewport viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		actionStage = new Stage(viewport);
 		controlsStage = new Stage(viewport);//new ScreenViewport()
+
 
 
 
@@ -195,6 +200,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		// ORDER IS IMPORTANT!
 		InputMultiplexer inputMultiplexer = new InputMultiplexer(controlsStage, actionStage);
 		Gdx.input.setInputProcessor(inputMultiplexer);
+
+		System.out.println("end creating");
 
 
 		/*// Tweak debug information
@@ -269,7 +276,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		exitButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				System.exit(0);
+
+				Gdx.app.exit();
 				return true;
 			}
 		});
@@ -592,7 +600,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	@Override
 	public void resize(int width, int height) {
+		System.out.println("start resizing");
 		viewport.update(width, height);
+		System.out.println("end resizing");
 	}
 
 
@@ -629,6 +639,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	
 	@Override
 	public void dispose () {
+		super.dispose();
+		System.out.println("start disposing");
+
+
+
+
+
 
 		defaultShape.dispose();
 		tfBackground.dispose();
@@ -638,10 +655,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		debugRenderer.dispose();
 
 
-		rayHandler.dispose();
 
-
-		steeringActorCreator.dispose();
+//		steeringActorCreator.dispose();
 		tfBackground.dispose();
 		background.dispose();
 
@@ -649,7 +664,25 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			namedTexture.getTextureRegion().getTexture().dispose();
 		}
 
+		actionStage.dispose();
+		controlsStage.dispose();
+
+		sr.dispose();
+
+
+		steeringActorCreator.dispose();
+
+
+		light.dispose();
+
+		rayHandler.dispose();
+
 		world.dispose();
+
+
+
+
+
 	}
 
 }
