@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public interface BorderControl {
 
-    void overBorderX (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY);
-    void negativeX (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY);
-    void overBorderY (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY);
-    void negativeY (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY);
+    void overBorderX (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY, float regionWidth, float regionHeight);
+    void negativeX (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY, float regionWidth, float regionHeight);
+    void overBorderY (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY, float regionWidth, float regionHeight);
+    void negativeY (Vector2 pos, Vector2 linearVelocity, float maxX, float maxY, float regionWidth, float regionHeight);
 }

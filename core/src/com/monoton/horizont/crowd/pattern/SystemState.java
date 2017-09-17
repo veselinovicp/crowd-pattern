@@ -13,11 +13,11 @@ import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFa
  * Created by monoton on 14.8.2017.
  */
 public class SystemState<T extends Vector<T>> {
-    float orderFactor=2.0f;
+    float orderFactor=3.0f;
     float distanceFactor=0.2f;
     float radiusFactor=10;
     float speedFactor=80;
-    float tailLengthFactor=200;
+    float tailLengthFactor=140;
     float tailDensityFactor=0.8f;
     float lightSizeFactor=Constants.LIGHT_SCENE_WIDTH *1.0f;
 

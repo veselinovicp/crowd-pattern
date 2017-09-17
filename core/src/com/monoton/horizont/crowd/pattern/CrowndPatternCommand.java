@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
@@ -31,6 +30,7 @@ import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
 import com.monoton.horizont.crowd.pattern.scene.LightScene;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
+import com.monoton.horizont.crowd.pattern.ui.NamedTexture;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 
@@ -38,7 +38,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Skin skin;
 
-	private Texture img;
+	private Texture defaultShape;
 	private Texture background;
 
 	private Texture tfBackground;
@@ -76,10 +76,16 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Viewport viewport;
 
+	private Array<NamedTexture> shapes = null;
+
+	private SteeringActorsScene steeringActorsScene;
+
 
 	
 	@Override
 	public void create () {
+
+		createShapes();
 
 		viewport = new FitViewport(Constants.LIGHT_SCENE_WIDTH, Constants.LIGHT_SCENE_HEIGHT);
 		// Center camera
@@ -119,7 +125,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		// Create a actionStage
 		StretchViewport viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		actionStage = new Stage(viewport);
-		controlsStage = new Stage(new ScreenViewport());
+		controlsStage = new Stage(viewport);//new ScreenViewport()
 
 
 
@@ -153,6 +159,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		/**
 		 * end color chooser select box
 		 */
+		createShapeChooseControls(font, ls);
 
 
 		createExitButton();
@@ -162,25 +169,30 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 
-		img = new Texture("star.png");
+		defaultShape = new Texture("hexagram.png");
 
 		characters = new Array<SteeringActor>();
 
 		background = new Texture(Gdx.files.internal("background2.jpg"));
 
-		SteeringActorsScene steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background);
+
+		LightScene lightScene = new LightScene(characters, light);
+		actionStage.addActor(lightScene);
+
+
+		steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background, shapes.get(0).getTextureRegion());
 
 		actionStage.addActor(steeringActorsScene);
 
-		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, img, borderControl, SystemState.getInstance().getRadiusFactor());
+		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, borderControl, SystemState.getInstance().getRadiusFactor());
 
-		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER,rayHandler);
+		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER,rayHandler, shapes.get(0).getTextureRegion());
 
 		actionStage.setScrollFocus(steeringActorsScene);
 
 
-		LightScene lightScene = new LightScene(characters, light);
-		actionStage.addActor(lightScene);
+
+
 
 		// ORDER IS IMPORTANT!
 		InputMultiplexer inputMultiplexer = new InputMultiplexer(controlsStage, actionStage);
@@ -214,12 +226,98 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		controlsTable.row();
 	}
 
+	SelectBox colorSelectBox = null;
+
 	private void createColorChooseControls(BitmapFont font, Label.LabelStyle ls) {
-		Label colorLabel = new Label("Color: ", ls);
-		controlsTable.add(colorLabel).padRight(10);
+
+		Array<String> items = new Array<String>();
+
+		items.add(Constants.COLOR_MACHINE_RAINBOW);
+		items.add(Constants.COLOR_MACHINE_RASTA);
+		items.add(Constants.COLOR_MACHINE_DREAM_MAGNET);
+		items.add(Constants.COLOR_MACHINE_EIGHTIES);
+		items.add(Constants.COLOR_MACHINE_RANDOM);
 
 
-		tfBackground = new Texture(Gdx.files.internal("tfbackground.png"));
+
+		ChangeListener changeListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				String selected = (String) colorSelectBox.getSelected();
+
+				SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(selected));
+
+
+			}
+		};
+
+		colorSelectBox = createDropDownControl("Color: ", items, changeListener, font, ls);
+
+
+		SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(items.first()));
+
+		TextButton randomColor = new TextButton("Random", skin);
+
+
+		randomColor.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				DrawUtils.reinitializeRandomColorChain();
+				SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_RANDOM));
+				colorSelectBox.setSelected(Constants.COLOR_MACHINE_RANDOM);
+				return true;
+			}
+		});
+
+		controlsTable.add(randomColor).center();
+		controlsTable.row();
+	}
+
+	private void createShapes(){
+		shapes = new Array<NamedTexture>();
+
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("circle.png")), "Circle"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("diamond.png")),"Diamond"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("ship1.png")), "Spaceship 1"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("spaceship.png")), "Spaceship2"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("star.png")), "Star 1"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("star2.png")), "Star 2"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("triangle.png")), "Triangle"));
+
+	}
+
+	SelectBox shapeSelectBox = null;
+
+
+	private void createShapeChooseControls(BitmapFont font, Label.LabelStyle ls) {
+
+
+
+
+
+		ChangeListener changeListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				NamedTexture selected = (NamedTexture) shapeSelectBox.getSelected();
+				steeringActorCreator.setShape(selected.getTextureRegion());
+				steeringActorsScene.setShape(selected.getTextureRegion());
+
+			}
+		};
+
+		shapeSelectBox = createDropDownControl("Shape: ", shapes, changeListener, font, ls);
+
+		controlsTable.row();
+	}
+
+	private SelectBox createDropDownControl(String labelName,Array items,ChangeListener changeListener, BitmapFont font, Label.LabelStyle ls) {
+		Label label = new Label(labelName, ls);
+		controlsTable.add(label).padRight(10);
+
+
+		if(tfBackground==null) {
+			tfBackground = new Texture(Gdx.files.internal("tfbackground.png"));
+		}
 		//List
 		List.ListStyle listS = new List.ListStyle();
 		listS.font = font;
@@ -232,9 +330,12 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		SelectBox.SelectBoxStyle sbs = new SelectBox.SelectBoxStyle();
 		sbs.listStyle = listS;
 		ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
-
-		scroll_horizontal = new Texture(Gdx.files.internal("scroll_horizontal.png"));
-		knob_scroll = new Texture(Gdx.files.internal("knob_scroll.png"));
+		if(scroll_horizontal==null) {
+			scroll_horizontal = new Texture(Gdx.files.internal("scroll_horizontal.png"));
+		}
+		if(knob_scroll==null) {
+			knob_scroll = new Texture(Gdx.files.internal("knob_scroll.png"));
+		}
 		sps.background = new TextureRegionDrawable(new TextureRegion(tfBackground));
 		sps.vScroll = new TextureRegionDrawable(new TextureRegion(scroll_horizontal));
 		sps.vScrollKnob = new TextureRegionDrawable(new TextureRegion(knob_scroll));
@@ -244,50 +345,20 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		sbs.fontColor.set(Color.RED);
 		final SelectBox selectBox = new SelectBox<String>(sbs);
 
-		Array<String> items = new Array<String>();
 
-		items.add(Constants.COLOR_MACHINE_RAINBOW);
-		items.add(Constants.COLOR_MACHINE_RASTA);
-		items.add(Constants.COLOR_MACHINE_DREAM_MAGNET);
-		items.add(Constants.COLOR_MACHINE_EIGHTIES);
-		items.add(Constants.COLOR_MACHINE_RANDOM);
 
 
 		selectBox.setItems(items);
 		selectBox.pack(); // To get the actual size
-//		selectBox.setPosition(list.getX() + list.getWidth() + 10, secondRowY-selectBox.getHeight());
-
-		selectBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				String selected = (String) selectBox.getSelected();
-
-				SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(selected));
+//		colorSelectBox.setPosition(list.getX() + list.getWidth() + 10, secondRowY-colorSelectBox.getHeight());
 
 
-			}
-		});
+		selectBox.addListener(changeListener);
 
 		controlsTable.add(selectBox).padRight(10);
-		SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(items.first()));
 
-		TextButton randomColor = new TextButton("Random", skin);
-
-
-		randomColor.addListener(new ClickListener(){
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				DrawUtils.reinitializeRandomColorChain();
-				SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(Constants.COLOR_MACHINE_RANDOM));
-				selectBox.setSelected(Constants.COLOR_MACHINE_RANDOM);
-				return true;
-			}
-		});
-
-		controlsTable.add(randomColor).center();
-		controlsTable.row();
+		return selectBox;
 	}
-
 
 
 	private Label speedValue = null;
@@ -496,7 +567,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	@Override
 	public void dispose () {
 
-		img.dispose();
+		defaultShape.dispose();
 		tfBackground.dispose();
 		scroll_horizontal.dispose();
 		knob_scroll.dispose();
@@ -510,6 +581,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		steeringActorCreator.dispose();
 		tfBackground.dispose();
 		background.dispose();
+
+		for(NamedTexture namedTexture : shapes){
+			namedTexture.getTextureRegion().getTexture().dispose();
+		}
 
 		world.dispose();
 	}

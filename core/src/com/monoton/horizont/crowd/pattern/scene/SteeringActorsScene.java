@@ -26,11 +26,14 @@ public class SteeringActorsScene extends Actor {
 
     private Texture background;
 
+    private TextureRegion mShape;
 
 
-    public SteeringActorsScene(final Array<SteeringActor> characters, final RayHandler rayHandler, Texture background) {
+
+    public SteeringActorsScene(final Array<SteeringActor> characters, final RayHandler rayHandler, Texture background, final TextureRegion shape) {
         this.background = background;
         this.characters = characters;
+        this.mShape = shape;
 
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -42,13 +45,17 @@ public class SteeringActorsScene extends Actor {
                 if(button == Input.Buttons.LEFT){
                     TextureRegion region = characters.get(0).getRegion();
                     SteeringActorCreator steeringActorCreator = characters.get(0).getSteeringActorCreator();
-                    float posX = x - region.getRegionHeight()/2;
-                    float posY = y - region.getRegionHeight()/2;
-                    steeringActorCreator.createSteeringActor(posX, posY, rayHandler);
+                    float posX = x + region.getRegionWidth()/2;
+                    float posY = y + region.getRegionHeight()/2;
+
+                    steeringActorCreator.createSteeringActor(posX, posY, rayHandler, mShape);
                 }
                 return true;
             }
-        });
+        });//addListener
+
+
+
     }
 
     @Override
@@ -69,6 +76,10 @@ public class SteeringActorsScene extends Actor {
                 steeringActor.act(delta);
             }
         }
+    }
+
+    public void setShape(TextureRegion shape) {
+        this.mShape = shape;
     }
 
     public void addSteeringActor(SteeringActor steeringActor){

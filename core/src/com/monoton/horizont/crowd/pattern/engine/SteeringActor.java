@@ -286,20 +286,20 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 		if (pos.y > maxY) pos.y = 0.0f;*/
 
-		if (pos.x > maxX) {
-			borderControl.overBorderX(pos, linearVelocity, maxX, maxY);
+		if (pos.x + region.getRegionWidth()/2> maxX) {
+			borderControl.overBorderX(pos, linearVelocity, maxX, maxY, region.getRegionWidth(), region.getRegionHeight());
 		}
 
-		if (pos.x < 0) {
-			borderControl.negativeX(pos, linearVelocity, maxX, maxY);
+		if (pos.x - region.getRegionWidth()/2 < 0) {
+			borderControl.negativeX(pos, linearVelocity, maxX, maxY, region.getRegionWidth(), region.getRegionHeight());
 		}
 
-		if (pos.y < 0) {
-			borderControl.negativeY(pos, linearVelocity, maxX, maxY);
+		if (pos.y - region.getRegionHeight()/2< 0) {
+			borderControl.negativeY(pos, linearVelocity, maxX, maxY, region.getRegionWidth(), region.getRegionHeight());
 		}
 
-		if (pos.y > maxY) {
-			borderControl.overBorderY(pos, linearVelocity, maxX, maxY);
+		if (pos.y + region.getRegionHeight()/2> maxY) {
+			borderControl.overBorderY(pos, linearVelocity, maxX, maxY, region.getRegionWidth(), region.getRegionHeight());
 		}
 
 	}
@@ -308,6 +308,9 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		// Update position and linear velocity. Velocity is trimmed to maximum speed
 		position.mulAdd(linearVelocity, time);
 		linearVelocity.mulAdd(steering.linear, time).limit(getMaxLinearSpeed());
+
+		//NEW
+		linearVelocity.setLength(getMaxLinearSpeed());
 
 		// Update orientation and angular velocity
 		if (independentFacing) {

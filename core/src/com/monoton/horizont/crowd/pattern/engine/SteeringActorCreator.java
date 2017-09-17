@@ -6,13 +6,10 @@ import com.badlogic.gdx.ai.steer.behaviors.PrioritySteering;
 import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.ai.steer.limiters.LinearAccelerationLimiter;
 import com.badlogic.gdx.ai.steer.proximities.RadiusProximity;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
@@ -25,29 +22,29 @@ public class SteeringActorCreator {
 
     private Array<SteeringActor> characters;
     //private Table table;
-    private Texture img;
+
     private BorderControl borderControl;
     private float PROXIMITY_FACTOR;
     private SteeringActorsScene steeringActorsScene;
 
-    public SteeringActorCreator(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, Texture img, BorderControl borderControl, float PROXIMITY_FACTOR) {
+    public SteeringActorCreator(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, BorderControl borderControl, float PROXIMITY_FACTOR) {
         this.characters = characters;
 //        this.table = table;
         this.steeringActorsScene = steeringActorsScene;
-        this.img = img;
+
         this.borderControl = borderControl;
         this.PROXIMITY_FACTOR = PROXIMITY_FACTOR;
     }
 
 
-    public void createSteeringActors(int number, RayHandler rayHandler){
+    public void createSteeringActors(int number, RayHandler rayHandler, TextureRegion textureRegion){
         for (int i = 0; i < number;i++) {
-            createSteeringActor(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()),rayHandler);
+            createSteeringActor(MathUtils.random(Gdx.graphics.getWidth()), MathUtils.random(Gdx.graphics.getHeight()),rayHandler, textureRegion);
         }
     }
 
-    public void createSteeringActor(float x, float y, RayHandler rayHandler) {
-        final SteeringActor character = new SteeringActor(new TextureRegion(img), false, borderControl, this,rayHandler, x, y);
+    public void createSteeringActor(float x, float y, RayHandler rayHandler, TextureRegion textureRegion) {
+        final SteeringActor character = new SteeringActor(textureRegion, false, borderControl, this,rayHandler, x, y);
         character.setMaxLinearSpeed(SystemState.getInstance().getSpeedFactor());
         character.setMaxLinearAcceleration(100);
 
@@ -106,6 +103,13 @@ public class SteeringActorCreator {
     public void setSpeed(float speed){
         for(SteeringActor steeringActor : characters){
             steeringActor.setMaxLinearSpeed(speed);
+        }
+
+    }
+
+    public void setShape(TextureRegion textureRegion){
+        for(SteeringActor steeringActor : characters){
+            steeringActor.setRegion(textureRegion);
         }
 
     }
