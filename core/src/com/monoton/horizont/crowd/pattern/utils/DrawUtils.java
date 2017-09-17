@@ -118,7 +118,7 @@ public class DrawUtils {
     }
 
     public static void reinitializeRandomColorChain(){
-        randomColorChain = getRandomColorChain(200);
+        randomColorChain = getRandomColorChain(500);
     }
 
     public static List<float[]> getRastaColorChain(int perColorTransitions){
@@ -213,6 +213,11 @@ public class DrawUtils {
         float[] color3 = getRandomColor();
         float[] color4 = getRandomColor();
         float[] color5 = getRandomColor();
+        float[] color6 = getRandomColor();
+        float[] color7 = getRandomColor();
+        float[] color8 = getRandomColor();
+        float[] color9 = getRandomColor();
+        float[] color10 = getRandomColor();
 
 
 
@@ -226,20 +231,19 @@ public class DrawUtils {
         random.add(color4);
         random.add(color5);
         random.add(color5);
+        random.add(color6);
+        random.add(color6);
+        random.add(color7);
+        random.add(color7);
+        random.add(color8);
+        random.add(color8);
+        random.add(color9);
+        random.add(color9);
+        random.add(color10);
+        random.add(color10);
 
         random.add(color1);
-        random.add(color1);
 
-        random.add(color2);
-        random.add(color2);
-        random.add(color3);
-        random.add(color3);
-        random.add(color4);
-        random.add(color4);
-        random.add(color5);
-        random.add(color5);
-
-        random.add(color1);
 
 
 
