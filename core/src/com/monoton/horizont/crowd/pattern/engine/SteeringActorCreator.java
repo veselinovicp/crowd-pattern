@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
@@ -43,7 +44,10 @@ public class SteeringActorCreator {
         }
     }
 
-    public void createSteeringActor(float x, float y, RayHandler rayHandler, TextureRegion textureRegion) {
+    public boolean createSteeringActor(float x, float y, RayHandler rayHandler, TextureRegion textureRegion) {
+        if(characters.size>= Constants.MAX_PARTICLE_NUMBER){
+            return false;
+        }
         final SteeringActor character = new SteeringActor(textureRegion, false, borderControl, this,rayHandler, x, y);
         character.setMaxLinearSpeed(SystemState.getInstance().getSpeedFactor());
         character.setMaxLinearAcceleration(100);
@@ -83,8 +87,20 @@ public class SteeringActorCreator {
 
         characters.add(character);
 //        table.addActor(character);
-        steeringActorsScene.addSteeringActor(character);
+//        steeringActorsScene.addSteeringActor(character);
 
+        return true;
+
+    }
+
+    public boolean removeSteeringActor(){
+        if(characters.size>0){
+            /*SteeringActor steeringActor = characters.get(0);
+            steeringActor.cleanResources();
+            characters.removeIndex(0);*/
+            return true;
+        }
+        return false;
     }
 
     private void setOrientationTowardsCenter(float x, float y, SteeringActor character){

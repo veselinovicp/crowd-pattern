@@ -49,6 +49,7 @@ public class SteeringActorsScene extends Actor {
                     float posY = y + region.getRegionHeight()/2;
 
                     steeringActorCreator.createSteeringActor(posX, posY, rayHandler, mShape);
+                    
                 }
                 return true;
             }
@@ -82,8 +83,5 @@ public class SteeringActorsScene extends Actor {
         this.mShape = shape;
     }
 
-    public void addSteeringActor(SteeringActor steeringActor){
-        characters.add(steeringActor);
 
-    }
 }

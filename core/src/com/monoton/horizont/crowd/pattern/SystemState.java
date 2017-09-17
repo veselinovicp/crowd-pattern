@@ -11,15 +11,15 @@ import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponseFa
  * Created by monoton on 14.8.2017.
  */
 public class SystemState<T extends Vector<T>> {
-    float orderFactor=3.0f;
-    float distanceFactor=0.2f;
-    float radiusFactor=10;
-    float speedFactor=80;
-    float tailLengthFactor=140;
-    float tailDensityFactor=0.8f;
-    float ambientFactor =Constants.LIGHT_SCENE_WIDTH *1.0f;
-    int tailSize = 4;
-    float lightSize = 0.6f;
+    float orderFactor=Constants.DEFAULT_ORDER_FACTOR;
+    float distanceFactor=Constants.DEFAULT_DISTANCE_FACTOR;
+    float radiusFactor=Constants.DEFAULT_RADIUS_FACTOR;
+    float speedFactor=Constants.DEFAULT_SPEED_FACTOR;
+    float tailLengthFactor=Constants.DEFAULT_TAIL_LENGTH_FACTOR;
+    float tailDensityFactor=Constants.DEFAULT_TAIL_DENSITY_FACTOR;
+    float ambientFactor =Constants.DEFAULT_AMBINENT_FACTOR;
+    int tailSize = Constants.DEFAULT_TAIL_SIZE;
+    float lightSize = Constants.DEFAULT_LIGHT_SIZE;
 
 
     private ClosenessResponse<T> closenessResponse;
@@ -39,6 +39,18 @@ public class SystemState<T extends Vector<T>> {
         closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
         tailPainter = TailPainterFactory.getTailPainter(Constants.TAIL_PAINTER_SNAKE);
 
+    }
+
+    public void reset(){
+         orderFactor=Constants.DEFAULT_ORDER_FACTOR;
+         distanceFactor=Constants.DEFAULT_DISTANCE_FACTOR;
+         radiusFactor=Constants.DEFAULT_RADIUS_FACTOR;
+         speedFactor=Constants.DEFAULT_SPEED_FACTOR;
+         tailLengthFactor=Constants.DEFAULT_TAIL_LENGTH_FACTOR;
+         tailDensityFactor=Constants.DEFAULT_TAIL_DENSITY_FACTOR;
+         ambientFactor =Constants.DEFAULT_AMBINENT_FACTOR;
+         tailSize = Constants.DEFAULT_TAIL_SIZE;
+         lightSize = Constants.DEFAULT_LIGHT_SIZE;
     }
 
     public float getOrderFactor() {

@@ -34,6 +34,7 @@ import com.monoton.horizont.crowd.pattern.ui.NamedTexture;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 
+
 public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Skin skin;
@@ -52,7 +53,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Stage controlsStage;
 
 
-	private final static int PARTICLE_START_NUMBER =50;
+
 
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
@@ -63,6 +64,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 	private TextButton exitButton;
+	private TextButton resetButton;
 
 
 	private World world;
@@ -152,17 +154,12 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		createAmbientControls(ls);
 
 
-		/**
-		 * color chooser select box
-		 */
+
 		createColorChooseControls(font, ls);
 
-		/**
-		 * end color chooser select box
-		 */
 		createShapeChooseControls(font, ls);
 
-
+		createResetButton();
 		createExitButton();
 
 		controlsStage.addActor(controlsTable);
@@ -187,7 +184,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, borderControl, SystemState.getInstance().getRadiusFactor());
 
-		steeringActorCreator.createSteeringActors(PARTICLE_START_NUMBER,rayHandler, shapes.get(0).getTextureRegion());
+		steeringActorCreator.createSteeringActors(Constants.PARTICLE_START_NUMBER,rayHandler, shapes.get(0).getTextureRegion());
 
 		actionStage.setScrollFocus(steeringActorsScene);
 
@@ -212,8 +209,62 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	}
 
+	private void createResetButton() {
+		resetButton = new TextButton("Reset", skin);
+
+		resetButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				SystemState.getInstance().reset();
+				resetControls();
+				return true;
+			}
+		});
+
+		controlsTable.add(resetButton).colspan(2).right().padBottom(20);
+
+	}
+
+	public void resetControls(){
+		resetSliderValues(speedSlider, SystemState.getInstance().getSpeedFactor());
+		resetSliderValues(tailLengthSlider, SystemState.getInstance().getTailSize());
+		resetSliderValues(lightSlider, SystemState.getInstance().getLightSize());
+		resetSliderValues(ambientSlider, SystemState.getInstance().getAmbientFactor());
+		resetDropDownValues(shapeSelectBox, shapes.get(0));
+		resetDropDownValues(colorSelectBox, colors.get(0));
+
+
+	}
+
+	public void resetDropDownValues(SelectBox selectBox, Object value){
+		selectBox.setSelected(value);
+
+		Array<EventListener> listeners = selectBox.getListeners();
+		for (EventListener l : listeners) {
+			if (l instanceof ChangeListener) {
+				((ChangeListener) l).handle(null);
+			}
+		}
+
+	}
+
+	public void resetSliderValues(Slider slider, float value){
+		slider.setValue(value);
+
+
+		Array<EventListener> listeners = slider.getListeners();
+		for (EventListener l : listeners) {
+			if (l instanceof InputListener) {
+				((InputListener) l).touchUp(null,0,0,0,0);
+			}
+		}
+//		label.setText(""+value);
+
+
+	}
+
 	private void createExitButton() {
-		exitButton = new TextButton("exit", skin);
+		exitButton = new TextButton("Exit", skin);
 
 		exitButton.addListener(new ClickListener(){
 			@Override
@@ -223,21 +274,23 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			}
 		});
 
-		controlsTable.add(exitButton).colspan(3).right().padBottom(20);
+		controlsTable.add(exitButton).colspan(1).right().padBottom(20);
 		controlsTable.row();
 	}
 
-	SelectBox colorSelectBox = null;
+	private SelectBox colorSelectBox = null;
+
+	private Array<String> colors = new Array<String>();
 
 	private void createColorChooseControls(BitmapFont font, Label.LabelStyle ls) {
 
-		Array<String> items = new Array<String>();
 
-		items.add(Constants.COLOR_MACHINE_RAINBOW);
-		items.add(Constants.COLOR_MACHINE_RASTA);
-		items.add(Constants.COLOR_MACHINE_DREAM_MAGNET);
-		items.add(Constants.COLOR_MACHINE_EIGHTIES);
-		items.add(Constants.COLOR_MACHINE_RANDOM);
+
+		colors.add(Constants.COLOR_MACHINE_RAINBOW);
+		colors.add(Constants.COLOR_MACHINE_RASTA);
+		colors.add(Constants.COLOR_MACHINE_DREAM_MAGNET);
+		colors.add(Constants.COLOR_MACHINE_EIGHTIES);
+		colors.add(Constants.COLOR_MACHINE_RANDOM);
 
 
 
@@ -252,10 +305,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			}
 		};
 
-		colorSelectBox = createDropDownControl("Color: ", items, changeListener, font, ls);
+		colorSelectBox = createDropDownControl("Color: ", colors, changeListener, font, ls);
 
 
-		SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(items.first()));
+		SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(colors.first()));
 
 		TextButton randomColor = new TextButton("Random", skin);
 
@@ -276,13 +329,12 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private void createShapes(){
 		shapes = new Array<NamedTexture>();
-
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("star.png")), "Star 1"));
+		shapes.add(new NamedTexture(new TextureRegion(new Texture("star2.png")), "Star 2"));
 		shapes.add(new NamedTexture(new TextureRegion(new Texture("circle.png")), "Circle"));
 		shapes.add(new NamedTexture(new TextureRegion(new Texture("diamond.png")),"Diamond"));
 		shapes.add(new NamedTexture(new TextureRegion(new Texture("ship1.png")), "Spaceship 1"));
 		shapes.add(new NamedTexture(new TextureRegion(new Texture("spaceship.png")), "Spaceship2"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("star.png")), "Star 1"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("star2.png")), "Star 2"));
 		shapes.add(new NamedTexture(new TextureRegion(new Texture("triangle.png")), "Triangle"));
 
 	}
