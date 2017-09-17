@@ -9,13 +9,13 @@ public class DrawPoint {
 
     private Vector2 position;
     private Vector2 velocity;
-    private float[]  color;
+
     private float width;
     private float height;
 
-    public DrawPoint(Vector2 position, Vector2 velocity, float[] color) {
+    public DrawPoint(Vector2 position, Vector2 velocity) {
         this.position = position;
-        this.color = color;
+
         this.velocity = velocity;
 
     }
@@ -24,9 +24,7 @@ public class DrawPoint {
         return position;
     }
 
-    public float[]  getColor() {
-        return color;
-    }
+
 
     public Vector2 getVelocity() {
         return velocity;

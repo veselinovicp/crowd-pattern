@@ -65,7 +65,7 @@ public abstract class ShootingStarPainter{
         batch.draw(region, position.x, position.y,region.getRegionWidth()/2,region.getRegionHeight()/2, region.getRegionWidth(), region.getRegionHeight(),1,1,velocity.angle());
 
 
-        this.drawPoints.add(new DrawPoint(position, velocity, color));
+        this.drawPoints.add(new DrawPoint(position, velocity));
 
 
         removeTail();

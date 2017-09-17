@@ -32,7 +32,11 @@ public class SnakeTailPainter implements TailPainter {
             DrawPoint drawPoint = drawPoints.get(i);
             int distance = calculateDistance(justDrawn.getPosition(), drawPoint.getPosition());
             if(distance>=radius){
-                float[] drawPointColor = drawPoint.getColor();
+
+
+                float[] drawPointColor = SystemState.getInstance().getColorMachine().getColor(drawPoint.getPosition(), drawPoint.getVelocity());
+
+
                 float factor = i / (float) drawPoints.size();
 
                 batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//  /2f
