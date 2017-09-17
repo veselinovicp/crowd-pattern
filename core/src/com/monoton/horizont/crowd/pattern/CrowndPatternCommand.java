@@ -424,7 +424,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-				tailLengthValue.setText("" + tailLengthSlider.getValue());
+//				tailLengthValue.setText("" + tailLengthSlider.getValue());//String.format("%.2f", floatValue);
+				tailLengthValue.setText(DrawUtils.formatFloat(tailLengthSlider.getValue()));//String.format("%.2f", floatValue);
 				SystemState.getInstance().setTailSize((int)tailLengthSlider.getValue());
 
 
@@ -456,7 +457,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-				speedValue.setText("" + speedSlider.getValue());
+				speedValue.setText(DrawUtils.formatFloat(speedSlider.getValue()));
 				steeringActorCreator.setSpeed(speedSlider.getValue());
 				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 
@@ -489,7 +490,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-				lightValue.setText("" + lightSlider.getValue());
+				lightValue.setText(DrawUtils.formatFloat(lightSlider.getValue()));
 
 				SystemState.getInstance().setLightSize(lightSlider.getValue());
 
@@ -525,7 +526,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-				ambientValue.setText("" + ambientSlider.getValue());
+				ambientValue.setText(DrawUtils.formatFloat(ambientSlider.getValue()));
 
 				SystemState.getInstance().setAmbientFactor(ambientSlider.getValue());
 				light.setDistance(ambientSlider.getValue());

@@ -17,6 +17,10 @@ public class DrawUtils {
         return factorX * Constants.LIGHT_SCENE_WIDTH;
     }
 
+    public static String formatFloat(float value){
+        return String.format("%.1f", value);
+    }
+
     public static Vector2 getBox2DCoords(Vector2 vector){
         return getBox2DCoords(vector.x, vector.y);
     }
