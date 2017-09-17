@@ -58,7 +58,7 @@ public class LightPainter {
 
             adjustLight(fixedPosition, drawPoint.getVelocity(), light);
             light.setActive(true);
-            light.setDistance(DrawUtils.getBox2DWidth(drawPoint.getWidth())*0.6f);
+            light.setDistance(DrawUtils.getBox2DWidth(drawPoint.getWidth())*SystemState.getInstance().getLightSize());
         }
 
     }

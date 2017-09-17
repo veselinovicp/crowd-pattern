@@ -23,5 +23,4 @@ public class Constants {
     public static final float LIGHT_SCENE_WIDTH = 12.80f; // 12.8 metres wide
     public static final float LIGHT_SCENE_HEIGHT = 7.20f; // 7.2 metres high
 
-//    public static final float MAX_SPEED = 80;
 }

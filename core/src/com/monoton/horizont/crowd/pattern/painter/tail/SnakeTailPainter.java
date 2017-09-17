@@ -49,7 +49,7 @@ public class SnakeTailPainter implements TailPainter {
 
 
             }
-            if(result.size>4){
+            if(result.size>SystemState.getInstance().getTailSize()){
                 break;
             }
 

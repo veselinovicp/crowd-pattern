@@ -1,9 +1,7 @@
 package com.monoton.horizont.crowd.pattern;
 
 import com.badlogic.gdx.math.Vector;
-import com.badlogic.gdx.math.Vector2;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
-import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
 import com.monoton.horizont.crowd.pattern.painter.tail.TailPainter;
 import com.monoton.horizont.crowd.pattern.painter.tail.TailPainterFactory;
 import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
@@ -19,7 +17,9 @@ public class SystemState<T extends Vector<T>> {
     float speedFactor=80;
     float tailLengthFactor=140;
     float tailDensityFactor=0.8f;
-    float lightSizeFactor=Constants.LIGHT_SCENE_WIDTH *1.0f;
+    float ambientFactor =Constants.LIGHT_SCENE_WIDTH *1.0f;
+    int tailSize = 4;
+    float lightSize = 0.6f;
 
 
     private ClosenessResponse<T> closenessResponse;
@@ -113,11 +113,27 @@ public class SystemState<T extends Vector<T>> {
         this.tailDensityFactor = tailDensityFactor;
     }
 
-    public float getLightSizeFactor() {
-        return lightSizeFactor;
+    public float getAmbientFactor() {
+        return ambientFactor;
     }
 
-    public void setLightSizeFactor(float lightSizeFactor) {
-        this.lightSizeFactor = lightSizeFactor;
+    public void setAmbientFactor(float ambientFactor) {
+        this.ambientFactor = ambientFactor;
+    }
+
+    public int getTailSize() {
+        return tailSize;
+    }
+
+    public void setTailSize(int tailSize) {
+        this.tailSize = tailSize;
+    }
+
+    public float getLightSize() {
+        return lightSize;
+    }
+
+    public void setLightSize(float lightSize) {
+        this.lightSize = lightSize;
     }
 }

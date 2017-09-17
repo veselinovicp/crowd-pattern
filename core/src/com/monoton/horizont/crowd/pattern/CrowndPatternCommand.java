@@ -147,8 +147,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		createSpeedControls(ls);
 		createTailLengthControls(ls);
-		createTailDensityControls(ls);
-		createLightSizeControls(ls);
+		createLightControls(ls);
+
+		createAmbientControls(ls);
 
 
 		/**
@@ -361,6 +362,38 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	}
 
 
+	private Label tailLengthValue = null;
+	private Slider tailLengthSlider = null;
+
+	private void createTailLengthControls(Label.LabelStyle ls) {
+
+
+		InputListener listener = new InputListener() {
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				tailLengthValue.setText("" + tailLengthSlider.getValue());
+				SystemState.getInstance().setTailSize((int)tailLengthSlider.getValue());
+
+
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				SystemState.getInstance().setTailSize((int)tailLengthSlider.getValue());
+				return true;
+			}
+
+			;
+		};
+
+		Controls controls = createControls("Tail length: ",2,8,1f,SystemState.getInstance().getTailSize(), listener, ls);
+		tailLengthSlider = controls.getSlider();
+		tailLengthValue = controls.getValue();
+	}
+
+
+
 	private Label speedValue = null;
 	private Slider speedSlider = null;
 
@@ -393,20 +426,20 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		speedValue = controls.getValue();
 	}
 
-	private Label lightSizeValue = null;
-	private Slider lightSizeSlider = null;
 
-	private void createLightSizeControls(Label.LabelStyle ls) {
+	private Label lightValue = null;
+	private Slider lightSlider = null;
+
+	private void createLightControls(Label.LabelStyle ls) {
 
 
 		InputListener listener = new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-				lightSizeValue.setText("" + lightSizeSlider.getValue());
+				lightValue.setText("" + lightSlider.getValue());
 
-				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
-				light.setDistance(lightSizeSlider.getValue());
+				SystemState.getInstance().setLightSize(lightSlider.getValue());
 
 
 			}
@@ -414,80 +447,57 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-				SystemState.getInstance().setLightSizeFactor(lightSizeSlider.getValue());
-				light.setDistance(lightSizeSlider.getValue());
+				SystemState.getInstance().setLightSize(lightSlider.getValue());
+
 				return true;
 			}
 
 			;
 		};
 
-		Controls controls = createControls("Light size: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getLightSizeFactor(), listener, ls);
-		lightSizeSlider = controls.getSlider();
-		lightSizeValue = controls.getValue();
+		Controls controls = createControls("Light size: ",0.2f,2.0f,0.1f,SystemState.getInstance().getLightSize(), listener, ls);
+		lightSlider = controls.getSlider();
+		lightValue = controls.getValue();
 	}
 
-	private Label tailLengthValue = null;
-	private Slider tailLengthSlider = null;
 
-	private void createTailLengthControls(Label.LabelStyle ls) {
+
+
+	private Label ambientValue = null;
+	private Slider ambientSlider = null;
+
+	private void createAmbientControls(Label.LabelStyle ls) {
 
 
 		InputListener listener = new InputListener() {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-				tailLengthValue.setText("" + tailLengthSlider.getValue());
+				ambientValue.setText("" + ambientSlider.getValue());
 
-				SystemState.getInstance().setTailLengthFactor(tailLengthSlider.getValue());
-
-
-			}
-
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setTailLengthFactor(tailLengthSlider.getValue());
-				return true;
-			}
-
-			;
-		};
-
-		Controls controls = createControls("Tail length: ",50f,500f,1f,SystemState.getInstance().getTailLengthFactor(), listener, ls);
-		tailLengthSlider = controls.getSlider();
-		tailLengthValue = controls.getValue();
-	}
-
-	private Label tailDensityValue = null;
-	private Slider tailDensitySlider = null;
-
-	private void createTailDensityControls(Label.LabelStyle ls) {
-
-
-		InputListener listener = new InputListener() {
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
-				tailDensityValue.setText("" + tailDensitySlider.getValue());
-
-				SystemState.getInstance().setTailDensityFactor(tailDensitySlider.getValue());
+				SystemState.getInstance().setAmbientFactor(ambientSlider.getValue());
+				light.setDistance(ambientSlider.getValue());
 
 
 			}
 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				SystemState.getInstance().setTailDensityFactor(tailDensitySlider.getValue());
+
+				SystemState.getInstance().setAmbientFactor(ambientSlider.getValue());
+				light.setDistance(ambientSlider.getValue());
 				return true;
 			}
 
 			;
 		};
 
-		Controls controls = createControls("Tail density: ",0.1f,2f,0.1f,SystemState.getInstance().getTailDensityFactor(), listener, ls);
-		tailDensitySlider = controls.getSlider();
-		tailDensityValue = controls.getValue();
+		Controls controls = createControls("Ambient: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getAmbientFactor(), listener, ls);
+		ambientSlider = controls.getSlider();
+		ambientValue = controls.getValue();
 	}
+
+
 
 
 	private class Controls{
