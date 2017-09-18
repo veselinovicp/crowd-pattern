@@ -135,11 +135,13 @@ public class SteeringActorCreator {
            steeringActor.getProximity().setRadius(radius);
         }
     }
-   public void dispose(){
-       for(SteeringActor steeringActor : characters){
-           steeringActor.cleanResources();
-       }
-   }
+
+    public void dispose(){
+        for(SteeringActor steeringActor : characters){
+            steeringActor.dispose();
+        }
+    }
+
 
     private void speedUp(SteeringActor character) {
         //character.getLinearVelocity().set(new Vector2(MathUtils.random(-1, 1),MathUtils.random(-1, 1))).nor().scl(character.getMaxLinearAcceleration());

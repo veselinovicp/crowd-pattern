@@ -37,7 +37,8 @@ public class LightPainter {
         int j=0;
         if(tailLights.size> tail.size){
 
-            tailLights.removeIndex(j).dispose();
+//            tailLights.removeIndex(j).dispose();
+            tailLights.removeIndex(j).setActive(false);
             j++;
 
         }
@@ -69,15 +70,9 @@ public class LightPainter {
         return position.add(drawPoint.getWidth() / 2, drawPoint.getHeight()  / 2);
     }
 
-    public void releaseResources(){
-        for(Light light : tailLights){
-
-            light.dispose();
-        }
-    }
 
 
-    private void setTailLightsInactive(){
+    public void setTailLightsInactive(){
         for(Light light : tailLights){
             light.setActive(false);
         }

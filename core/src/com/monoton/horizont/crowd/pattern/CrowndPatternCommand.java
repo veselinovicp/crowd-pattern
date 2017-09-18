@@ -5,6 +5,7 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.ai.GdxAI;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,6 +32,7 @@ import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
 import com.monoton.horizont.crowd.pattern.scene.LightScene;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.ui.NamedTexture;
+import com.monoton.horizont.crowd.pattern.ui.UIBuilder;
 import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 
@@ -39,7 +41,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private Skin skin;
 
-	private Texture defaultShape;
+
 	private Texture background;
 
 	private Texture tfBackground;
@@ -68,13 +70,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 	private World world;
-	private Box2DDebugRenderer debugRenderer;
+
 	private RayHandler rayHandler;
 	private Light light;
 
 
 
-	ShapeRenderer sr;
+
 
 	private Viewport viewport;
 
@@ -82,12 +84,16 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private SteeringActorsScene steeringActorsScene;
 
+	private UIBuilder uiBuilder = new UIBuilder();
+
 
 	
 	@Override
 	public void create () {
 
 		System.out.println("start creating");
+		uiBuilder.load();
+
 		createShapes();
 
 		viewport = new FitViewport(Constants.LIGHT_SCENE_WIDTH, Constants.LIGHT_SCENE_HEIGHT);
@@ -101,14 +107,11 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		// Create Physics World
-//		world = new World(new Vector2(0,-9.8f), true);
+
 		world = new World(new Vector2(0,0), true);
 
 
-		// Instantiate the class in charge of drawing physics shapes
-		debugRenderer = new Box2DDebugRenderer();
-		// To add some color to the ground
-		sr = new ShapeRenderer();
+
 
 
 		rayHandler = new RayHandler(world);
@@ -120,11 +123,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
 
 
-//		Light conelight = new ConeLight(rayHandler, 32, Color.WHITE, 15,Constants.LIGHT_SCENE_WIDTH*0.5f, Constants.LIGHT_SCENE_HEIGHT-1, 270, 45);
-
-
-
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = uiBuilder.get(UIBuilder.DEFAULT_SKIN, Skin.class);
 
 
 
@@ -147,7 +146,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 
-		BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
+
+		BitmapFont font = uiBuilder.get(UIBuilder.DEFAULT_FONT, BitmapFont.class);
 		Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
 
 
@@ -172,11 +172,11 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 
-		defaultShape = new Texture("hexagram.png");
+
 
 		characters = new Array<SteeringActor>();
 
-		background = new Texture(Gdx.files.internal("background2.jpg"));
+		background = uiBuilder.get(UIBuilder.BACKGROUND, Texture.class);
 
 
 		LightScene lightScene = new LightScene(characters, light);
@@ -337,13 +337,15 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private void createShapes(){
 		shapes = new Array<NamedTexture>();
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("star.png")), "Star 1"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("star2.png")), "Star 2"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("circle.png")), "Circle"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("diamond.png")),"Diamond"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("ship1.png")), "Spaceship 1"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("spaceship.png")), "Spaceship2"));
-		shapes.add(new NamedTexture(new TextureRegion(new Texture("triangle.png")), "Triangle"));
+
+
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.STAR_1, Texture.class)), "Star 1"));
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.STAR_2, Texture.class)), "Star 2"));
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.CIRCLE, Texture.class)), "Circle"));
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.DIAMOND, Texture.class)),"Diamond"));
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.SPACESHIP_1, Texture.class)), "Spaceship 1"));
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.SPACESHIP_2, Texture.class)), "Spaceship2"));
+		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.TRIANGLE, Texture.class)), "Triangle"));
 
 	}
 
@@ -377,7 +379,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		if(tfBackground==null) {
-			tfBackground = new Texture(Gdx.files.internal("tfbackground.png"));
+			tfBackground = uiBuilder.get(UIBuilder.TF_BACKGROUND, Texture.class);
 		}
 		//List
 		List.ListStyle listS = new List.ListStyle();
@@ -392,10 +394,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		sbs.listStyle = listS;
 		ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
 		if(scroll_horizontal==null) {
-			scroll_horizontal = new Texture(Gdx.files.internal("scroll_horizontal.png"));
+			scroll_horizontal = uiBuilder.get(UIBuilder.SCROLL_HORIZONTAL, Texture.class);
 		}
 		if(knob_scroll==null) {
-			knob_scroll = new Texture(Gdx.files.internal("knob_scroll.png"));
+			knob_scroll =uiBuilder.get(UIBuilder.KNOB_SCROLL, Texture.class);
 		}
 		sps.background = new TextureRegionDrawable(new TextureRegion(tfBackground));
 		sps.vScroll = new TextureRegionDrawable(new TextureRegion(scroll_horizontal));
@@ -643,37 +645,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		System.out.println("start disposing");
 
 
-
-
-
-
-		defaultShape.dispose();
-		tfBackground.dispose();
-		scroll_horizontal.dispose();
-		knob_scroll.dispose();
-		skin.dispose();
-		debugRenderer.dispose();
-
-
-
-//		steeringActorCreator.dispose();
-		tfBackground.dispose();
-		background.dispose();
-
-		for(NamedTexture namedTexture : shapes){
-			namedTexture.getTextureRegion().getTexture().dispose();
-		}
+		steeringActorCreator.dispose();
+		uiBuilder.dispose();
 
 		actionStage.dispose();
 		controlsStage.dispose();
 
-		sr.dispose();
 
-
-		steeringActorCreator.dispose();
-
-
-		light.dispose();
 
 		rayHandler.dispose();
 

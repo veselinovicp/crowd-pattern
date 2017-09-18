@@ -273,6 +273,10 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 		super.act(delta);
 	}
 
+	public void  dispose(){
+		lightPainter.setTailLightsInactive();
+	}
+
 
 
 	// the display area is considered to wrap around from top to bottom
@@ -342,11 +346,6 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	}
 
-	public void cleanResources(){
-		lightPainter.releaseResources();
-
-
-	}
 
 
 
