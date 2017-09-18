@@ -13,7 +13,7 @@ public class DesktopLauncher {
 		cfg.height = 610;
 		cfg.width = 987;
 
-//		cfg.fullscreen = true;
+		cfg.fullscreen = true;
 /*
 		cfg.height = 1000;
 		cfg.width = 1500;*/
