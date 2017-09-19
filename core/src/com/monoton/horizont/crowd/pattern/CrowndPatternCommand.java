@@ -1,7 +1,5 @@
 package com.monoton.horizont.crowd.pattern;
 
-import box2dLight.Light;
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.ai.GdxAI;
@@ -24,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
-import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
+import com.monoton.horizont.crowd.pattern.engine.SteeringActorEngine;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
@@ -59,7 +57,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private BorderControl borderControl = BorderControlFactory.getBorderControl(Constants.BORDER_CONTROL_BOUNCE);
 
-	private SteeringActorCreator steeringActorCreator;
+	private SteeringActorEngine steeringActorEngine;
 
 	private Table controlsTable;
 
@@ -80,6 +78,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private Viewport viewport;
 
 	private Array<NamedTexture> shapes = null;
+	private NamedTexture selectedShape;
 
 	private SteeringActorsScene steeringActorsScene;
 
@@ -161,8 +160,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		createShapeChooseControls(font, ls);
 
-		createResetButton();
-		createExitButton();
+		createButtons();
 
 		controlsStage.addActor(controlsTable);
 
@@ -180,13 +178,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		actionStage.addActor(lightScene);
 
 
-		steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background, shapes.get(0).getTextureRegion());
+		steeringActorsScene = new SteeringActorsScene(characters, rayHandler, background, selectedShape.getTextureRegion());
 
 		actionStage.addActor(steeringActorsScene);
 
-		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, borderControl, SystemState.getInstance().getRadiusFactor());
+		steeringActorEngine = new SteeringActorEngine(characters, steeringActorsScene, borderControl, SystemState.getInstance().getRadiusFactor());
 
-		steeringActorCreator.createSteeringActors(SystemState.getInstance().getParticleStartNumber(),rayHandler, shapes.get(0).getTextureRegion());
+		steeringActorEngine.createSteeringActors(SystemState.getInstance().getParticleStartNumber(),rayHandler, shapes.get(0).getTextureRegion());
 
 		actionStage.setScrollFocus(steeringActorsScene);
 
@@ -201,6 +199,14 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		System.out.println("end creating");
 
 
+	}
+
+	private void createButtons() {
+		createRemoveParticlesButton();
+		createAddParticlesButton();
+		createResetButton();
+		createExitButton();
+		controlsTable.row();
 	}
 
 	private void createResetButton() {
@@ -257,6 +263,38 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	}
 
+	private void createAddParticlesButton() {
+		TextButton addButton = new TextButton("Add 5", skin);
+
+		addButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+				steeringActorEngine.createSteeringActors(5, rayHandler, selectedShape.getTextureRegion());
+				return true;
+			}
+		});
+
+		controlsTable.add(addButton).colspan(1).center().padBottom(20);
+
+	}
+
+	private void createRemoveParticlesButton() {
+		TextButton removeButton = new TextButton("Remove 5", skin);
+
+		removeButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+				steeringActorEngine.removeSteeringActors(5);
+				return true;
+			}
+		});
+
+		controlsTable.add(removeButton).colspan(1).right().padBottom(20);
+//		controlsTable.row();
+	}
+
 	private void createExitButton() {
 		exitButton = new TextButton("Exit", skin);
 
@@ -270,7 +308,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		});
 
 		controlsTable.add(exitButton).colspan(1).right().padBottom(20);
-		controlsTable.row();
+
 	}
 
 	private SelectBox colorSelectBox = null;
@@ -334,6 +372,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.SPACESHIP_2, Texture.class)), "Spaceship2"));
 		shapes.add(new NamedTexture(new TextureRegion(uiBuilder.get(UIBuilder.TRIANGLE, Texture.class)), "Triangle"));
 
+		selectedShape = shapes.get(0);
+
 	}
 
 	SelectBox shapeSelectBox = null;
@@ -344,9 +384,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		ChangeListener changeListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				NamedTexture selected = (NamedTexture) shapeSelectBox.getSelected();
-				steeringActorCreator.setShape(selected.getTextureRegion());
-				steeringActorsScene.setShape(selected.getTextureRegion());
+				selectedShape = (NamedTexture) shapeSelectBox.getSelected();
+				steeringActorEngine.setShape(selectedShape.getTextureRegion());
+				steeringActorsScene.setShape(selectedShape.getTextureRegion());
+
 
 			}
 		};
@@ -451,7 +492,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
 				speedValue.setText(DrawUtils.formatFloat(speedSlider.getValue()));
-				steeringActorCreator.setSpeed(speedSlider.getValue());
+				steeringActorEngine.setSpeed(speedSlider.getValue());
 				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 
 
@@ -459,7 +500,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				steeringActorCreator.setSpeed(speedSlider.getValue());
+				steeringActorEngine.setSpeed(speedSlider.getValue());
 				SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 				return true;
 			}
@@ -597,26 +638,25 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
-
 		GdxAI.getTimepiece().update(Gdx.graphics.getDeltaTime());
 
-
-
-		actionStage.act();
+		/**
+		 *
+		 * 1. draw particles
+		 */
+     	actionStage.act();
 		actionStage.draw();
 
+		/**
+		 * 2. draw controls
+		 */
 		controlsStage.act();
 		controlsStage.draw();
 
-
-
-
+		/**
+		 * 3. draw lights
+		 */
 		world.step(1/60f, 6, 2);
-
-
-
 
 		rayHandler.setCombinedMatrix(viewport.getCamera().combined);
 		rayHandler.updateAndRender();
@@ -629,7 +669,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		System.out.println("start disposing");
 
 
-		steeringActorCreator.dispose();
+		steeringActorEngine.dispose();
 		uiBuilder.dispose();
 
 		actionStage.dispose();
@@ -641,9 +681,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		world.dispose();
 
-
-
-
+		System.out.println("end disposing");
 
 	}
 

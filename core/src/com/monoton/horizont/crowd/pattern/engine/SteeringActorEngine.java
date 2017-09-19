@@ -19,7 +19,7 @@ import com.monoton.horizont.crowd.pattern.steering.PassingNeighboursSteering;
 /**
  * Created by monoton on 13.8.2017.
  */
-public class SteeringActorCreator {
+public class SteeringActorEngine {
 
     private Array<SteeringActor> characters;
     //private Table table;
@@ -28,7 +28,7 @@ public class SteeringActorCreator {
     private float PROXIMITY_FACTOR;
     private SteeringActorsScene steeringActorsScene;
 
-    public SteeringActorCreator(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, BorderControl borderControl, float PROXIMITY_FACTOR) {
+    public SteeringActorEngine(Array<SteeringActor> characters, SteeringActorsScene steeringActorsScene, BorderControl borderControl, float PROXIMITY_FACTOR) {
         this.characters = characters;
 //        this.table = table;
         this.steeringActorsScene = steeringActorsScene;
@@ -93,11 +93,20 @@ public class SteeringActorCreator {
 
     }
 
-    public boolean removeSteeringActor(){
-        if(characters.size>0){
-            /*SteeringActor steeringActor = characters.get(0);
-            steeringActor.cleanResources();
-            characters.removeIndex(0);*/
+    public boolean removeSteeringActors(int number){
+        for(int i=0; i<number;i++){
+            if(!removeSteeringActor()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean removeSteeringActor(){
+        if(characters.size>1){
+
+
+            characters.removeIndex(0).dispose();
             return true;
         }
         return false;

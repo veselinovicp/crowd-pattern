@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
-import com.monoton.horizont.crowd.pattern.engine.SteeringActorCreator;
+import com.monoton.horizont.crowd.pattern.engine.SteeringActorEngine;
 import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
 
 /**
@@ -44,11 +44,11 @@ public class SteeringActorsScene extends Actor {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(button == Input.Buttons.LEFT){
                     TextureRegion region = characters.get(0).getRegion();
-                    SteeringActorCreator steeringActorCreator = characters.get(0).getSteeringActorCreator();
+                    SteeringActorEngine steeringActorEngine = characters.get(0).getSteeringActorEngine();
                     float posX = x + region.getRegionWidth()/2;
                     float posY = y + region.getRegionHeight()/2;
 
-                    steeringActorCreator.createSteeringActor(posX, posY, rayHandler, mShape);
+                    steeringActorEngine.createSteeringActor(posX, posY, rayHandler, mShape);
                     
                 }
                 return true;

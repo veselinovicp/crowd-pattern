@@ -31,12 +31,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
-import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.engine.light.LightPainter;
 import com.monoton.horizont.crowd.pattern.painter.DrawPoint;
 import com.monoton.horizont.crowd.pattern.painter.ShootingStarPainter;
-import com.monoton.horizont.crowd.pattern.utils.DrawUtils;
 
 /** A SteeringActor is a scene2d {@link Actor} implementing the {@link Steerable} interface.
  * 
@@ -64,7 +62,7 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 	private BorderControl borderControl;
 
-	private SteeringActorCreator steeringActorCreator;
+	private SteeringActorEngine steeringActorEngine;
 
 	private RadiusProximity<Vector2> proximity;
 
@@ -82,9 +80,9 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 
 
-	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl, SteeringActorCreator steeringActorCreator, RayHandler rayHandler, float x, float y) {
+	public SteeringActor(TextureRegion region, boolean independentFacing, BorderControl borderControl, SteeringActorEngine steeringActorEngine, RayHandler rayHandler, float x, float y) {
 
-		this.steeringActorCreator = steeringActorCreator;
+		this.steeringActorEngine = steeringActorEngine;
 		this.borderControl = borderControl;
 		this.independentFacing = independentFacing;
 		this.region = region;
@@ -349,8 +347,8 @@ public class SteeringActor extends Actor implements Steerable<Vector2> {
 
 
 
-	public SteeringActorCreator getSteeringActorCreator() {
-		return steeringActorCreator;
+	public SteeringActorEngine getSteeringActorEngine() {
+		return steeringActorEngine;
 	}
 
 	public void setProximity(RadiusProximity<Vector2> proximity) {

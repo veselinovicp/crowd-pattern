@@ -43,7 +43,7 @@ public class LightScene extends Actor {
         light.setPosition(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f);
 
         light.setColor(Color.YELLOW);
-        light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
+        light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.5f);
     }
 
     @Override

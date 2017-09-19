@@ -36,6 +36,6 @@ public class Constants {
     public static final float DEFAULT_TAIL_DENSITY_FACTOR=0.8f;
     public static final float DEFAULT_AMBINENT_FACTOR = Constants.LIGHT_SCENE_WIDTH *1.0f;
     public static final int DEFAULT_TAIL_SIZE = 5;
-    public static final float DEFAULT_LIGHT_SIZE = 0.6f;
+    public static final float DEFAULT_LIGHT_SIZE = 0.5f;
 
 }
