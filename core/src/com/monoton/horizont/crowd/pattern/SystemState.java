@@ -1,5 +1,6 @@
 package com.monoton.horizont.crowd.pattern;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
 import com.monoton.horizont.crowd.pattern.painter.tail.TailPainter;
@@ -20,6 +21,8 @@ public class SystemState<T extends Vector<T>> {
     float ambientFactor =Constants.DEFAULT_AMBINENT_FACTOR;
     int tailSize = Constants.DEFAULT_TAIL_SIZE;
     float lightSize = Constants.DEFAULT_LIGHT_SIZE;
+    int particleStartNumber;
+    int maxParticles;
 
 
     private ClosenessResponse<T> closenessResponse;
@@ -39,6 +42,10 @@ public class SystemState<T extends Vector<T>> {
         closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
         tailPainter = TailPainterFactory.getTailPainter(Constants.TAIL_PAINTER_SNAKE);
 
+        particleStartNumber = (int)(Constants.PARTICLE_DENSITY * (float)Gdx.graphics.getWidth() * (float)Gdx.graphics.getHeight());
+        maxParticles = particleStartNumber * Constants.MAX_PARTICLE_FACTOR;
+        System.out.println("particleStartNumber: "+particleStartNumber);
+
     }
 
     public void reset(){
@@ -51,6 +58,14 @@ public class SystemState<T extends Vector<T>> {
          ambientFactor =Constants.DEFAULT_AMBINENT_FACTOR;
          tailSize = Constants.DEFAULT_TAIL_SIZE;
          lightSize = Constants.DEFAULT_LIGHT_SIZE;
+    }
+
+    public int getMaxParticles() {
+        return maxParticles;
+    }
+
+    public int getParticleStartNumber() {
+        return particleStartNumber;
     }
 
     public float getOrderFactor() {

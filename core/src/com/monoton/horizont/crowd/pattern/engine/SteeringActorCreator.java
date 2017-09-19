@@ -45,7 +45,7 @@ public class SteeringActorCreator {
     }
 
     public boolean createSteeringActor(float x, float y, RayHandler rayHandler, TextureRegion textureRegion) {
-        if(characters.size>= Constants.MAX_PARTICLE_NUMBER){
+        if(characters.size>= SystemState.getInstance().getMaxParticles()){
             return false;
         }
         final SteeringActor character = new SteeringActor(textureRegion, false, borderControl, this,rayHandler, x, y);

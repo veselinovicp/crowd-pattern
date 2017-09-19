@@ -23,8 +23,9 @@ public class Constants {
     public static final float LIGHT_SCENE_WIDTH = 12.80f; // 12.8 metres wide
     public static final float LIGHT_SCENE_HEIGHT = 7.20f; // 7.2 metres high
 
-    public static final int MAX_PARTICLE_NUMBER = 500;
-    public final static int PARTICLE_START_NUMBER =100;
+
+    public static final int MAX_PARTICLE_FACTOR = 2;
+    public static final float PARTICLE_DENSITY = 1 / 10000f;
 
 
     public static final float DEFAULT_ORDER_FACTOR=3.0f;

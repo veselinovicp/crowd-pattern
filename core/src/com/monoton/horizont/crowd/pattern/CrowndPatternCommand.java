@@ -189,7 +189,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		steeringActorCreator = new SteeringActorCreator(characters, steeringActorsScene, borderControl, SystemState.getInstance().getRadiusFactor());
 
-		steeringActorCreator.createSteeringActors(Constants.PARTICLE_START_NUMBER,rayHandler, shapes.get(0).getTextureRegion());
+		steeringActorCreator.createSteeringActors(SystemState.getInstance().getParticleStartNumber(),rayHandler, shapes.get(0).getTextureRegion());
 
 		actionStage.setScrollFocus(steeringActorsScene);
 
