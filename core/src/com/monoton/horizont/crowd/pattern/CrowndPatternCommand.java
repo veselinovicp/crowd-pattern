@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -72,7 +71,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private World world;
 
 	private RayHandler rayHandler;
-	private Light light;
+
 
 
 
@@ -85,6 +84,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	private SteeringActorsScene steeringActorsScene;
 
 	private UIBuilder uiBuilder = new UIBuilder();
+
+	private LightScene lightScene;
 
 
 	
@@ -115,12 +116,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.25f);
-		light = new PointLight(rayHandler, 32);
-		light.setPosition(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f);
+		rayHandler.setAmbientLight(0.25f, 0.2f, 0.2f, 0.25f);
 
-		light.setColor(Color.YELLOW);
-		light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
 
 
 		skin = uiBuilder.get(UIBuilder.DEFAULT_SKIN, Skin.class);
@@ -179,7 +176,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		background = uiBuilder.get(UIBuilder.BACKGROUND, Texture.class);
 
 
-		LightScene lightScene = new LightScene(characters, light);
+		lightScene = new LightScene(characters, rayHandler);
 		actionStage.addActor(lightScene);
 
 
@@ -203,16 +200,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		System.out.println("end creating");
 
-
-		/*// Tweak debug information
-		debugRenderer = new Box2DDebugRenderer(
-				true, *//* draw bodies *//*
-				false, *//* don't draw joints *//*
-				true, *//* draw aabbs *//*
-				true, *//* draw inactive bodies *//*
-				false, *//* don't draw velocities *//*
-				true *//* draw contacts *//*);
-*/
 
 	}
 
@@ -265,7 +252,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 				((InputListener) l).touchUp(null,0,0,0,0);
 			}
 		}
-//		label.setText(""+value);
+
 
 
 	}
@@ -353,10 +340,6 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 	private void createShapeChooseControls(BitmapFont font, Label.LabelStyle ls) {
-
-
-
-
 
 		ChangeListener changeListener = new ChangeListener() {
 			@Override
@@ -539,7 +522,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 				ambientValue.setText(DrawUtils.formatFloat(ambientSlider.getValue()));
 
 				SystemState.getInstance().setAmbientFactor(ambientSlider.getValue());
-				light.setDistance(ambientSlider.getValue());
+				lightScene.setDistance(ambientSlider.getValue());
+
 
 
 			}
@@ -548,7 +532,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
 				SystemState.getInstance().setAmbientFactor(ambientSlider.getValue());
-				light.setDistance(ambientSlider.getValue());
+				lightScene.setDistance(ambientSlider.getValue());
 				return true;
 			}
 

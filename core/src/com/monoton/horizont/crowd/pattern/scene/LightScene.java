@@ -1,10 +1,12 @@
 package com.monoton.horizont.crowd.pattern.scene;
 
 import box2dLight.Light;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.Constants;
@@ -28,13 +30,20 @@ public class LightScene extends Actor {
 
 
 
-    public LightScene(final Array<SteeringActor> characters, Light light) {
+    public LightScene(final Array<SteeringActor> characters, RayHandler rayHandler) {
         this.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.characters =characters;
-        this.light = light;
+        createLight(rayHandler);
 
 
+    }
 
+    private void createLight(RayHandler rayHandler){
+        light = new PointLight(rayHandler, 32);
+        light.setPosition(Constants.LIGHT_SCENE_WIDTH *0.5f, Constants.LIGHT_SCENE_HEIGHT *0.5f);
+
+        light.setColor(Color.YELLOW);
+        light.setDistance(Constants.LIGHT_SCENE_WIDTH *0.7f);
     }
 
     @Override
@@ -67,5 +76,9 @@ public class LightScene extends Actor {
         float factorY = averagePosition.y / Gdx.graphics.getHeight();
         position.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT, 0);*/
         position = DrawUtils.getBox2DCoords(averagePosition);
+    }
+
+    public void setDistance(float value){
+        light.setDistance(value);
     }
 }
