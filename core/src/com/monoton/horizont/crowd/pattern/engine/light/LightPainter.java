@@ -3,7 +3,6 @@ package com.monoton.horizont.crowd.pattern.engine.light;
 import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.SystemState;
@@ -18,11 +17,15 @@ public class LightPainter {
 
     private Array<Light> tailLights = new Array<Light>();
     private RayHandler rayHandler;
+    private Vector2 fixedPosition;
+    private Vector2 box2dPosition;
 
 
     public LightPainter(RayHandler rayHandler) {
 
         this.rayHandler = rayHandler;
+        fixedPosition = new Vector2();
+        box2dPosition = new Vector2();
 
     }
 
@@ -56,7 +59,7 @@ public class LightPainter {
             DrawPoint drawPoint = tail.get(i);
             Light light = tailLights.get(i);
 
-            Vector2 fixedPosition = getFixedPosition(drawPoint);
+            setFixedPosition(drawPoint);
 
             adjustLight(fixedPosition, drawPoint.getVelocity(), light);
             light.setActive(true);
@@ -65,10 +68,9 @@ public class LightPainter {
 
     }
 
-    private Vector2 getFixedPosition(DrawPoint drawPoint) {
-        Vector2 position = drawPoint.getPosition().cpy();
+    private void setFixedPosition(DrawPoint drawPoint) {
 
-        return position.add(drawPoint.getWidth() / 2, drawPoint.getHeight()  / 2);
+        fixedPosition.set(drawPoint.getPosition().x + drawPoint.getWidth() / 2, drawPoint.getPosition().y + drawPoint.getHeight()  / 2);
     }
 
 
@@ -90,7 +92,8 @@ public class LightPainter {
     }
 
     private void setLightPosition(Vector2 position, Light light) {
-        light.setPosition(DrawUtils.getBox2DCoords(position));
+        DrawUtils.getBox2DCoords(position, box2dPosition);
+        light.setPosition(box2dPosition);
 
     }
 

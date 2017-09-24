@@ -21,18 +21,17 @@ public class DrawUtils {
         return String.format("%.1f", value);
     }
 
-    public static Vector2 getBox2DCoords(Vector2 vector){
-        return getBox2DCoords(vector.x, vector.y);
+    public static void getBox2DCoords(Vector2 vector, Vector2 result){
+        getBox2DCoords(result,vector.x, vector.y);
     }
 
 
-    public static Vector2 getBox2DCoords(float x, float y){
-        Vector2 vector2 = new Vector2();
+    public static void getBox2DCoords(Vector2 result, float x, float y){
+
         float factorX = x / Gdx.graphics.getWidth();
         float factorY = y / Gdx.graphics.getHeight();
-        vector2.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT);
+        result.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT);
 
-        return vector2;
     }
 
     public static Vector2 calculateNorSum(List<Vector2> vectors){

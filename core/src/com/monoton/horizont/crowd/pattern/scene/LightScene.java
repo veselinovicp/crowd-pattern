@@ -75,7 +75,7 @@ public class LightScene extends Actor {
         /*float factorX = averagePosition.x / Gdx.graphics.getWidth();
         float factorY = averagePosition.y / Gdx.graphics.getHeight();
         position.set(factorX * Constants.LIGHT_SCENE_WIDTH, factorY*Constants.LIGHT_SCENE_HEIGHT, 0);*/
-        position = DrawUtils.getBox2DCoords(averagePosition);
+        DrawUtils.getBox2DCoords(averagePosition, position);
     }
 
     public void setDistance(float value){
