@@ -46,7 +46,7 @@ public class LightPainter {
 
 
         while(tail.size> tailLights.size){
-            tailLights.add(new PointLight(rayHandler, 20));
+            tailLights.add(new PointLight(rayHandler, 5));
 
         }
 

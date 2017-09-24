@@ -123,6 +123,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0.25f, 0.2f, 0.2f, 0.25f);
 		rayHandler.setShadows(false);
+		rayHandler.resizeFBO(200,200);
+		rayHandler.setCulling(true);
+
 
 
 
@@ -648,10 +651,10 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		GdxAI.getTimepiece().update(Gdx.graphics.getDeltaTime());
 
 
-		if (performanceControl.isLagging()){
+	/*	if (performanceControl.isLagging()){
 			System.out.println("lagging: "+performanceControl.getFrameRate());
 			steeringActorEngine.removeSteeringActors(5);
-		}
+		}*/
 
 
 		/**

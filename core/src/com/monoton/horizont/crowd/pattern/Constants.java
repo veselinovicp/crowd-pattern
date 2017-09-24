@@ -24,19 +24,19 @@ public class Constants {
     public static final float LIGHT_SCENE_HEIGHT = 7.20f; // 7.2 metres high
 
 
-    public static final int MAX_PARTICLE_FACTOR = 20;
-    public static final float PARTICLE_DENSITY = 0.8f / 10000f;
+    public static final int MAX_PARTICLE_FACTOR = 5;
+    public static final float PARTICLE_DENSITY = 0.6f / 10000f;
 
 
     public static final float DEFAULT_ORDER_FACTOR=3.0f;
     public static final float DEFAULT_DISTANCE_FACTOR=0.2f;
-    public static final float DEFAULT_RADIUS_FACTOR=15;
+    public static final float DEFAULT_RADIUS_FACTOR=10;
     public static final float DEFAULT_SPEED_FACTOR=100;
     public static final float DEFAULT_TAIL_LENGTH_FACTOR=140;
     public static final float DEFAULT_TAIL_DENSITY_FACTOR=0.8f;
     public static final float DEFAULT_AMBINENT_FACTOR = Constants.LIGHT_SCENE_WIDTH *1.0f;
     public static final int DEFAULT_TAIL_SIZE = 5;
-    public static final float DEFAULT_LIGHT_SIZE = 0.5f;
+    public static final float DEFAULT_LIGHT_SIZE = 1.5f;
     public static final float MIN_FRAME_RATE = 20f;
 
 }
