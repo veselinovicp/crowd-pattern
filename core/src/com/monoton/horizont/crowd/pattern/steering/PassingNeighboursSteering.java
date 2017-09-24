@@ -15,7 +15,6 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
 
     private List<Steerable<T>> neighbours;
 
-    private Steerable<T> firstNeighbor;
 
     private T neighboursResult;
     private T smallNeighboursResult;
@@ -45,7 +44,6 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
     public boolean reportNeighbor(Steerable<T> neighbor) {
         neighbours.add(neighbor);
 
-        firstNeighbor = neighbor;
 
 
         return true;
@@ -55,7 +53,6 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
     protected SteeringAcceleration<T> calculateRealSteering(SteeringAcceleration<T> steering) {
 
 
-        firstNeighbor = null;
 
 
 
@@ -65,7 +62,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         int neighborCount = proximity.findNeighbors(this);
 
         // If we have no target, then return no steering acceleration
-        if (neighborCount == 0 || firstNeighbor == null) return steering.setZero();
+        if (neighborCount == 0) return steering.setZero();
 
 
 
@@ -78,12 +75,12 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
          *
          * make neighbours result small as to not disturb the particle much
          */
-        smallNeighboursResult = neighboursResult.cpy().nor().scl(SystemState.getInstance().getOrderFactor());
+        smallNeighboursResult = neighboursResult.nor().scl(SystemState.getInstance().getOrderFactor());
 
         ownerVelocity.set(owner.getLinearVelocity()).nor();
 
 
-        steering.linear = ownerVelocity.cpy().add(smallNeighboursResult);
+        steering.linear = ownerVelocity.add(smallNeighboursResult);
 
         /**
          * end of comment
