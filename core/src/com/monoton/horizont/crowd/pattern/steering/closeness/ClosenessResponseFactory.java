@@ -1,5 +1,6 @@
 package com.monoton.horizont.crowd.pattern.steering.closeness;
 
+import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.math.Vector;
 import com.monoton.horizont.crowd.pattern.Constants;
 
@@ -8,9 +9,9 @@ import com.monoton.horizont.crowd.pattern.Constants;
  */
 public class ClosenessResponseFactory<T extends Vector<T>>  {
 
-    public  ClosenessResponse<T> getClosenessResponse(String type){
+    public  ClosenessResponse<T> getClosenessResponse(String type, Steerable<T> owner){
         if(type.equals(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY)){
-            return new SimilarVelocityClosenessResponse<T>();
+            return new SimilarVelocityClosenessResponse<T>(owner);
         }
         if(type.equals(Constants.CLOSENESS_RESPONSE_NONE)){
             return new EmptyClosenessResponse<T>();

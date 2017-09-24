@@ -24,7 +24,7 @@ public class Constants {
     public static final float LIGHT_SCENE_HEIGHT = 7.20f; // 7.2 metres high
 
 
-    public static final int MAX_PARTICLE_FACTOR = 2;
+    public static final int MAX_PARTICLE_FACTOR = 20;
     public static final float PARTICLE_DENSITY = 0.8f / 10000f;
 
 
@@ -37,5 +37,6 @@ public class Constants {
     public static final float DEFAULT_AMBINENT_FACTOR = Constants.LIGHT_SCENE_WIDTH *1.0f;
     public static final int DEFAULT_TAIL_SIZE = 5;
     public static final float DEFAULT_LIGHT_SIZE = 0.5f;
+    public static final float MIN_FRAME_RATE = 20f;
 
 }

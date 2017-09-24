@@ -12,18 +12,27 @@ import java.util.List;
  */
 public class SimilarVelocityClosenessResponse<T extends Vector<T>> implements ClosenessResponse<T>{
 
+    private Steerable<T> owner;
+    private T velocityDifference;
+
+    public SimilarVelocityClosenessResponse(Steerable<T> owner) {
+        this.owner = owner;
+//        velocityDifference = owner.newVector(owner);
+        velocityDifference = owner.getLinearVelocity().cpy().setZero();
+    }
+
     @Override
     public void determineAndExecute(SteeringAcceleration<T> steering, Steerable<T> owner, List<Steerable<T>> neighbours) {
         /**
          * if owner goes in approximately the same direction as neighbour go perpendicular to them
          */
-        T velocityDifference = owner.getLinearVelocity().cpy().setZero();
-        velocityDifference.setZero();
-        velocityDifference.add(steering.linear).sub(owner.getLinearVelocity().cpy().nor());
-        //velocityDifference.add(neighboursResult.cpy().nor()).sub(ownerVelocity);
+
+
+        velocityDifference.set(steering.linear).sub(owner.getLinearVelocity().cpy().nor());
+
         float velocityDifferenceSize = velocityDifference.len();
         if(velocityDifferenceSize< SystemState.getInstance().getDistanceFactor()){
-//            steering.linear = (T) getPerpendicularNormalizedVector((Vector2)ownerVelocity);//neighboursResult ownerVelocity
+
             /**
              * go away from the closest neighbour
              */

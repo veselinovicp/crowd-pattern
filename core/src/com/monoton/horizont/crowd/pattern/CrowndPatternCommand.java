@@ -26,6 +26,7 @@ import com.monoton.horizont.crowd.pattern.engine.SteeringActorEngine;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControl;
 import com.monoton.horizont.crowd.pattern.engine.border.BorderControlFactory;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachineFactory;
+import com.monoton.horizont.crowd.pattern.performance.PerformanceControl;
 import com.monoton.horizont.crowd.pattern.scene.LightScene;
 import com.monoton.horizont.crowd.pattern.scene.SteeringActorsScene;
 import com.monoton.horizont.crowd.pattern.ui.NamedTexture;
@@ -86,6 +87,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 	private LightScene lightScene;
 
+	private PerformanceControl performanceControl;
+
 
 	
 	@Override
@@ -93,6 +96,9 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		System.out.println("start creating");
 		uiBuilder.load();
+//		SystemState.getInstance().setParticleStartNumber(2);
+
+		performanceControl = new PerformanceControl();
 
 		createShapes();
 
@@ -116,6 +122,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0.25f, 0.2f, 0.2f, 0.25f);
+		rayHandler.setShadows(false);
 
 
 
@@ -639,6 +646,13 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		GdxAI.getTimepiece().update(Gdx.graphics.getDeltaTime());
+
+
+		if (performanceControl.isLagging()){
+			System.out.println("lagging: "+performanceControl.getFrameRate());
+			steeringActorEngine.removeSteeringActors(5);
+		}
+
 
 		/**
 		 *

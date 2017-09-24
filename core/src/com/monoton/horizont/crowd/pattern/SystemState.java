@@ -1,6 +1,7 @@
 package com.monoton.horizont.crowd.pattern;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.math.Vector;
 import com.monoton.horizont.crowd.pattern.painter.colors.ColorMachine;
 import com.monoton.horizont.crowd.pattern.painter.tail.TailPainter;
@@ -38,8 +39,8 @@ public class SystemState<T extends Vector<T>> {
     }
 
     private SystemState() {
-        ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
-        closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY);
+   /*     ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
+        closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY, );*/
         tailPainter = TailPainterFactory.getTailPainter(Constants.TAIL_PAINTER_SNAKE);
 
         particleStartNumber = (int)(Constants.PARTICLE_DENSITY * (float)Gdx.graphics.getWidth() * (float)Gdx.graphics.getHeight());
@@ -68,6 +69,10 @@ public class SystemState<T extends Vector<T>> {
         return particleStartNumber;
     }
 
+    public void setParticleStartNumber(int particleStartNumber) {
+        this.particleStartNumber = particleStartNumber;
+    }
+
     public float getOrderFactor() {
         return orderFactor;
     }
@@ -92,7 +97,9 @@ public class SystemState<T extends Vector<T>> {
         this.radiusFactor = radiusFactor;
     }
 
-    public ClosenessResponse<T> getClosenessResponse() {
+    public ClosenessResponse<T> getClosenessResponse(Steerable<T> owner) {
+        ClosenessResponseFactory<T> closenessResponseFactory = new ClosenessResponseFactory<T>();
+        closenessResponse = closenessResponseFactory.getClosenessResponse(Constants.CLOSENESS_RESPONSE_SIMILAR_VELOCITY, owner);
         return closenessResponse;
     }
 

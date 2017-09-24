@@ -37,8 +37,9 @@ public class LightPainter {
         int j=0;
         if(tailLights.size> tail.size){
 
-//            tailLights.removeIndex(j).dispose();
-            tailLights.removeIndex(j).setActive(false);
+
+//            tailLights.removeIndex(j).setActive(false);
+            tailLights.removeIndex(j).remove(false);
             j++;
 
         }

@@ -1,11 +1,9 @@
 package com.monoton.horizont.crowd.pattern.steering;
 
 import com.badlogic.gdx.ai.steer.*;
-import com.badlogic.gdx.ai.steer.behaviors.CollisionAvoidance;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector;
-import com.badlogic.gdx.math.Vector2;
 import com.monoton.horizont.crowd.pattern.SystemState;
+import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +15,12 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
 
     private List<Steerable<T>> neighbours;
 
-
-    private float shortestTime;
     private Steerable<T> firstNeighbor;
-    private float firstMinSeparation;
-    private float firstDistance;
-    private T firstRelativePosition;
-    private T firstRelativeVelocity;
-    private T relativePosition;
-    private T relativeVelocity;
+
+    private T neighboursResult;
+    private T smallNeighboursResult;
+    private  T ownerVelocity;
+    private ClosenessResponse closenessResponse;
 
 
     /**
@@ -39,45 +34,19 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
 
         neighbours = new ArrayList<Steerable<T>>();
 
-        this.firstRelativePosition = newVector(owner);
-        this.firstRelativeVelocity = newVector(owner);
 
-        this.relativeVelocity = newVector(owner);
+        neighboursResult = newVector(owner);
+        smallNeighboursResult = newVector(owner);
+        ownerVelocity = newVector(owner);
+        closenessResponse = SystemState.getInstance().getClosenessResponse(owner);
     }
 
     @Override
     public boolean reportNeighbor(Steerable<T> neighbor) {
         neighbours.add(neighbor);
 
-// Calculate the time to collision
-        relativePosition.set(neighbor.getPosition()).sub(owner.getPosition());
-        relativeVelocity.set(neighbor.getLinearVelocity()).sub(owner.getLinearVelocity());
-        float relativeSpeed2 = relativeVelocity.len2();
-
-        // Collision can't happen when the agents have the same linear velocity.
-        // Also, note that timeToTarget would be NaN due to the indeterminate form 0/0 and,
-        // since any comparison involving NaN returns false, it would become the shortestTime,
-        // so defeating the algorithm.
-        if (relativeSpeed2 == 0) return false;
-
-        float timeToCollision = -relativePosition.dot(relativeVelocity) / relativeSpeed2;
-
-        // If timeToCollision is negative, i.e. the owner is already moving away from the the neighbor,
-        // or it's not the most imminent collision then no action needs to be taken.
-        if (timeToCollision <= 0 || timeToCollision >= shortestTime) return false;
-
-        // Check if it is going to be a collision at all
-        float distance = relativePosition.len();
-        float minSeparation = distance - (float)Math.sqrt(relativeSpeed2) * timeToCollision /* shortestTime */;
-        if (minSeparation > owner.getBoundingRadius() + neighbor.getBoundingRadius()) return false;
-
-        // Store most imminent collision data
-        shortestTime = timeToCollision;
         firstNeighbor = neighbor;
-        firstMinSeparation = minSeparation;
-        firstDistance = distance;
-        firstRelativePosition.set(relativePosition);
-        firstRelativeVelocity.set(relativeVelocity);
+
 
         return true;
     }
@@ -85,11 +54,10 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
     @Override
     protected SteeringAcceleration<T> calculateRealSteering(SteeringAcceleration<T> steering) {
 
-        shortestTime = Float.POSITIVE_INFINITY;
+
         firstNeighbor = null;
-        firstMinSeparation = 0;
-        firstDistance = 0;
-        relativePosition = steering.linear;
+
+
 
         neighbours.clear();
 
@@ -99,16 +67,8 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
         // If we have no target, then return no steering acceleration
         if (neighborCount == 0 || firstNeighbor == null) return steering.setZero();
 
-       /* // If we're going to hit exactly, or if we're already
-        // colliding, then do the steering based on current position.
-        if (firstMinSeparation <= 0 || firstDistance < owner.getBoundingRadius() + firstNeighbor.getBoundingRadius()) {
-            relativePosition.set(firstNeighbor.getPosition()).sub(owner.getPosition());
-        } else {
-            // Otherwise calculate the future relative position
-            relativePosition.set(firstRelativePosition).mulAdd(firstRelativeVelocity, shortestTime);
-        }*/
 
-        T neighboursResult = newVector(owner);
+
         neighboursResult.setZero();
         for(Steerable<T> neighbour :  neighbours){
             neighboursResult.add(neighbour.getLinearVelocity());
@@ -118,12 +78,10 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
          *
          * make neighbours result small as to not disturb the particle much
          */
-        T smallNeighboursResult = neighboursResult.cpy().nor().scl(SystemState.getInstance().getOrderFactor());
+        smallNeighboursResult = neighboursResult.cpy().nor().scl(SystemState.getInstance().getOrderFactor());
 
-        T ownerVelocity = newVector(owner);
-        ownerVelocity.setZero();
-        ownerVelocity.add(owner.getLinearVelocity());
-        ownerVelocity.nor();
+        ownerVelocity.set(owner.getLinearVelocity()).nor();
+
 
         steering.linear = ownerVelocity.cpy().add(smallNeighboursResult);
 
@@ -138,7 +96,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
 
 
 
-        SystemState.getInstance().getClosenessResponse().determineAndExecute(steering, owner, neighbours);
+        closenessResponse.determineAndExecute(steering, owner, neighbours);
 
 
 

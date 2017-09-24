@@ -61,27 +61,6 @@ public class SnakeTailPainter implements TailPainter {
 
         }
 
-       /* int tailSize = 4;
-
-        if(drawPoints.size()<tailSize){
-            return result;
-        }
-
-        for(int j=0;j<tailSize;j++){
-            int index = getIndex(drawPoints, j, tailSize);
-            DrawPoint drawPoint = drawPoints.get(index);
-            float[] drawPointColor = drawPoint.getColor();
-            float factor = (tailSize -j - 1) / (float) drawPoints.size();
-
-            batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//  /2f
-
-            batch.draw(region, drawPoint.getPosition().x, drawPoint.getPosition().y, region.getRegionWidth() / 2 * factor, region.getRegionHeight() / 2 * factor, region.getRegionWidth() * factor, region.getRegionHeight() * factor, 1, 1, drawPoint.getVelocity().angle());
-
-
-            drawPoint.setWidth(region.getRegionWidth() * factor);
-            drawPoint.setHeight(region.getRegionHeight() * factor);
-            result.add(drawPoint);
-        }*/
 
         return result;
 
