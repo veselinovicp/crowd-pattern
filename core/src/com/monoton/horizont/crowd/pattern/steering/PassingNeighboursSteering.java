@@ -2,18 +2,17 @@ package com.monoton.horizont.crowd.pattern.steering;
 
 import com.badlogic.gdx.ai.steer.*;
 import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.steering.closeness.ClosenessResponse;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by monoton on 8.8.2017.
  */
 public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavior<T> implements Proximity.ProximityCallback<T> {
 
-    private List<Steerable<T>> neighbours;
+    private Array<Steerable<T>> neighbours;
 
 
     private T neighboursResult;
@@ -31,7 +30,7 @@ public class PassingNeighboursSteering<T extends Vector<T>> extends GroupBehavio
     public PassingNeighboursSteering(Steerable<T> owner, Proximity<T> proximity) {
         super(owner, proximity);
 
-        neighbours = new ArrayList<Steerable<T>>();
+        neighbours = new Array<Steerable<T>>();
 
 
         neighboursResult = newVector(owner);

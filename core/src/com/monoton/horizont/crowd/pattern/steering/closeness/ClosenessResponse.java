@@ -7,10 +7,9 @@ package com.monoton.horizont.crowd.pattern.steering.closeness;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.math.Vector;
-
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
 
 public interface ClosenessResponse<T extends Vector<T>>  {
 
-    void determineAndExecute(SteeringAcceleration<T> steering, Steerable<T> owner, List<Steerable<T>> neighbours);
+    void determineAndExecute(SteeringAcceleration<T> steering, Steerable<T> owner, Array<Steerable<T>> neighbours);
 }

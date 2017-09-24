@@ -3,9 +3,8 @@ package com.monoton.horizont.crowd.pattern.steering.closeness;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.utils.Array;
 import com.monoton.horizont.crowd.pattern.SystemState;
-
-import java.util.List;
 
 /**
  * Created by monoton on 15.8.2017.
@@ -22,7 +21,7 @@ public class SimilarVelocityClosenessResponse<T extends Vector<T>> implements Cl
     }
 
     @Override
-    public void determineAndExecute(SteeringAcceleration<T> steering, Steerable<T> owner, List<Steerable<T>> neighbours) {
+    public void determineAndExecute(SteeringAcceleration<T> steering, Steerable<T> owner, Array<Steerable<T>> neighbours) {
         /**
          * if owner goes in approximately the same direction as neighbour go perpendicular to them
          */
@@ -42,7 +41,7 @@ public class SimilarVelocityClosenessResponse<T extends Vector<T>> implements Cl
         }
     }
 
-    private Steerable<T> getClosestNeighbour(Steerable<T> owner,List<Steerable<T>> neighbours){
+    private Steerable<T> getClosestNeighbour(Steerable<T> owner, Array<Steerable<T>> neighbours){
         Steerable<T> result = neighbours.get(0);
         for(Steerable<T> neighbour :  neighbours){
             float min = getDistance(result, owner);

@@ -8,15 +8,13 @@ import com.monoton.horizont.crowd.pattern.Constants;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by monoton on 16.8.2017.
  */
 public abstract class ShootingStarPainter{
 
-    private List<DrawPoint> drawPoints = new ArrayList<DrawPoint>();
+    private Array<DrawPoint> drawPoints = new Array<DrawPoint>();
 
     protected Array<SteeringActor> characters;
     protected SteeringActor steeringActor;
@@ -91,9 +89,9 @@ public abstract class ShootingStarPainter{
 
     private void removeTail() {
         int i=0;
-        while(drawPoints.size()>SystemState.getInstance().getTailLengthFactor()){
-            if(i<drawPoints.size()) {
-                drawPoints.remove(i);
+        while(drawPoints.size>SystemState.getInstance().getTailLengthFactor()){
+            if(i<drawPoints.size) {
+                drawPoints.removeIndex(i);
                 i++;
             }else{
                 break;

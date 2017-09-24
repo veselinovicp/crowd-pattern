@@ -16,19 +16,19 @@ public class SnakeTailPainter implements TailPainter {
 
 
     @Override
-    public Array<DrawPoint> drawTail(List<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
+    public Array<DrawPoint> drawTail(Array<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
         Array<DrawPoint> result = new Array<DrawPoint>();
 
         float tailDensityFactor= SystemState.getInstance().getTailDensityFactor();
 
-        if(drawPoints==null || drawPoints.size()==0){
+        if(drawPoints==null || drawPoints.size==0){
             return result;
         }
         int regionWidth = region.getRegionWidth();
 
         float radius = regionWidth * tailDensityFactor;
         DrawPoint justDrawn = drawPoints.get(0);
-        for(int i=drawPoints.size()-1;i>=0;i--){
+        for(int i=drawPoints.size-1;i>=0;i--){
             DrawPoint drawPoint = drawPoints.get(i);
             int distance = calculateDistance(justDrawn.getPosition(), drawPoint.getPosition());
             if(distance>=radius){
@@ -37,7 +37,7 @@ public class SnakeTailPainter implements TailPainter {
                 float[] drawPointColor = SystemState.getInstance().getColorMachine().getColor(drawPoint.getPosition(), drawPoint.getVelocity());
 
 
-                float factor = i / (float) drawPoints.size();
+                float factor = i / (float) drawPoints.size;
 
                 batch.setColor(drawPointColor[0], drawPointColor[1], drawPointColor[2], factor);//  /2f
 
