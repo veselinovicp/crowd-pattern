@@ -25,26 +25,26 @@ public class LoadingScreen implements Screen{//
 
     private CrowndPatternCommand crowndPatternCommand;
     private UIBuilder uiBuilder;
-    private StretchViewport stretchViewport;
+
 
     public LoadingScreen(CrowndPatternCommand crowndPatternCommand) {
 
         this.crowndPatternCommand = crowndPatternCommand;
         this.shapeRenderer = new ShapeRenderer();
         uiBuilder = crowndPatternCommand.getUiBuilder();
-        stretchViewport = crowndPatternCommand.getStretchViewport();
+
     }
 
 
     private void queueAssets() {
-        uiBuilder.load("img/splash.png", Texture.class);
-        uiBuilder.load("ui/uiskin.atlas", TextureAtlas.class);
+
+        uiBuilder.startLoading();
     }
 
     @Override
     public void show() {
         System.out.println("LOADING");
-        shapeRenderer.setProjectionMatrix(stretchViewport.getCamera().combined);
+
         this.progress = 0f;
         queueAssets();
     }
@@ -58,17 +58,18 @@ public class LoadingScreen implements Screen{//
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         update(delta);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(32, stretchViewport.getCamera().viewportHeight / 2 - 8, stretchViewport.getCamera().viewportWidth - 64, 16);
+        shapeRenderer.setColor(Color.GRAY);
+        shapeRenderer.rect(32, Gdx.graphics.getHeight() / 2 - 8, Gdx.graphics.getWidth() - 64, 16);
 
         shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.rect(32, stretchViewport.getCamera().viewportHeight / 2 - 8, progress * (stretchViewport.getCamera().viewportWidth - 64), 16);
+        shapeRenderer.rect(32, Gdx.graphics.getHeight() / 2 - 8, progress * (Gdx.graphics.getWidth() - 64), 16);
         shapeRenderer.end();
     }
 

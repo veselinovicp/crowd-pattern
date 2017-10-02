@@ -50,29 +50,6 @@ public class  UIBuilder extends AssetManager {
         super.load(DEFAULT_SKIN, Skin.class, new SkinLoader.SkinParameter(DEFAULT_SKIN_ATLAS));
 
 
-  /*      Skin skin = new Skin();
-        Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-
-        TextureRegionDrawable textureBar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("barGreen_horizontalMid.png"))));
-        ProgressBar.ProgressBarStyle barStyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("white", Color.DARK_GRAY), textureBar);
-        ProgressBar bar = new ProgressBar(0, 10, 0.5f, false, barStyle);
-        bar.setPosition(10, 10);
-        bar.setSize(290, bar.getPrefHeight());
-        bar.setAnimateDuration(2);
-        stage.addActor(bar);*/
-      /*  barStyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("default-horizontal", Color.DARK_GRAY), textureBar);
-        barStyle.knobBefore = barStyle.knob;
-        bar = new ProgressBar(0, 10, 0.5f, false, barStyle);*/
-/*
-
-        barStyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("default-horizontal", Color.DARK_GRAY));
-        barStyle.knobBefore = barStyle.knob;
-        bar = new ProgressBar(0, 10, 0.5f, false, barStyle);
-*/
-
 
 
 
@@ -97,10 +74,10 @@ public class  UIBuilder extends AssetManager {
 
 
 
-
+/*
         while (!super.update()){
 
-        }
+        }*/
 
     }
 
