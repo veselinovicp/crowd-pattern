@@ -95,7 +95,7 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 	public void create () {
 
 		System.out.println("start creating");
-		uiBuilder.load();
+		uiBuilder.startLoading();
 //		SystemState.getInstance().setParticleStartNumber(2);
 
 		performanceControl = new PerformanceControl();
@@ -130,6 +130,8 @@ public class CrowndPatternCommand extends ApplicationAdapter{
 
 
 		skin = uiBuilder.get(UIBuilder.DEFAULT_SKIN, Skin.class);
+
+
 
 
 
