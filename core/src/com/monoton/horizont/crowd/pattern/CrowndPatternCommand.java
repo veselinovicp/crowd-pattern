@@ -1,10 +1,16 @@
 package com.monoton.horizont.crowd.pattern;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.monoton.horizont.crowd.pattern.screens.MainScreen;
+import com.monoton.horizont.crowd.pattern.ui.UIBuilder;
 
 
 public class CrowndPatternCommand extends Game{
+
+	private UIBuilder uiBuilder = new UIBuilder();
+	private StretchViewport stretchViewport;
 
 
 
@@ -14,7 +20,10 @@ public class CrowndPatternCommand extends Game{
 
 
 		System.out.println("start creating");
-		setScreen(new MainScreen());
+
+		uiBuilder.startLoading();
+		stretchViewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		setScreen(new MainScreen(this));
 
 		System.out.println("end creating");
 
@@ -39,9 +48,17 @@ public class CrowndPatternCommand extends Game{
 	@Override
 	public void dispose () {
 		super.dispose();
+		uiBuilder.dispose();
 		getScreen().dispose();
 
 
 	}
 
+	public UIBuilder getUiBuilder() {
+		return uiBuilder;
+	}
+
+	public StretchViewport getStretchViewport() {
+		return stretchViewport;
+	}
 }

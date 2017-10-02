@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.monoton.horizont.crowd.pattern.Constants;
+import com.monoton.horizont.crowd.pattern.CrowndPatternCommand;
 import com.monoton.horizont.crowd.pattern.SystemState;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActor;
 import com.monoton.horizont.crowd.pattern.engine.SteeringActorEngine;
@@ -88,20 +89,31 @@ public class MainScreen implements Screen{
 
     private SteeringActorsScene steeringActorsScene;
 
-    private UIBuilder uiBuilder = new UIBuilder();
+
 
     private LightScene lightScene;
 
     private PerformanceControl performanceControl;
 
+    private UIBuilder uiBuilder;
 
+    private CrowndPatternCommand crowndPatternCommand;
+    private StretchViewport stretchViewport;
+
+    public MainScreen(CrowndPatternCommand crowndPatternCommand) {
+        this.crowndPatternCommand = crowndPatternCommand;
+        this.stretchViewport = crowndPatternCommand.getStretchViewport();
+    }
 
     @Override
     public void show() {
 
 
+
         System.out.println("start creating");
-        uiBuilder.startLoading();
+
+        uiBuilder = crowndPatternCommand.getUiBuilder();
+
 //		SystemState.getInstance().setParticleStartNumber(2);
 
         performanceControl = new PerformanceControl();
@@ -142,9 +154,9 @@ public class MainScreen implements Screen{
 
 
         // Create a actionStage
-        StretchViewport viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        actionStage = new Stage(viewport);
-        controlsStage = new Stage(viewport);//new ScreenViewport()
+
+        actionStage = new Stage(stretchViewport);
+        controlsStage = new Stage(stretchViewport);//new ScreenViewport()
 
 
 
@@ -287,7 +299,7 @@ public class MainScreen implements Screen{
 
 
         steeringActorEngine.dispose();
-        uiBuilder.dispose();
+
 
         actionStage.dispose();
         controlsStage.dispose();
