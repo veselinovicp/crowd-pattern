@@ -8,7 +8,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
-		cfg.title = "Title";
+		cfg.title = "Light Dance";
 
 		cfg.height = 610;
 		cfg.width = 987;

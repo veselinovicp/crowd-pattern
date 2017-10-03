@@ -69,8 +69,8 @@ public class MainScreen implements Screen{
     private Table controlsTable;
 
 
-    private TextButton exitButton;
-    private TextButton resetButton;
+    /*private TextButton exitButton;
+    private TextButton resetButton;*/
 
 
     private World world;
@@ -315,16 +315,21 @@ public class MainScreen implements Screen{
     }
 
 
-    private void createButtons() {
-        createRemoveParticlesButton();
-        createAddParticlesButton();
-        createResetButton();
-        createExitButton();
+    private void
+    createButtons() {
+        TextButton removeParticlesButton = createRemoveParticlesButton();
+        TextButton addParticlesButton = createAddParticlesButton();
+        TextButton resetButton = createResetButton();
+        TextButton exitButton = createExitButton();
+        controlsTable.add(resetButton).colspan(1).padBottom(20);
+        controlsTable.add(removeParticlesButton).colspan(1).padBottom(20);
+        controlsTable.add(addParticlesButton).colspan(1).padBottom(20);
+        controlsTable.add(exitButton).colspan(1).padBottom(20);
         controlsTable.row();
     }
 
-    private void createResetButton() {
-        resetButton = new TextButton("Reset", skin);
+    private TextButton createResetButton() {
+        TextButton resetButton = new TextButton("Reset", skin);
 
         resetButton.addListener(new ClickListener(){
             @Override
@@ -335,7 +340,9 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(resetButton).colspan(2).right().padBottom(20);
+//        controlsTable.add(resetButton).colspan(2).right().padBottom(20);
+
+        return resetButton;
 
     }
 
@@ -377,7 +384,7 @@ public class MainScreen implements Screen{
 
     }
 
-    private void createAddParticlesButton() {
+    private TextButton createAddParticlesButton() {
         TextButton addButton = new TextButton("Add 5", skin);
 
         addButton.addListener(new ClickListener(){
@@ -389,11 +396,13 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(addButton).colspan(1).center().padBottom(20);
+//        controlsTable.add(addButton).colspan(1).center().padBottom(20);
+
+        return addButton;
 
     }
 
-    private void createRemoveParticlesButton() {
+    private TextButton createRemoveParticlesButton() {
         TextButton removeButton = new TextButton("Remove 5", skin);
 
         removeButton.addListener(new ClickListener(){
@@ -405,12 +414,14 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(removeButton).colspan(1).right().padBottom(20);
-//		controlsTable.row();
+//        controlsTable.add(removeButton).colspan(1).right().padBottom(20);
+
+        return removeButton;
+
     }
 
-    private void createExitButton() {
-        exitButton = new TextButton("Exit", skin);
+    private TextButton createExitButton() {
+        TextButton exitButton = new TextButton("Exit", skin);
 
         exitButton.addListener(new ClickListener(){
             @Override
@@ -421,7 +432,9 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(exitButton).colspan(1).right().padBottom(20);
+//        controlsTable.add(exitButton).colspan(1).right().padBottom(20);
+
+        return exitButton;
 
     }
 
@@ -470,7 +483,7 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(randomColor).center();
+        controlsTable.add(randomColor).colspan(2).center();
         controlsTable.row();
     }
 
@@ -556,7 +569,7 @@ public class MainScreen implements Screen{
 
         selectBox.addListener(changeListener);
 
-        controlsTable.add(selectBox).padRight(10);
+        controlsTable.add(selectBox).colspan(2).padRight(10);
 
         return selectBox;
     }
@@ -729,7 +742,7 @@ public class MainScreen implements Screen{
         slider.setValue(defaultValue);//
         slider.addListener(inputListener);
 
-        controlsTable.add(slider).padRight(10);
+        controlsTable.add(slider).colspan(2).padRight(10);
 
         Label value = new Label(""+slider.getValue(), ls);
         controlsTable.add(value);
