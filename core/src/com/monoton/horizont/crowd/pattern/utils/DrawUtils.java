@@ -34,16 +34,18 @@ public class DrawUtils {
 
     }
 
-    public static Vector2 calculateNorSum(List<Vector2> vectors){
-        Vector2 result = vectors.get(0).cpy().setZero();
+    public static Vector2 calculateNorSum(List<Vector2> vectors, Vector2 result ){
+//        Vector2 result = vectors.get(0).cpy().setZero();
+        result.setZero();
         for(Vector2 vector: vectors){
             result = result.add(vector);
         }
         return result.nor();
     }
 
-    public static Vector2 calculateAvarage(List<Vector2> vectors){
-        Vector2 result = vectors.get(0).cpy().setZero();
+    public static Vector2 calculateAvarage(List<Vector2> vectors, Vector2 result){
+//        Vector2 result = vectors.get(0).cpy().setZero();
+        result.setZero();
         for(Vector2 vector: vectors){
             result = result.add(vector);
         }

@@ -10,6 +10,10 @@ import com.monoton.horizont.crowd.pattern.utils.SteeringActorUtils;
  * Created by monoton on 19.8.2017.
  */
 public class AverageShootingStarPainter extends ShootingStarPainter {
+    private Vector2 norSumVelocity = new Vector2();
+    private Vector2 averagePosition = new Vector2();
+
+
     AverageShootingStarPainter(Array<SteeringActor> characters, SteeringActor steeringActor) {
         super(characters, steeringActor);
     }
@@ -17,14 +21,14 @@ public class AverageShootingStarPainter extends ShootingStarPainter {
     @Override
     protected Vector2 getVelocity() {
 
-        return SteeringActorUtils.getNorSumVelocity(characters);
+        return SteeringActorUtils.getNorSumVelocity(characters, norSumVelocity);
 
     }
 
     @Override
     protected Vector2 getPosition() {
 
-        return SteeringActorUtils.getAveragePosition(characters);
+        return SteeringActorUtils.getAveragePosition(characters, averagePosition);
     }
 
     @Override

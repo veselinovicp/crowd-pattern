@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class SnakeTailPainter implements TailPainter {
 
+    private Vector2 distance = new Vector2();
+
 
     @Override
     public Array<DrawPoint> drawTail(Array<DrawPoint> drawPoints, TextureRegion region, Batch batch, float parentAlpha) {
@@ -74,8 +76,10 @@ public class SnakeTailPainter implements TailPainter {
     }
 
     private int calculateDistance(Vector2 vector1, Vector2 vector2){
-        Vector2 result = vector1.cpy().setZero();
-        return (int)result.add(vector1).sub(vector2).len();
+//        Vector2 result = vector1.cpy().setZero();
+
+//        return (int)result.add(vector1).sub(vector2).len();
+        return (int)distance.set(vector1).sub(vector2).len();
     }
 
     private int calculateRadius(int regionWidth, int regionHeight){

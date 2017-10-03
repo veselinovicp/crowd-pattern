@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class SteeringActorUtils {
 
-    public static Vector2 getNorSumVelocity(Array<SteeringActor> characters) {
+    public static Vector2 getNorSumVelocity(Array<SteeringActor> characters, Vector2 norSumVelocity ) {
         List<Vector2> linearVelocities = new ArrayList<Vector2>();
         for (SteeringActor steeringActor : characters){
 
@@ -21,11 +21,11 @@ public class SteeringActorUtils {
 
         }
 
-        return DrawUtils.calculateNorSum(linearVelocities);
+        return DrawUtils.calculateNorSum(linearVelocities, norSumVelocity);
 
     }
 
-    public static Vector2 getAveragePosition(Array<SteeringActor> characters) {
+    public static Vector2 getAveragePosition(Array<SteeringActor> characters, Vector2 result) {
 
         List<Vector2> positions = new ArrayList<Vector2>();
 
@@ -35,6 +35,6 @@ public class SteeringActorUtils {
 
         }
         TextureRegion region = characters.get(0).getRegion();
-        return DrawUtils.calculateAvarage(positions).add(-region.getRegionWidth()/2,-region.getRegionHeight()/2);
+        return DrawUtils.calculateAvarage(positions, result).add(-region.getRegionWidth()/2,-region.getRegionHeight()/2);
     }
 }

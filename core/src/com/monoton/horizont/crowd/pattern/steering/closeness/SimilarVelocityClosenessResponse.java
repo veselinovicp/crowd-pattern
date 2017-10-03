@@ -13,11 +13,13 @@ public class SimilarVelocityClosenessResponse<T extends Vector<T>> implements Cl
 
     private Steerable<T> owner;
     private T velocityDifference;
+    private  T relativeVector;
 
     public SimilarVelocityClosenessResponse(Steerable<T> owner) {
         this.owner = owner;
 //        velocityDifference = owner.newVector(owner);
         velocityDifference = owner.getLinearVelocity().cpy().setZero();
+        relativeVector = owner.getLinearVelocity().cpy().setZero();
     }
 
     @Override
@@ -60,10 +62,12 @@ public class SimilarVelocityClosenessResponse<T extends Vector<T>> implements Cl
     }
 
     private T getRelativeVector(Steerable<T> first, Steerable<T> second){
-        T relative = first.getLinearVelocity().cpy().setZero();
+       /* T relative = first.getLinearVelocity().cpy().setZero();
         relative.setZero();
         relative.add(first.getPosition()).sub(second.getPosition());
-        return relative;
+        return relative;*/
+        relativeVector.set(first.getPosition()).sub(second.getPosition());
+        return relativeVector;
     }
 
 

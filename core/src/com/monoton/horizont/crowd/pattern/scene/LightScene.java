@@ -27,6 +27,9 @@ public class LightScene extends Actor {
 
     float[] color;
 
+    private Vector2 norSumVelocity = new Vector2();
+    private Vector2 _averagePosition = new Vector2();
+
 
 
 
@@ -50,11 +53,11 @@ public class LightScene extends Actor {
     public void draw(Batch batch, float parentAlpha) {
 
 
-        Vector2 averagePosition = SteeringActorUtils.getAveragePosition(characters);
+        Vector2 averagePosition = SteeringActorUtils.getAveragePosition(characters, _averagePosition);
 
         calculateLightPosition(averagePosition);
 
-        Vector2 velocity = SteeringActorUtils.getNorSumVelocity(characters);
+        Vector2 velocity = SteeringActorUtils.getNorSumVelocity(characters, norSumVelocity);
         calculateColor(averagePosition, velocity);
 
         light.setColor(color[0], color[1], color[2], 1);
