@@ -192,6 +192,7 @@ public class MainScreen implements Screen{
         createButtons();
 
         controlsStage.addActor(controlsTable);
+//        controlsStage.clear();
 
 
 
@@ -320,11 +321,28 @@ public class MainScreen implements Screen{
         TextButton addParticlesButton = createAddParticlesButton();
         TextButton resetButton = createResetButton();
         TextButton exitButton = createExitButton();
+        TextButton hideControlsButton = createHideControlsButton();
+        controlsTable.add(hideControlsButton).colspan(1).padBottom(20);
         controlsTable.add(resetButton).colspan(1).padBottom(20);
         controlsTable.add(removeParticlesButton).colspan(1).padBottom(20);
         controlsTable.add(addParticlesButton).colspan(1).padBottom(20);
         controlsTable.add(exitButton).colspan(1).padBottom(20);
         controlsTable.row();
+    }
+
+    private TextButton createHideControlsButton() {
+        TextButton resetButton = new TextButton("Hide controls", skin);
+
+        resetButton.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                controlsStage.clear();
+                return true;
+            }
+        });
+
+        return resetButton;
+
     }
 
     private TextButton createResetButton() {
@@ -338,8 +356,6 @@ public class MainScreen implements Screen{
                 return true;
             }
         });
-
-//        controlsTable.add(resetButton).colspan(2).right().padBottom(20);
 
         return resetButton;
 
@@ -482,7 +498,7 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(randomColor).colspan(2).center();
+        controlsTable.add(randomColor).colspan(1).center();
         controlsTable.row();
     }
 
@@ -543,7 +559,7 @@ public class MainScreen implements Screen{
 
         selectBox.addListener(changeListener);
 
-        controlsTable.add(selectBox).colspan(2).padRight(10);
+        controlsTable.add(selectBox).colspan(3).padRight(10);
 
         return selectBox;
     }
@@ -716,7 +732,7 @@ public class MainScreen implements Screen{
         slider.setValue(defaultValue);//
         slider.addListener(inputListener);
 
-        controlsTable.add(slider).colspan(2).padRight(10);
+        controlsTable.add(slider).width(200).colspan(3).padRight(10);//growX().
 
         Label value = new Label(""+slider.getValue(), skin);
         controlsTable.add(value);
