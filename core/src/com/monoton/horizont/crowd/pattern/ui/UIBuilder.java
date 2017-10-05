@@ -25,8 +25,10 @@ public class  UIBuilder extends AssetManager {
     public static final String SPACESHIP_1 = "ship1.png";
     public static final String SPACESHIP_2 = "spaceship.png";
     public static final String TRIANGLE = "triangle.png";
-    public static final String DEFAULT_SKIN_ATLAS = "uiskin.atlas";
-    public static final String DEFAULT_SKIN = "uiskin.json";
+
+
+    public static final String DEFAULT_SKIN_ATLAS = "quantum-horizon-ui.atlas";//quantum-horizon-ui.atlas  uiskin.atlas
+    public static final String DEFAULT_SKIN = "quantum-horizon-ui.json";//quantum-horizon-ui.json uiskin.json
 
 
 
