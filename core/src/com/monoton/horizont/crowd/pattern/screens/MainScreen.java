@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -47,10 +46,10 @@ public class MainScreen implements Screen{
 
 
     private Texture background;
-
+/*
     private Texture tfBackground;
     private Texture scroll_horizontal;
-    private Texture knob_scroll;
+    private Texture knob_scroll;*/
 
     Array<SteeringActor> characters = new Array<SteeringActor>();
 
@@ -173,22 +172,22 @@ public class MainScreen implements Screen{
 
 
 
-        BitmapFont font = uiBuilder.get(UIBuilder.DEFAULT_FONT, BitmapFont.class);
-        Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
 
 
 
-        createSpeedControls(ls);
-        createTailLengthControls(ls);
-        createLightControls(ls);
-
-        createAmbientControls(ls);
 
 
+        createSpeedControls();
+        createTailLengthControls();
+        createLightControls();
 
-        createColorChooseControls(font, ls);
+        createAmbientControls();
 
-        createShapeChooseControls(font, ls);
+
+
+        createColorChooseControls();
+
+        createShapeChooseControls();
 
         createButtons();
 
@@ -442,7 +441,7 @@ public class MainScreen implements Screen{
 
     private Array<String> colors = new Array<String>();
 
-    private void createColorChooseControls(BitmapFont font, Label.LabelStyle ls) {
+    private void createColorChooseControls() {
 
 
 
@@ -465,7 +464,7 @@ public class MainScreen implements Screen{
             }
         };
 
-        colorSelectBox = createDropDownControl("Color: ", colors, changeListener, font, ls);
+        colorSelectBox = createDropDownControl("Color: ", colors, changeListener);
 
 
         SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(colors.first()));
@@ -506,7 +505,7 @@ public class MainScreen implements Screen{
     SelectBox shapeSelectBox = null;
 
 
-    private void createShapeChooseControls(BitmapFont font, Label.LabelStyle ls) {
+    private void createShapeChooseControls() {
 
         ChangeListener changeListener = new ChangeListener() {
             @Override
@@ -519,52 +518,27 @@ public class MainScreen implements Screen{
             }
         };
 
-        shapeSelectBox = createDropDownControl("Shape: ", shapes, changeListener, font, ls);
+        shapeSelectBox = createDropDownControl("Shape: ", shapes, changeListener);
 
         controlsTable.row();
     }
 
-    private SelectBox createDropDownControl(String labelName,Array items,ChangeListener changeListener, BitmapFont font, Label.LabelStyle ls) {
-        Label label = new Label(labelName, ls);
+    private SelectBox createDropDownControl(String labelName, Array items, ChangeListener changeListener) {
+//        Label label = new Label(labelName, ls);
+        Label label = new Label(labelName, skin);
         controlsTable.add(label).padRight(10);
 
 
-        if(tfBackground==null) {
-            tfBackground = uiBuilder.get(UIBuilder.TF_BACKGROUND, Texture.class);
-        }
-        //List
-        List.ListStyle listS = new List.ListStyle();
-        listS.font = font;
-        listS.fontColorSelected = Color.BLACK;
-        listS.fontColorUnselected = Color.GRAY;
-        listS.selection = new TextureRegionDrawable(new TextureRegion(tfBackground));
 
-
-        //SelectBox
-        SelectBox.SelectBoxStyle sbs = new SelectBox.SelectBoxStyle();
-        sbs.listStyle = listS;
-        ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
-        if(scroll_horizontal==null) {
-            scroll_horizontal = uiBuilder.get(UIBuilder.SCROLL_HORIZONTAL, Texture.class);
-        }
-        if(knob_scroll==null) {
-            knob_scroll =uiBuilder.get(UIBuilder.KNOB_SCROLL, Texture.class);
-        }
-        sps.background = new TextureRegionDrawable(new TextureRegion(tfBackground));
-        sps.vScroll = new TextureRegionDrawable(new TextureRegion(scroll_horizontal));
-        sps.vScrollKnob = new TextureRegionDrawable(new TextureRegion(knob_scroll));
-        sbs.background = new TextureRegionDrawable(new TextureRegion(tfBackground));
-        sbs.scrollStyle = sps;
-        sbs.font = font;
-        sbs.fontColor.set(Color.RED);
-        final SelectBox selectBox = new SelectBox<String>(sbs);
+//        final SelectBox selectBox = new SelectBox<String>(sbs);
+        final SelectBox selectBox = new SelectBox<String>(skin);
 
 
 
 
         selectBox.setItems(items);
         selectBox.pack(); // To get the actual size
-//		colorSelectBox.setPosition(list.getX() + list.getWidth() + 10, secondRowY-colorSelectBox.getHeight());
+
 
 
         selectBox.addListener(changeListener);
@@ -578,7 +552,7 @@ public class MainScreen implements Screen{
     private Label tailLengthValue = null;
     private Slider tailLengthSlider = null;
 
-    private void createTailLengthControls(Label.LabelStyle ls) {
+    private void createTailLengthControls() {
 
 
         InputListener listener = new InputListener() {
@@ -601,7 +575,7 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Tail length: ",2,8,1f,SystemState.getInstance().getTailSize(), listener, ls);
+        Controls controls = createControls("Tail length: ",2,8,1f,SystemState.getInstance().getTailSize(), listener);
         tailLengthSlider = controls.getSlider();
         tailLengthValue = controls.getValue();
     }
@@ -611,7 +585,7 @@ public class MainScreen implements Screen{
     private Label speedValue = null;
     private Slider speedSlider = null;
 
-    private void createSpeedControls(Label.LabelStyle ls) {
+    private void createSpeedControls() {
 
 
         InputListener listener = new InputListener() {
@@ -635,7 +609,7 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener, ls);
+        Controls controls = createControls("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener);
         speedSlider = controls.getSlider();
         speedValue = controls.getValue();
     }
@@ -644,7 +618,7 @@ public class MainScreen implements Screen{
     private Label lightValue = null;
     private Slider lightSlider = null;
 
-    private void createLightControls(Label.LabelStyle ls) {
+    private void createLightControls() {
 
 
         InputListener listener = new InputListener() {
@@ -669,7 +643,7 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Light size: ",0.2f,2.0f,0.1f,SystemState.getInstance().getLightSize(), listener, ls);
+        Controls controls = createControls("Light size: ",0.2f,2.0f,0.1f,SystemState.getInstance().getLightSize(), listener);
         lightSlider = controls.getSlider();
         lightValue = controls.getValue();
     }
@@ -680,7 +654,7 @@ public class MainScreen implements Screen{
     private Label ambientValue = null;
     private Slider ambientSlider = null;
 
-    private void createAmbientControls(Label.LabelStyle ls) {
+    private void createAmbientControls() {
 
 
         InputListener listener = new InputListener() {
@@ -707,7 +681,7 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Ambient: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getAmbientFactor(), listener, ls);
+        Controls controls = createControls("Ambient: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getAmbientFactor(), listener);
         ambientSlider = controls.getSlider();
         ambientValue = controls.getValue();
     }
@@ -733,8 +707,8 @@ public class MainScreen implements Screen{
         }
     }
 
-    private Controls createControls(String label,float min, float max, float stepSize, float defaultValue, InputListener inputListener, Label.LabelStyle ls){
-        Label labelName = new Label(label, ls);
+    private Controls createControls(String label, float min, float max, float stepSize, float defaultValue, InputListener inputListener){
+        Label labelName = new Label(label, skin);
         controlsTable.add(labelName).padRight(10);
 
         Slider slider = new Slider(min,max,stepSize, false, skin);
@@ -744,7 +718,7 @@ public class MainScreen implements Screen{
 
         controlsTable.add(slider).colspan(2).padRight(10);
 
-        Label value = new Label(""+slider.getValue(), ls);
+        Label value = new Label(""+slider.getValue(), skin);
         controlsTable.add(value);
         controlsTable.row();
         return new Controls(slider, value);

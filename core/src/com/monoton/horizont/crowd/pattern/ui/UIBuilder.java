@@ -27,10 +27,10 @@ public class  UIBuilder extends AssetManager {
     public static final String TRIANGLE = "triangle.png";
     public static final String DEFAULT_SKIN_ATLAS = "uiskin.atlas";
     public static final String DEFAULT_SKIN = "uiskin.json";
-    public static final String DEFAULT_FONT = "default.fnt";//"tfbackground.png"
-    public static final String TF_BACKGROUND = "tfbackground.png";//"scroll_horizontal.png"
-    public static final String SCROLL_HORIZONTAL = "scroll_horizontal.png";//"knob_scroll.png"
-    public static final String KNOB_SCROLL = "knob_scroll.png";//"background2.jpg"
+
+
+
+
     public static final String BACKGROUND = "background2.jpg";//"background2.jpg"
 
 
@@ -64,12 +64,8 @@ public class  UIBuilder extends AssetManager {
 
 
 
-        super.load(DEFAULT_FONT, BitmapFont.class);
 
-        super.load(TF_BACKGROUND, Texture.class);
 
-        super.load(SCROLL_HORIZONTAL, Texture.class);
-        super.load(KNOB_SCROLL, Texture.class);
         super.load(BACKGROUND, Texture.class);
 
 
