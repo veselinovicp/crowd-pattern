@@ -586,7 +586,7 @@ public class MainScreen implements Screen{
     private SelectBox createDropDownControl(String labelName, Array items, ChangeListener changeListener, int colSpan) {
 //        Label label = new Label(labelName, ls);
         Label label = new Label(labelName, skin);
-        mainControls.add(label).padRight(10);
+        mainControls.add(label).align(Align.right).padRight(10);
 
 
 
@@ -603,7 +603,7 @@ public class MainScreen implements Screen{
 
         selectBox.addListener(changeListener);
 
-        mainControls.add(selectBox).align(Align.left).colspan(colSpan).padRight(10);
+        mainControls.add(selectBox).align(Align.left).colspan(colSpan).padRight(0);
 
         return selectBox;
     }
