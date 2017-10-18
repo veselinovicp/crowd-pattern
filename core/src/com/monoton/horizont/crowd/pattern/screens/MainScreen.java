@@ -320,11 +320,14 @@ public class MainScreen implements Screen{
         TextButton resetButton = createResetButton();
         TextButton exitButton = createExitButton();
         TextButton hideControlsButton = createHideControlsButton();
-        controlsTable.add(hideControlsButton).colspan(1).padBottom(20);
-        controlsTable.add(resetButton).colspan(1).padBottom(20);
-        controlsTable.add(removeParticlesButton).colspan(1).padBottom(20);
-        controlsTable.add(addParticlesButton).colspan(1).padBottom(20);
-        controlsTable.add(exitButton).colspan(1).padBottom(20);
+
+        controlsTable.add(resetButton).colspan(1).padBottom(0);
+        controlsTable.add(removeParticlesButton).colspan(1).padBottom(0);
+        controlsTable.add(addParticlesButton).colspan(1).padBottom(0);
+
+        controlsTable.row();
+        controlsTable.add(hideControlsButton).align(Align.right).colspan(2).padBottom(0);
+        controlsTable.add(exitButton).colspan(1).padBottom(0);
         controlsTable.row();
     }
 
@@ -478,7 +481,7 @@ public class MainScreen implements Screen{
             }
         };
 
-        colorSelectBox = createDropDownControl("Color: ", colors, changeListener);
+        colorSelectBox = createDropDownControl("Color: ", colors, changeListener, 1);
 
 
         SystemState.getInstance().setColorMachine(ColorMachineFactory.getColorMachine(colors.first()));
@@ -532,12 +535,12 @@ public class MainScreen implements Screen{
             }
         };
 
-        shapeSelectBox = createDropDownControl("Shape: ", shapes, changeListener);
+        shapeSelectBox = createDropDownControl("Shape: ", shapes, changeListener, 2);
 
         controlsTable.row();
     }
 
-    private SelectBox createDropDownControl(String labelName, Array items, ChangeListener changeListener) {
+    private SelectBox createDropDownControl(String labelName, Array items, ChangeListener changeListener, int colSpan) {
 //        Label label = new Label(labelName, ls);
         Label label = new Label(labelName, skin);
         controlsTable.add(label).padRight(10);
@@ -557,7 +560,7 @@ public class MainScreen implements Screen{
 
         selectBox.addListener(changeListener);
 
-        controlsTable.add(selectBox).colspan(3).padRight(10);
+        controlsTable.add(selectBox).align(Align.left).colspan(colSpan).padRight(10);
 
         return selectBox;
     }
@@ -623,7 +626,7 @@ public class MainScreen implements Screen{
             ;
         };
 
-        speedSlider = createSlider("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener);
+        speedSlider = createSlider("Speed: ",20f,300f,1f,SystemState.getInstance().getSpeedFactor(), listener);
 
     }
 
@@ -702,14 +705,14 @@ public class MainScreen implements Screen{
 
     private Slider createSlider(String label, float min, float max, float stepSize, float defaultValue, InputListener inputListener){
         Label labelName = new Label(label, skin);
-        controlsTable.add(labelName).padRight(10);
+        controlsTable.add(labelName).align(Align.right).padRight(10);
 
         Slider slider = new Slider(min,max,stepSize, false, skin);
 
         slider.setValue(defaultValue);//
         slider.addListener(inputListener);
 
-        controlsTable.add(slider).width((float)Gdx.graphics.getWidth()/3).colspan(4).padRight(10);//growX().
+        controlsTable.add(slider).width((float)Gdx.graphics.getWidth()/3).colspan(2).padRight(10);//growX().
 
       /*  Label value = new Label(""+slider.getValue(), skin);
         controlsTable.add(value);*/
