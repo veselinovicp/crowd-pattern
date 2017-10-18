@@ -63,7 +63,8 @@ public class MainScreen implements Screen{
 
     private SteeringActorEngine steeringActorEngine;
 
-    private Table controlsTable;
+    private Table mainControls = new Table();
+    private Table minimalControls = new Table();
 
 
     /*private TextButton exitButton;
@@ -85,6 +86,8 @@ public class MainScreen implements Screen{
     private NamedTexture selectedShape;
 
     private SteeringActorsScene steeringActorsScene;
+
+
 
 
 
@@ -156,41 +159,14 @@ public class MainScreen implements Screen{
         controlsStage = new Stage(stretchViewport);//new ScreenViewport()
 
 
-
-
-        controlsTable = new Table();
-        controlsTable.setWidth(Gdx.graphics.getWidth());
-        controlsTable.setHeight(Gdx.graphics.getHeight());
-        controlsTable.align(Align.top|Align.right);
-
-
-
-        controlsTable.padTop(20);
+        createMainControls();
+        createMinimalControls();
 
 
 
 
+        controlsStage.addActor(mainControls);
 
-
-
-
-
-        createSpeedControls();
-        createTailLengthControls();
-        createLightControls();
-
-        createAmbientControls();
-
-
-
-        createColorChooseControls();
-
-        createShapeChooseControls();
-
-        createButtons();
-
-        controlsStage.addActor(controlsTable);
-//        controlsStage.clear();
 
 
 
@@ -226,6 +202,71 @@ public class MainScreen implements Screen{
 
         System.out.println("end creating");
 
+    }
+
+    private void populateMainControls() {
+        createSpeedControls();
+        createTailLengthControls();
+        createLightControls();
+
+        createAmbientControls();
+
+
+        createColorChooseControls();
+
+        createShapeChooseControls();
+
+        createButtons();
+    }
+
+    private void createMinimalControls() {
+        createTable(minimalControls);
+        populateMinimalControls();
+    }
+
+    private void populateMinimalControls(){
+        TextButton controlsButton = createControlsButton();
+
+        minimalControls.add(controlsButton).colspan(1).padBottom(0);
+        minimalControls.row();
+
+        TextButton exitButton = createExitButton();
+        minimalControls.add(exitButton).colspan(1).padBottom(0);
+        minimalControls.row();
+
+
+    }
+
+    private TextButton createControlsButton() {
+        TextButton controlsButton = new TextButton("Controls", skin);
+
+        controlsButton.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                controlsStage.clear();
+                controlsStage.addActor(mainControls);
+                return true;
+            }
+        });
+
+
+
+        return controlsButton;
+
+    }
+
+    private void createMainControls() {
+        createTable(mainControls);
+        populateMainControls();
+    }
+
+    private void createTable(Table table) {
+
+        table.setWidth(Gdx.graphics.getWidth());
+        table.setHeight(Gdx.graphics.getHeight());
+        table.align(Align.top|Align.right);
+        table.padTop(20);
     }
 
     @Override
@@ -313,22 +354,23 @@ public class MainScreen implements Screen{
     }
 
 
-    private void
-    createButtons() {
+
+
+    private void createButtons() {
         TextButton removeParticlesButton = createRemoveParticlesButton();
         TextButton addParticlesButton = createAddParticlesButton();
         TextButton resetButton = createResetButton();
         TextButton exitButton = createExitButton();
         TextButton hideControlsButton = createHideControlsButton();
 
-        controlsTable.add(resetButton).colspan(1).padBottom(0);
-        controlsTable.add(removeParticlesButton).colspan(1).padBottom(0);
-        controlsTable.add(addParticlesButton).colspan(1).padBottom(0);
+        mainControls.add(resetButton).colspan(1).padBottom(0);
+        mainControls.add(removeParticlesButton).colspan(1).padBottom(0);
+        mainControls.add(addParticlesButton).colspan(1).padBottom(0);
 
-        controlsTable.row();
-        controlsTable.add(hideControlsButton).align(Align.right).colspan(2).padBottom(0);
-        controlsTable.add(exitButton).colspan(1).padBottom(0);
-        controlsTable.row();
+        mainControls.row();
+        mainControls.add(hideControlsButton).align(Align.right).colspan(2).padBottom(0);
+        mainControls.add(exitButton).colspan(1).padBottom(0);
+        mainControls.row();
     }
 
     private TextButton createHideControlsButton() {
@@ -338,6 +380,7 @@ public class MainScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 controlsStage.clear();
+                controlsStage.addActor(minimalControls);
                 return true;
             }
         });
@@ -412,7 +455,7 @@ public class MainScreen implements Screen{
             }
         });
 
-//        controlsTable.add(addButton).colspan(1).center().padBottom(20);
+//        mainControls.add(addButton).colspan(1).center().padBottom(20);
 
         return addButton;
 
@@ -430,7 +473,7 @@ public class MainScreen implements Screen{
             }
         });
 
-//        controlsTable.add(removeButton).colspan(1).right().padBottom(20);
+//        mainControls.add(removeButton).colspan(1).right().padBottom(20);
 
         return removeButton;
 
@@ -448,7 +491,7 @@ public class MainScreen implements Screen{
             }
         });
 
-//        controlsTable.add(exitButton).colspan(1).right().padBottom(20);
+
 
         return exitButton;
 
@@ -499,8 +542,8 @@ public class MainScreen implements Screen{
             }
         });
 
-        controlsTable.add(randomColor).colspan(1).center();
-        controlsTable.row();
+        mainControls.add(randomColor).colspan(1).center();
+        mainControls.row();
     }
 
     private void createShapes(){
@@ -537,13 +580,13 @@ public class MainScreen implements Screen{
 
         shapeSelectBox = createDropDownControl("Shape: ", shapes, changeListener, 2);
 
-        controlsTable.row();
+        mainControls.row();
     }
 
     private SelectBox createDropDownControl(String labelName, Array items, ChangeListener changeListener, int colSpan) {
 //        Label label = new Label(labelName, ls);
         Label label = new Label(labelName, skin);
-        controlsTable.add(label).padRight(10);
+        mainControls.add(label).padRight(10);
 
 
 
@@ -560,7 +603,7 @@ public class MainScreen implements Screen{
 
         selectBox.addListener(changeListener);
 
-        controlsTable.add(selectBox).align(Align.left).colspan(colSpan).padRight(10);
+        mainControls.add(selectBox).align(Align.left).colspan(colSpan).padRight(10);
 
         return selectBox;
     }
@@ -705,18 +748,18 @@ public class MainScreen implements Screen{
 
     private Slider createSlider(String label, float min, float max, float stepSize, float defaultValue, InputListener inputListener){
         Label labelName = new Label(label, skin);
-        controlsTable.add(labelName).align(Align.right).padRight(10);
+        mainControls.add(labelName).align(Align.right).padRight(10);
 
         Slider slider = new Slider(min,max,stepSize, false, skin);
 
         slider.setValue(defaultValue);//
         slider.addListener(inputListener);
 
-        controlsTable.add(slider).width((float)Gdx.graphics.getWidth()/3).colspan(2).padRight(10);//growX().
+        mainControls.add(slider).width((float)Gdx.graphics.getWidth()/3).colspan(2).padRight(10);//growX().
 
       /*  Label value = new Label(""+slider.getValue(), skin);
-        controlsTable.add(value);*/
-        controlsTable.row();
+        mainControls.add(value);*/
+        mainControls.row();
         return slider;
 
     }
