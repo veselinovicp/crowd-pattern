@@ -5,10 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -565,7 +563,7 @@ public class MainScreen implements Screen{
     }
 
 
-    private Label tailLengthValue = null;
+
     private Slider tailLengthSlider = null;
 
     private void createTailLengthControls() {
@@ -576,7 +574,7 @@ public class MainScreen implements Screen{
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
 //				tailLengthValue.setText("" + tailLengthSlider.getValue());//String.format("%.2f", floatValue);
-                tailLengthValue.setText(DrawUtils.formatFloat(tailLengthSlider.getValue()));//String.format("%.2f", floatValue);
+
                 SystemState.getInstance().setTailSize((int)tailLengthSlider.getValue());
 
 
@@ -591,14 +589,14 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Tail length: ",2,8,1f,SystemState.getInstance().getTailSize(), listener);
-        tailLengthSlider = controls.getSlider();
-        tailLengthValue = controls.getValue();
+        tailLengthSlider =  createSlider("Tail length: ",2,8,1f,SystemState.getInstance().getTailSize(), listener);
+
+
     }
 
 
 
-    private Label speedValue = null;
+
     private Slider speedSlider = null;
 
     private void createSpeedControls() {
@@ -608,7 +606,7 @@ public class MainScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-                speedValue.setText(DrawUtils.formatFloat(speedSlider.getValue()));
+
                 steeringActorEngine.setSpeed(speedSlider.getValue());
                 SystemState.getInstance().setSpeedFactor(speedSlider.getValue());
 
@@ -625,13 +623,12 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener);
-        speedSlider = controls.getSlider();
-        speedValue = controls.getValue();
+        speedSlider = createSlider("Speed: ",20f,200f,1f,SystemState.getInstance().getSpeedFactor(), listener);
+
     }
 
 
-    private Label lightValue = null;
+
     private Slider lightSlider = null;
 
     private void createLightControls() {
@@ -641,7 +638,6 @@ public class MainScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-                lightValue.setText(DrawUtils.formatFloat(lightSlider.getValue()));
 
                 SystemState.getInstance().setLightSize(lightSlider.getValue());
 
@@ -659,15 +655,14 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Light size: ",0.2f,2.0f,0.1f,SystemState.getInstance().getLightSize(), listener);
-        lightSlider = controls.getSlider();
-        lightValue = controls.getValue();
+        lightSlider = createSlider("Light size: ",0.2f,2.0f,0.1f,SystemState.getInstance().getLightSize(), listener);
+
     }
 
 
 
 
-    private Label ambientValue = null;
+
     private Slider ambientSlider = null;
 
     private void createAmbientControls() {
@@ -677,7 +672,6 @@ public class MainScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-                ambientValue.setText(DrawUtils.formatFloat(ambientSlider.getValue()));
 
                 SystemState.getInstance().setAmbientFactor(ambientSlider.getValue());
                 lightScene.setDistance(ambientSlider.getValue());
@@ -697,33 +691,16 @@ public class MainScreen implements Screen{
             ;
         };
 
-        Controls controls = createControls("Ambient: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getAmbientFactor(), listener);
-        ambientSlider = controls.getSlider();
-        ambientValue = controls.getValue();
+        ambientSlider = createSlider("Ambient: ",Constants.LIGHT_SCENE_WIDTH *0.1f,Constants.LIGHT_SCENE_WIDTH *2.0f,0.11f,SystemState.getInstance().getAmbientFactor(), listener);
+
     }
 
 
 
 
-    private class Controls{
-        Slider slider;
-        Label value;
 
-        public Controls(Slider slider, Label value) {
-            this.slider = slider;
-            this.value = value;
-        }
 
-        public Slider getSlider() {
-            return slider;
-        }
-
-        public Label getValue() {
-            return value;
-        }
-    }
-
-    private Controls createControls(String label, float min, float max, float stepSize, float defaultValue, InputListener inputListener){
+    private Slider createSlider(String label, float min, float max, float stepSize, float defaultValue, InputListener inputListener){
         Label labelName = new Label(label, skin);
         controlsTable.add(labelName).padRight(10);
 
@@ -732,12 +709,12 @@ public class MainScreen implements Screen{
         slider.setValue(defaultValue);//
         slider.addListener(inputListener);
 
-        controlsTable.add(slider).width(200).colspan(3).padRight(10);//growX().
+        controlsTable.add(slider).width((float)Gdx.graphics.getWidth()/3).colspan(4).padRight(10);//growX().
 
-        Label value = new Label(""+slider.getValue(), skin);
-        controlsTable.add(value);
+      /*  Label value = new Label(""+slider.getValue(), skin);
+        controlsTable.add(value);*/
         controlsTable.row();
-        return new Controls(slider, value);
+        return slider;
 
     }
 
