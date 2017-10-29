@@ -230,9 +230,9 @@ public class MainScreen implements Screen{
         minimalControls.add(controlsButton).colspan(1).padBottom(0);
         minimalControls.row();
 
-        TextButton exitButton = createExitButton();
+       /* TextButton exitButton = createExitButton();
         minimalControls.add(exitButton).colspan(1).padBottom(0);
-        minimalControls.row();
+        minimalControls.row();*/
 
 
     }
