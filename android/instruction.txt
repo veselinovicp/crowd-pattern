@@ -1,0 +1,6 @@
+keytool -import -keystore key3.jks -file deployment_cert.der -deststoretype jks -deststorepass passwordKeyStore -destalias monoton -destkeypass passwordKey
+
+
+keytool -importcert -file deployment_cert.der -keystore key4.jks -storepass jkspass -alias openssl_crt_der -keypass keypass
+
+http://www.herongyang.com/Cryptography/Certificate-Format-keytool-Import-in-DER-and-PEM.html
