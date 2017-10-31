@@ -25,7 +25,7 @@ public class Constants {
 
 
     public static final int MAX_PARTICLE_FACTOR = 5;
-    public static final float PARTICLE_DENSITY = 0.6f / 10000f;
+    public static final float PARTICLE_DENSITY = 0.25f / 10000f;// 0.6f / 10000f
 
 
     public static final float DEFAULT_ORDER_FACTOR=3.0f;
