@@ -25,18 +25,18 @@ android {
         versionName "1.0"
     }
 
-    signingConfigs {
+   /* signingConfigs {
         release {
             storeFile file('my-release-key.jks')
             storePassword "keypass"
             keyAlias "mykey"
             keyPassword "keypass"
         }
-    }
+    }*/
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
